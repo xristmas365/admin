@@ -1,0 +1,10 @@
+.env
+.idea
+/vendor
+/node_modules
+composer.lock
+yarn.lock
+package-lock.json
+yarn-error.log
+error.log
+access.log
