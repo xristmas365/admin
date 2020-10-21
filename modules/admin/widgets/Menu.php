@@ -74,7 +74,7 @@ class Menu extends \yii\widgets\Menu
                 $class[] = 'show';
                 $class[] = 'active';
             }
-            if($item['items']) {
+            if(isset($item['items'])) {
                 $class[] = 'with-sub';
             }
             
