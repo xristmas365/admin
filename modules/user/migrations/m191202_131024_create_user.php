@@ -37,7 +37,7 @@ class m191202_131024_create_user extends Migration
             'role'          => $this->integer()->notNull()->defaultValue(0),
             'first_name'    => $this->string(32)->notNull(),
             'last_name'     => $this->string(32),
-            'phone'         => $this->string(12),
+            'phone'         => $this->string(16),
             'address'       => $this->string(60),
             'city'          => $this->string(32),
             'state'         => $this->string(2),
