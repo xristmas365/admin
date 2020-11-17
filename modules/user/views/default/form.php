@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card-body">
         <div class="d-flex justify-content-end align-content-end">
             <?= $form->field($model, 'files')->widget(Upload::class, [
-                'url'        => ['/storage/upload'],
+                'url'        => ['/storage/default/upload'],
                 'uploadPath' => 'photo/',
                 'multiple'   => true,
             ])->label('Photo') ?>
