@@ -17,7 +17,7 @@ use yii\web\AssetBundle;
 class FrontAsset extends AssetBundle
 {
     
-    public $sourcePath = '@app/resources/app/dist';
+    public $sourcePath = '@app/web/dist/app';
     
     public $css        = [
         'bootstrap.css',

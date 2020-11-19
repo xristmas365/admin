@@ -8,3 +8,4 @@ package-lock.json
 yarn-error.log
 error.log
 access.log
+/web/dist/

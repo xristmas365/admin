@@ -18,20 +18,15 @@ function recursiveIssuer(m) {
 }
 module.exports = {
   entry: {
-    dashforge: './resources/admin/js/main.js',
+    'app/app': './resources/app/js/main.js',
+    'app/bootstrap': './resources/app/scss/bootstrap.scss',
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, './resources/admin/dist/'),
-    publicPath: ''
+    path: path.resolve(__dirname, './web/dist/'),
+    publicPath: '/dist/'
   },
   plugins: [
-    new PurgecssPlugin({
-      paths: glob.sync([
-        `${PATHS.root}/**/*.php`,
-        `${PATHS.admin}/**/*.php`,
-      ])
-    }),
     new Dotenv(),
   ],
   optimization: {
@@ -47,18 +42,6 @@ module.exports = {
       },
     },
   },
-  /*optimization: {
-    splitChunks: {
-      cacheGroups: {
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        }
-      }
-    }
-  },*/
   module: {
     rules: [
       {

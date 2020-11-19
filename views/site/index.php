@@ -11,9 +11,9 @@
  */
 
 /* @var $this yii\web\View */
-
+use app\assets\FrontAsset;
 use yii\helpers\Html;
-
+FrontAsset::register($this);
 ?>
 <div class="site-index">
     <div class="jumbotron">
