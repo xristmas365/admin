@@ -2,9 +2,9 @@
 /**
  * AdminGrid.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -16,14 +16,14 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 class AdminGrid extends GridView
 {
     
-    const COLUMN_ACTION   = ['class' => 'app\modules\admin\widgets\grid\ActionColumn'];
-    const COLUMN_CHECKBOX = ['class' => 'kartik\grid\CheckboxColumn'];
-    const COLUMN_SERIAL   = ['class' => 'kartik\grid\SerialColumn'];
-    const COLUMN_BOOL     = ['class' => 'app\modules\admin\widgets\grid\BooleanColumn'];
+    const COLUMN_ACTION = ['class' => 'app\modules\admin\widgets\grid\ActionColumn'];
+    const COLUMN_IMAGE  = ['class' => 'app\modules\admin\widgets\grid\ImageColumn'];
+    const COLUMN_SERIAL = ['class' => 'kartik\grid\SerialColumn'];
     
     public $title;
     
@@ -129,9 +129,9 @@ HTML;
     
     public function renderGridTitle()
     {
-        $title = $this->title ?? $this->view->title;
+        $title = $this->title ?? Html::tag('i', null, ['data-feather' => ArrayHelper::getValue($this->view->params, 'icon', 'home')]) . ' ' . Html::encode($this->view->title);
         
-        return Html::tag('div', Html::encode($title), ['class' => 'text-heading']);
+        return Html::tag('div', $title, ['class' => 'text-heading']);
     }
     
     public function renderExtraSearch()

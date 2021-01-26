@@ -33,6 +33,7 @@ $config = [
                 '@app/modules/user/migrations',
                 '@app/modules/page/migrations',
                 '@app/modules/store/migrations',
+                '@app/modules/article/migrations',
                 '@yii/log/migrations/',
             ],
         ],

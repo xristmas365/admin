@@ -22,6 +22,14 @@ return [
     '/terms'   => '/site/terms',
     
     /**
+     * FRONT PAGES
+     */
+    
+    '/sections'       => '/article/front/sections',
+    '/section/<slug>' => '/article/front/section',
+    '/article/<slug>' => '/article/front/article',
+    
+    /**
      * AUTH
      */
     
@@ -54,6 +62,14 @@ return [
     
     '/admin/pages'     => '/page/default/index',
     '/admin/pages/new' => '/page/default/create',
+    
+    /**
+     * ARTICLE
+     */
+    
+    '/admin/articles'          => '/article/default/index',
+    '/admin/articles/new'      => '/article/default/create',
+    '/admin/articles/sections' => '/article/section/index',
     
     /**
      * STORE

@@ -23,7 +23,7 @@ if(Yii::$app->controller->action->id === 'create' || Yii::$app->controller->acti
 ?>
 <aside class="aside aside-fixed">
     <div class="aside-header">
-        <a href="<?= Url::home() ?>" class="aside-logo">AX<span>basic</span></a>
+        <a href="<?= Url::home() ?>" class="aside-logo">AX<span>admin</span></a>
         <a href="" class="aside-menu-link">
             <i data-feather="menu"></i>
             <i data-feather="x"></i>

@@ -8,12 +8,12 @@
  */
 
 $config = [
-    'id'         => 'basic',
-    'name'       => 'AXbasic',
+    'id'         => 'ax-admin',
+    'name'       => 'AXAdmin',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
     'modules'    => require __DIR__ . '/modules.php',
-    'params'    => require __DIR__ . '/params.php',
+    'params'     => require __DIR__ . '/params.php',
     'components' => require __DIR__ . '/components.php',
     'container'  => require __DIR__ . '/container.php',
     'aliases'    => require __DIR__ . '/aliases.php',

@@ -84,6 +84,7 @@ return [
     ],
     'fileStorage'          => [
         'class'               => 'trntv\filekit\Storage',
+        'useDirindex'         => true,
         'filesystemComponent' => 'fsLocal',
         'baseUrl'             => '/upload/',
     ],

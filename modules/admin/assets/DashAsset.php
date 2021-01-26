@@ -2,9 +2,9 @@
 /**
  * DashAsset.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -23,6 +23,7 @@ class DashAsset extends AssetBundle
     
     public $css     = [
         'dashforge.css',
+        'tagsinput.css',
         'dashforge.demo.css',
         'ionicons/css/ionicons.min.css',
     ];
@@ -32,6 +33,8 @@ class DashAsset extends AssetBundle
         'perfect-scrollbar.min.js',
         'dashforge.js',
         'dashforge.aside.js',
+        'tagsinput.js',
+        'admin.js',
     ];
     
     public $depends = [

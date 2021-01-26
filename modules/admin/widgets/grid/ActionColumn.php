@@ -2,9 +2,9 @@
 /**
  * ActionColumn.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -27,14 +27,13 @@ class ActionColumn extends \kartik\grid\ActionColumn
     {
         parent::init();
         
-        if(true) {
-            $this->header = Html::a('<i class="fas fa-filter"></i> Clear', $this->clearAction, ['class' => 'btn btn-white']);
-        }
+        $this->header = Html::a('<i class="fas fa-filter"></i> Clear', $this->clearAction, ['class' => 'btn btn-white']);
         
     }
     
     protected function renderHeaderCellContent()
     {
+        return;
     }
     
     protected function renderFilterCellContent()
