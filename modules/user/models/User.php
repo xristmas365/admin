@@ -272,7 +272,7 @@ class User extends ActiveRecord implements IdentityInterface
             return $this->attachments[0]->src;
         }
         
-        return Url::base(true) . '/images/no-image.webp';
+        return Url::base(true) . '/images/no_photo.webp';
     }
     
     /**

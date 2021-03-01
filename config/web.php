@@ -8,8 +8,8 @@
  */
 
 $config = [
-    'id'         => 'ax-admin',
-    'name'       => 'AXAdmin',
+    'id'         => 'ax',
+    'name'       => 'AX Admin',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
     'modules'    => require __DIR__ . '/modules.php',
@@ -23,7 +23,6 @@ if(YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        //'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1', 'localhost:8000'],
     ];
     
     $config['bootstrap'][] = 'gii';

@@ -1,13 +1,10 @@
 <?php
 /**
- * account.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   NACR project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 use yii\web\View;
@@ -27,59 +24,39 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <?php $form = ActiveForm::begin(); ?>
-<div class="card user-card">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-        <div class="d-flex justify-content-start">
-            <?= Html::a('<i class="fas fa-arrow-left"></i> Back', ['/admin/default/index'], ['class' => 'btn btn-white mr-4']) ?>
-        </div>
-        <div class="text-heading"><?= $this->title ?></div>
-        <div class="d-flex justify-content-end">
-            <?= Html::a('<div class="fas fa-user-alt-slash"></div> Deactivate', ['deactivate'], [
-                'class'        => 'btn btn-outline-danger mr-2',
-                'data-confirm' => 'Are You sure you want to Deactivate your account?',
-                'data-method'  => 'POST',
-            ]) ?>
-            <?= Html::a('<div class="fas fa-lock"></div> Change Password', ['password'], [
-                'class' => 'btn btn-outline-danger mr-2',
-            ]) ?>
-            <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-white']) ?>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="d-flex justify-content-end align-content-end">
+<div class="container-admin shadow p-4">
+    <div class="text-heading mb-4"><?= $this->title ?></div>
+    <div class="row">
+        <div class="col-md-2">
             <?= $form->field($model, 'files')->widget(Upload::class, [
                 'url'        => ['/storage/default/upload'],
                 'uploadPath' => 'photo/',
                 'multiple'   => true,
             ])->label('Photo') ?>
-            <div class="row ml-4">
-                <div class="col-md-6">
-                    <?= $form->field($model, 'email') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'phone') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'first_name') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'last_name') ?>
-                </div>
+            <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-white btn-block']) ?>
+            <?= Html::a('<div class="fas fa-lock"></div> Password', ['password'], ['class' => 'btn btn-block btn-white']) ?>
+            <?= Html::a('<div class="fas fa-user-alt-slash"></div> Deactivate', ['deactivate'], [
+                'class'        => 'btn btn-block btn-outline-danger',
+                'data-confirm' => 'Are You sure you want to Deactivate your account?',
+                'data-method'  => 'POST',
+            ]) ?>
+            <?= Html::a('<div class="fas fa-ban"></div> Cancel', ['/admin/default/index'], ['class' => 'btn btn-block btn-white']) ?>
+        </div>
+        <div class="col-md-10 ">
+            <?= $form->field($model, 'email') ?>
+            <div class="row">
+                <div class="col"><?= $form->field($model, 'first_name') ?></div>
+                <div class="col"><?= $form->field($model, 'last_name') ?></div>
             </div>
-            <div class="row ml-4">
-                <div class="col-md-6">
-                    <?= $form->field($model, 'address') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'city') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'state') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'zip') ?>
-                </div>
-            </div>
+            <?= $form->field($model, 'phone') ?>
+            <?= $form->field($model, 'address') ?>
+            <?= $form->field($model, 'city') ?>
+            <?= $form->field($model, 'state') ?>
+            <?= $form->field($model, 'zip') ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 offset-md-2">
         </div>
     </div>
 </div>

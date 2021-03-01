@@ -18,8 +18,9 @@ function recursiveIssuer(m) {
 }
 module.exports = {
   entry: {
+    'admin/main': './resources/admin/custom/styles.scss',
     'app/app': './resources/app/js/main.js',
-    'app/bootstrap': './resources/app/scss/bootstrap.scss',
+    'app/bootstrap': './resources/app/js/bootstrap.js',
   },
   output: {
     filename: '[name].js',

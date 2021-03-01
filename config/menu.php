@@ -13,10 +13,16 @@
 use app\modules\user\models\User;
 
 return [
+    ['label' => 'Dashboard'],
     [
         'label' => '<i data-feather="box"></i> <span>Dashboard</span>',
         'url'   => ['/admin/default/index'],
     ],
+    [
+        'label' => '<i data-feather="user"></i> <span>Account</span>',
+        'url'   => ['/user/default/account'],
+    ],
+    ['label' => 'Store'],
     [
         'label' => '<i data-feather="shopping-bag"></i> <span>Products</span>',
         'url'   => ['/store/product/index'],
@@ -25,6 +31,7 @@ return [
         'label' => '<i data-feather="server"></i> <span>Catalogs</span>',
         'url'   => ['/store/catalog/index'],
     ],
+    ['label' => 'Content'],
     [
         'label'   => '<i data-feather="file-text"></i> <span>Pages</span>',
         'url'     => ['/page/default/index'],
@@ -36,14 +43,22 @@ return [
         'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
     ],
     [
+        'label'   => 'Admin Tools',
+        'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
+    ],
+    [
         'label'   => '<i data-feather="users"></i> <span>Users</span>',
         'url'     => ['/user/default/index'],
         'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
     ],
     [
+        'label'   => 'DEV Tools',
+        'visible' => Yii::$app->user->can(User::ROLE_DEVELOPER),
+    ],
+    [
         'label'   => '<i data-feather="layers"></i> <span>Error Log</span>',
         'url'     => ['/admin/log/index'],
-        'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
+        'visible' => Yii::$app->user->can(User::ROLE_DEVELOPER),
     ],
     [
         'label'   => '<i data-feather="code"></i> <span>GII</span>',

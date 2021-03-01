@@ -1,13 +1,10 @@
 <?php
 /**
- * ImageColumn.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   NACR project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\admin\widgets\grid;
@@ -26,9 +23,11 @@ class ImageColumn extends \kartik\grid\DataColumn
     
     public $header         = false;
     
-    public $imageWidth     = '30px';
+    public $imageWidth     = '40px';
     
-    public $width          = '35px';
+    public $width          = '45px';
+    
+    public $mergeHeader    = true;
     
     public function getDataCellValue($model, $key, $index)
     {
@@ -36,6 +35,6 @@ class ImageColumn extends \kartik\grid\DataColumn
             throw new InvalidConfigException('Please, define ' . $this->imageAttribute . ' property in ' . $model->formName() . ' Model');
         }
         
-        return Html::img($model->{$this->imageAttribute}, ['width' => $this->imageWidth]);
+        return Html::img($model->{$this->imageAttribute}, ['width' => 'auto', 'height'=> '20px']);
     }
 }

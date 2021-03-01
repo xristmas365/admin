@@ -15,7 +15,6 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-bootstrap4": "~2.0.6",
         "yiisoft/yii2-authclient": "~2.2.0",
-        "2amigos/yii2-tinymce-widget": "~1.1",
         "vlucas/phpdotenv": "^4.1",
         "intervention/image": "^2.1",
         "creocoder/yii2-flysystem": "dev-master",
@@ -35,6 +34,11 @@
         "omnilight/yii2-shopping-cart": "*",
         "extead/yii2-autonumeric": "*",
         "richardfan1126/yii2-js-register":"*",
+        "2amigos/yii2-tinymce-widget": "~1.1",
+        "2amigos/yii2-google-maps-library" : "*",
+        "2amigos/yii2-google-places-library" : "*",
+        "2amigos/yii2-taggable-behavior": "~1.0",
+        "2amigos/yii2-selectize-widget": "~1.1.0",
         "ext-json": "*"
     },
     "require-dev": {

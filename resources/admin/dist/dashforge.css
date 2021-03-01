@@ -8263,6 +8263,7 @@ textarea.parsley-success:focus {
 
 .content-header .nav-link {
     padding: 0;
+    margin-right: 1rem;
     color: rgba(27, 46, 75, 0.75);
 }
 
@@ -8297,7 +8298,6 @@ textarea.parsley-success:focus {
 }
 
 .content-search {
-    width: 250px;
     display: flex;
     align-items: center;
 }

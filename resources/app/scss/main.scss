@@ -8,3 +8,25 @@
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
  */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import "mixins";
+
+* {
+  transition: all .3s ease-in-out;
+}
+
+html, body {
+  transition: none;
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-size: 18px;
+  font-family: Roboto, sans-serif;
+  @include media-breakpoint-down(xs) {
+    font-size: 14px;
+  }
+}
+
+

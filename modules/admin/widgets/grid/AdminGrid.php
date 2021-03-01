@@ -1,13 +1,10 @@
 <?php
 /**
- * AdminGrid.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   NACR project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\admin\widgets\grid;
@@ -16,7 +13,6 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use yii\helpers\ArrayHelper;
 
 class AdminGrid extends GridView
 {
@@ -31,7 +27,15 @@ class AdminGrid extends GridView
     
     public $extraSearch;
     
-    public $pjax                 = true;
+    public $pjax             = true;
+    
+    public $emptyText        = '<i class="fas fa-dice"></i> Empty';
+    
+    public $emptyTextOptions = [
+        'class' => 'text-uppercase text-center font-weight-bold mt-3 mb-3',
+        'style' => 'color:#596882',
+    ];
+    
     
     public $pjaxSettings         = [
         'neverTimeout'    => true,
@@ -49,8 +53,14 @@ class AdminGrid extends GridView
     public $toolbar              = false;
     
     public $panel                = [
-        'before' => false,
-        'after'  => false,
+        'options'        => [
+            'class' => 'shadow',
+        ],
+        'headingOptions' => [
+            'class' => 'card-header',
+        ],
+        'before'         => false,
+        'after'          => false,
     ];
     
     public $tableOptions         = [
@@ -62,8 +72,8 @@ class AdminGrid extends GridView
     public $resizableColumns     = false;
     
     public $panelHeadingTemplate = <<< HTML
-<div class="d-flex justify-content-between align-items-center">
-     {createButton}{gridTitle}{extraSearch}
+<div class="position-relative text-center">
+     <div class="create-button">{createButton}</div>{gridTitle}
 </div>
 HTML;
     
@@ -129,9 +139,9 @@ HTML;
     
     public function renderGridTitle()
     {
-        $title = $this->title ?? Html::tag('i', null, ['data-feather' => ArrayHelper::getValue($this->view->params, 'icon', 'home')]) . ' ' . Html::encode($this->view->title);
+        $title = $this->title ?? Html::encode($this->view->title);
         
-        return Html::tag('div', $title, ['class' => 'text-heading']);
+        return Html::tag('div', $title, ['class' => 'text-uppercase font-weight-bold', 'style' => 'color:#596882']);
     }
     
     public function renderExtraSearch()
@@ -141,7 +151,7 @@ HTML;
     
     public function renderCreateButton()
     {
-        return $this->createButton ?? Html::a('<div class="fas fa-plus"></div> New', ['create'], ['class' => 'btn btn-white', 'data-pjax' => 0]);
+        return $this->createButton ?? Html::a('<div class="fas fa-plus"></div> New', ['create'], ['class' => 'btn btn-sm btn-white', 'data-pjax' => 0]);
     }
     
 }

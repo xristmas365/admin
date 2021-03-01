@@ -22,7 +22,7 @@ $this->params['icon'] = 'cast';
 $createButton =
     '<div>' .
     Html::a('<div class="fas fa-plus"></div> New', ['create'], ['class' => 'btn btn-white', 'data-pjax' => 0])
-    . Html::a('<div class="fas fa-bars"></div> Sections', ['/article/section/index'], ['class' => 'btn btn-white ml-2', 'data-pjax' => 0])
+    . Html::a('<div class="fas fa-bars"></div> Topics', ['/article/section/index'], ['class' => 'btn btn-white ml-2', 'data-pjax' => 0])
     . '</div>';
 
 ?>

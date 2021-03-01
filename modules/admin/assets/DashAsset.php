@@ -1,13 +1,10 @@
 <?php
 /**
- * DashAsset.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   NACR project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\admin\assets;
@@ -24,7 +21,8 @@ class DashAsset extends AssetBundle
     public $css     = [
         'dashforge.css',
         'tagsinput.css',
-        'dashforge.demo.css',
+        'dashforge2.css',
+        //'dashforge.demo.css',
         'ionicons/css/ionicons.min.css',
     ];
     
@@ -34,6 +32,7 @@ class DashAsset extends AssetBundle
         'dashforge.js',
         'dashforge.aside.js',
         'tagsinput.js',
+        'typehead.js',
         'admin.js',
     ];
     

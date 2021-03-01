@@ -1,13 +1,10 @@
 <?php
 /**
- * main.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   NACR project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 /* @var $this View */
@@ -18,12 +15,13 @@ use yii\web\View;
 use yii\helpers\Html;
 use kartik\icons\Icon;
 use kartik\dialog\Dialog;
-use yii\widgets\Breadcrumbs;
 use kartik\alert\AlertBlock;
 use app\modules\admin\assets\DashAsset;
+use app\modules\admin\assets\CustomAsset;
 
 Icon::map($this);
 DashAsset::register($this);
+CustomAsset::register($this);
 
 echo Dialog::widget([
     'dialogDefaults' => [
@@ -53,19 +51,17 @@ echo Dialog::widget([
 <body class="pos-relative" data-spy="scroll" data-target="#navSection" data-offset="120">
 <?php $this->beginBody() ?>
 <?= $this->render('_left') ?>
-<div class="content ht-100v pd-0">
+<div class="content ht-100v p-0">
     <?= $this->render('_top') ?>
     <div class="content-body">
-        <div class="container-fluid">
+        <div class="preloader">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="container-admin pt-5">
             <?= AlertBlock::widget(['type' => 'growl', 'delay' => 1000]) ?>
-            <?= Breadcrumbs::widget([
-                'homeLink'           => ['label' => 'Dashboard', 'url' => ['/admin/default/index']],
-                'links'              => $this->params['breadcrumbs'] ?? [],
-                'tag'                => 'ol',
-                'options'            => ['class' => 'breadcrumb df-breadcrumbs mg-b-10'],
-                'itemTemplate'       => "<li class=\"breadcrumb-item\">{link}</li>\n",
-                'activeItemTemplate' => "<li class=\"breadcrumb-item active\">{link}</li>\n",
-            ]) ?>
             <?= $content ?>
         </div>
     </div>

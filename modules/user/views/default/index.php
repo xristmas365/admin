@@ -2,9 +2,9 @@
 /**
  * index.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -66,7 +66,9 @@ $this->params['icon'] = 'users';
             ],
         ],
         'last_login_at:date',
-        
-        AdminGrid::COLUMN_ACTION,
+        [
+            'class'    => 'app\modules\admin\widgets\grid\ActionColumn',
+            'template' => '<div class="d-flex actions justify-content-around"><span class="action-delete">{delete}</span></div>',
+        ],
     ],
 ]); ?>
