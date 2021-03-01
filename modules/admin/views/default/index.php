@@ -17,24 +17,6 @@ $this->params['icon'] = 'box';
 <?php if(Yii::$app->user->identity->role === User::ROLE_USER): ?>
     <div class="row mb-4">
         <div class="col-lg-4">
-            <a href="<?= Url::toRoute(['/company/default/index']) ?>" class="dashboard-card shadow">
-                <div class="dashboard-card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="dashboard-card-icon">
-                            <i data-feather="award"></i>
-                        </div>
-                        <div>
-                            <h4>My Company</h4>
-                            <p class="m-0">Click here to view/edit the information about your company</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="dashboard-card-footer">
-                    <span>My registered products</span> <i data-feather="chevron-right"></i>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-4">
             <a href="<?= Url::toRoute(['/store/product/index']) ?>" class="dashboard-card shadow">
                 <div class="dashboard-card-body">
                     <div class="d-flex align-items-center">
@@ -71,63 +53,8 @@ $this->params['icon'] = 'box';
             </a>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-4">
-            <a href="<?= Url::toRoute(['/company/front/view', 'slug' => Yii::$app->user->identity->company->slug]) ?>" target="_blank" class="dashboard-card shadow">
-                <div class="dashboard-card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="dashboard-card-icon">
-                            <i data-feather="home"></i>
-                        </div>
-                        <div>
-                            <h4>Company Overview</h4>
-                            <p class="m-0">Click here to view the company profile</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="dashboard-card-footer">
-                    <span>Company <?= Yii::$app->user->identity->company->name ?> Overview</span> <i data-feather="chevron-right"></i>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-4">
-            <a href="<?= Url::toRoute(['/company/default/locations']) ?>" class="dashboard-card shadow">
-                <div class="dashboard-card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="dashboard-card-icon">
-                            <i data-feather="map-pin"></i>
-                        </div>
-                        <div>
-                            <h4>Authorized Stores</h4>
-                            <p class="m-0">Click Here to view/add the Authorized Stores locations</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="dashboard-card-footer">
-                    <span>Manage Authorized Stores</span> <i data-feather="chevron-right"></i>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-4">
-            <a href="<?= Url::toRoute(['/service/default/index']) ?>" class="dashboard-card shadow">
-                <div class="dashboard-card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="dashboard-card-icon">
-                            <i data-feather="package"></i>
-                        </div>
-                        <div>
-                            <h4>Services</h4>
-                            <p class="m-0">Click here to view/edit the services you have already registered in our database</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="dashboard-card-footer">
-                    <span>Manage Services</span> <i data-feather="chevron-right"></i>
-                </div>
-            </a>
-        </div>
-    </div>
 <?php endif ?>
+
 <?php if(Yii::$app->user->can(User::ROLE_ADMIN)): ?>
     <div class="row mb-4">
         <div class="col-lg-4">
@@ -226,8 +153,6 @@ $this->params['icon'] = 'box';
         </div>
     </div>
 <?php endif ?>
-
-
 <?php if(Yii::$app->user->can(User::ROLE_DEVELOPER)) : ?>
     <div class="row mb-4">
         <div class="col-lg-4">
