@@ -15,18 +15,72 @@
   transition: all .3s ease-in-out;
 }
 
-html, body {
-  transition: none;
-  height: 100%;
-  scroll-behavior: smooth;
+html,
+body {
+  color: $body-color;
+  height: 100vh;
 }
 
-body {
-  font-size: 18px;
-  font-family: Roboto, sans-serif;
-  @include media-breakpoint-down(xs) {
-    font-size: 14px;
+html {
+  font-size: $font-size-base + px;
+}
+
+label {
+  color: $primary;
+}
+
+.app {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-image: url("/images/bg.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+
+
+.btn-primary {
+  background: $primary;
+  border: solid 1px $primary;
+  border-radius: 3px;
+  color: #fff;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-left: 10px;
+  min-width: 120px;
+  outline: none;
+  padding: 0.375rem 0.75rem;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.6s ease;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: $dark;
+    border: solid 1px $dark;
+    color: #fff;
   }
 }
 
+.auth-form {
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+  .btn {
+    margin-left: 0;
+  }
 
+
+}

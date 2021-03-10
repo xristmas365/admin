@@ -8,14 +8,13 @@
  */
 
 use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
+use app\modules\user\models\User;
 use app\modules\admin\widgets\Menu;
 
-if(Yii::$app->controller->action->id === 'create' || Yii::$app->controller->action->id === 'update') {
-    $icon = 'edit';
-} else {
-    $icon = ArrayHelper::getValue($this->params, 'icon', 'home');
-}
+/**
+ * @var $user User
+ */
+$user = Yii::$app->user->identity;
 
 ?>
 <aside class="aside aside-fixed shadow">
@@ -28,7 +27,13 @@ if(Yii::$app->controller->action->id === 'create' || Yii::$app->controller->acti
     </div>
     <div class="aside-body">
         <div class="aside-loggedin shadow">
-            <a href="<?= Url::toRoute(['/user/default/account']) ?>" class="avatar"><img src="<?= Yii::$app->user->identity->image ?>" alt=""></a>
+            <a href="<?= Url::toRoute(['/user/default/account']) ?>" class="avatar"><img src="<?= $user->image ?>" alt=""></a>
+        </div>
+        <div class="aside-loggedin-user">
+            <span class="d-flex align-items-center justify-content-between mg-b-2">
+                <h6 class="tx-semibold mg-b-0 text-uppercase"><?= $user->name ?></h6>
+            </span>
+            <p class="tx-color-03 tx-12 mg-b-0"><?= $user->roleValue ?></p>
         </div>
         <?= Menu::widget(['items' => require Yii::getAlias('@config/menu.php')]) ?>
     </div>

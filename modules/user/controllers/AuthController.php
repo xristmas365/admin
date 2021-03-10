@@ -2,9 +2,9 @@
 /**
  * AuthController.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -13,13 +13,9 @@
 namespace app\modules\user\controllers;
 
 use Yii;
-use yii\web\Response;
-use yii\web\Controller;
-use app\modules\user\models\Login;
-use app\modules\user\models\Reset;
-use app\modules\user\form\ResetForm;
-use app\modules\user\models\Password;
+use yii\web\{Response, Controller};
 use app\modules\user\components\AuthHandler;
+use app\modules\user\models\{User, Login, Reset, Password};
 
 class AuthController extends Controller
 {
@@ -109,6 +105,38 @@ class AuthController extends Controller
         }
         
         return $this->render('password', ['model' => $model]);
+    }
+    
+    public function actionSwitch($id)
+    {
+        $currentUser = Yii::$app->user->identity;
+        $user = User::findOne($id);
+        if($user) {
+            Yii::$app->user->switchIdentity($user);
+            
+            Yii::$app->session->set('admin_id', $currentUser->id);
+            Yii::$app->session->set('admin_name', $currentUser->name);
+            
+            Yii::$app->session->setFlash('success', 'Welcome to ' . $user->name . ' Dashboard');
+            
+            return $this->redirect(['/admin/default/index']);
+        }
+        
+    }
+    
+    public function actionSwitchBack($id)
+    {
+        $user = User::findOne($id);
+        if($user) {
+            Yii::$app->session->remove('admin_id');
+            Yii::$app->session->remove('admin_name');
+            
+            Yii::$app->user->switchIdentity($user);
+            
+            Yii::$app->session->setFlash('success', 'Welcome back to ' . $user->name . ' Dashboard');
+            
+            return $this->redirect(['/user/default/index']);
+        }
     }
     
 }

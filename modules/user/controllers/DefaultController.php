@@ -2,9 +2,9 @@
 /**
  * DefaultController.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -16,7 +16,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\modules\admin\controllers\BackendController;
-use app\modules\user\models\{User, UserSearch, ChangePassword};
+use app\modules\user\models\{User, ChangePassword, search\UserSearch};
 
 /**
  * UserController implements the CRUD actions for User model.

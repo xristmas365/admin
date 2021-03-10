@@ -13,6 +13,19 @@
 use app\modules\user\models\User;
 
 return [
+    [
+        'label'   => 'Account Identity',
+        'visible' => Yii::$app->session->has('admin_id'),
+    ],
+    [
+        'label'   => '<i data-feather="user-x"></i> <span> Back to ' . Yii::$app->session->get('admin_name') . '</span>',
+        'url'     => ['/user/auth/switch-back', 'id' => Yii::$app->session->get('admin_id')],
+        'visible' => Yii::$app->session->has('admin_id'),
+    ],
+    [
+        'label'   => '',
+        'visible' => Yii::$app->session->has('admin_id'),
+    ],
     ['label' => 'Dashboard'],
     [
         'label' => '<i data-feather="box"></i> <span>Dashboard</span>',

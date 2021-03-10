@@ -2,9 +2,9 @@
 /**
  * User.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -150,7 +150,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['email'], 'string', 'max' => 255],
             [['password', 'address'], 'string', 'max' => 60],
             [['auth_key', 'first_name', 'last_name', 'city'], 'string', 'max' => 32],
-            [['phone'], 'string', 'max' => 12],
+            [['phone'], 'string', 'max' => 16],
             [['state'], 'string', 'max' => 2],
             [['email'], 'unique'],
             [['email'], 'email'],

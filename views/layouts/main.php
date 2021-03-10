@@ -2,20 +2,24 @@
 /**
  * main.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
  */
 
-/* @var $this View */
-
-/* @var $content string */
-
 use yii\web\View;
 use yii\helpers\Html;
+use app\assets\AppAsset;
+
+/**
+ * @var $this    View
+ * @var $content string
+ */
+
+AppAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
@@ -31,7 +35,7 @@ use yii\helpers\Html;
 </head>
 <body>
 <?php $this->beginBody() ?>
-<div class="wrap fixed-background">
+<div class="app">
     <div class="container">
         <?= $content ?>
     </div>
