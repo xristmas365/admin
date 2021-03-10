@@ -15,7 +15,7 @@ namespace app\modules\user\controllers;
 use Yii;
 use yii\web\{Response, Controller};
 use app\modules\user\components\AuthHandler;
-use app\modules\user\models\{User, Login, Reset, Password};
+use app\modules\user\models\{User, Login, Reset, Password, Register};
 
 class AuthController extends Controller
 {
@@ -65,11 +65,17 @@ class AuthController extends Controller
      */
     public function actionRegister()
     {
-        if(Yii::$app->user->isGuest) {
+        if(!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         
-        return $this->render('register');
+        $model = new Register;
+        
+        if($model->load(Yii::$app->request->post()) && $model->up()) {
+            return $this->redirect(['/admin/default/index']);
+        }
+        
+        return $this->render('register', ['model' => $model]);
     }
     
     /**

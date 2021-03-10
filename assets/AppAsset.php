@@ -13,6 +13,7 @@
 namespace app\assets;
 
 use yii\web\AssetBundle;
+use yii\bootstrap4\BootstrapPluginAsset;
 
 class AppAsset extends AssetBundle
 {
@@ -29,6 +30,7 @@ class AppAsset extends AssetBundle
     ];
     
     public $depends    = [
+        BootstrapPluginAsset::class,
         FontAwesomeAsset::class,
     ];
     

@@ -13,20 +13,34 @@
 use yii\web\View;
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
-use app\modules\user\models\Login;
+use yii\widgets\MaskedInput;
+use app\modules\user\models\Register;
 
 /**
  * @var $this  View
- * @var $model Login
+ * @var $model Register
  */
 
-$this->title = 'Login';
+$this->title = 'Registration';
 
 ?>
-<?php $form = ActiveForm::begin() ?>
-
-<?= $form->field($model, 'email') ?>
-<?= $form->field($model, 'password', ['addon' => ['append' => ['content' => Html::a('?', ['/user/auth/reset'])]]])->passwordInput() ?>
+<?php $form = ActiveForm::begin(['options' => ['class' => 'auth-form py-5 col-md-5 offset-md-7 px-5']]) ?>
+<div class="h4 text-primary mb-2"><?= $this->title ?></div>
+<?= $form->field($model, 'email')->textInput(['placeholder' => 'Email']) ?>
+<?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password']) ?>
+<div class="row">
+    <div class="col-md-6">
+        <?= $form->field($model, 'firstName')->textInput(['placeholder' => 'First Name']) ?>
+    </div>
+    <div class="col-md-6">
+        <?= $form->field($model, 'lastName')->textInput(['placeholder' => 'Last Name']) ?>
+    </div>
+</div>
+<?= $form->field($model, 'phone')->widget(MaskedInput::class, ['mask' => '(999) 999-9999', 'options' => ['placeholder' => '(___) ___-____']]) ?>
 <?= $form->field($model, 'remember')->checkbox() ?>
-<?= Html::submitButton('Login', ['class' => 'btn btn-primary']) ?>
+<?= Html::submitButton('Register', ['class' => 'btn btn-primary']) ?>
+<p class="text-muted mt-2">
+    Already have an account?
+    <?= Html::a('Login', ['/user/auth/login'], ['class' => 'btn btn-link']) ?>
+</p>
 <?php ActiveForm::end() ?>

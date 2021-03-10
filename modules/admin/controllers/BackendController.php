@@ -2,9 +2,9 @@
 /**
  * BackendController.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -23,6 +23,8 @@ class BackendController extends Controller
     public function init()
     {
         parent::init();
+        Yii::$app->assetManager->bundles['yii\bootstrap4\BootstrapAsset'] = ['css' => ['css/bootstrap.min.css']];
+        
     }
     
     public function behaviors()

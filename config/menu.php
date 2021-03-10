@@ -44,7 +44,7 @@ return [
         'label' => '<i data-feather="server"></i> <span>Catalogs</span>',
         'url'   => ['/store/catalog/index'],
     ],
-    ['label' => 'Content'],
+    ['label' => 'Content', 'visible' => Yii::$app->user->can(User::ROLE_ADMIN),],
     [
         'label'   => '<i data-feather="file-text"></i> <span>Pages</span>',
         'url'     => ['/page/default/index'],
