@@ -13,6 +13,9 @@
 namespace app\modules\admin\controllers;
 
 use Yii;
+use yii\helpers\Json;
+use yii\base\DynamicModel;
+use yii\helpers\FileHelper;
 use yii\helpers\ArrayHelper;
 use yii\web\MethodNotAllowedHttpException;
 
@@ -25,6 +28,22 @@ class DefaultController extends BackendController
     public function actionIndex()
     {
         return $this->render('index');
+    }
+    
+    public function actionSettings()
+    {
+        $file = Yii::getAlias('@app/config/settings.json');
+        $content = Json::decode(file_get_contents($file));
+        
+        $settings = new DynamicModel($content);
+        $settings->addRule(array_keys($content), 'safe');
+        
+        if($settings->load(Yii::$app->request->post())) {
+            file_put_contents($file, Json::encode($settings->attributes, JSON_PRETTY_PRINT));
+            Yii::$app->session->setFlash('success', 'Settings Saved');
+        }
+        
+        return $this->render('settings', ['settings' => $settings]);
     }
     
     

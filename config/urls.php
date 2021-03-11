@@ -45,6 +45,7 @@ return [
     '/admin'           => '/admin/default/index',
     '/admin/logs'      => '/admin/log/index',
     '/admin/logs/<id>' => '/admin/log/view',
+    '/admin/settings' => '/admin/default/settings',
     
     /**
      * USERS

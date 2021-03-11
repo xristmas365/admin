@@ -60,8 +60,12 @@ return [
         'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
     ],
     [
-        'label'   => '<i data-feather="users"></i> <span>Users</span>',
-        'url'     => ['/user/default/index'],
+        'label' => '<i data-feather="users"></i> <span>Users</span>',
+        'url'   => ['/user/default/index'],
+    ],
+    [
+        'label'   => '<i data-feather="settings"></i> <span>Settings</span>',
+        'url'     => ['/admin/default/settings'],
         'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
     ],
     [

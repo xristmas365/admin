@@ -43,8 +43,7 @@ AppAsset::register($this);
     'brandImage'           => '/favicon.ico',
     'renderInnerContainer' => false,
     'options'              => [
-        'class' => 'navbar navbar-expand-lg shadow p-1',
-        'style' => 'z-index:2',
+        'class' => 'navbar navbar-expand-lg shadow p-1 z-index-2',
     ],
     'collapseOptions'      => [
         'class' => 'd-flex justify-content-end mx-5',
@@ -60,7 +59,8 @@ AppAsset::register($this);
 <?php endif ?>
 <?php NavBar::end() ?>
 <div class="app">
-    <div class="container">
+    <img src="/images/bg.webp" class="blur" alt="">
+    <div class="z-index-2 w-100 text">
         <?= $content ?>
     </div>
 </div>
