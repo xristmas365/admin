@@ -2,9 +2,9 @@
 /**
  * DefaultController.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -109,19 +109,11 @@ class DefaultController extends BackendController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
     
-    /**
-     * Deletes an existing Page model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param integer $id
-     *
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->findModel($id)->delete();
         
-        return $this->redirect(['index']);
+        $ids = Yii::$app->request->post('ids');
+        
+        return Page::deleteAll(['id' => $ids]);
     }
 }

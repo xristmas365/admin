@@ -63,6 +63,7 @@ return [
     
     '/admin/pages'     => '/page/default/index',
     '/admin/pages/new' => '/page/default/create',
+    '/admin/pages/<id>' => '/page/default/update',
     
     /**
      * ARTICLE

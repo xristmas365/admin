@@ -18,7 +18,7 @@ use dosamigos\tinymce\TinyMce;
 /* @var $model app\modules\page\models\Page */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = $model->isNewRecord ? 'New Page' : $model->name;
+$this->title = $model->isNewRecord ? 'New Page' : $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Pages', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

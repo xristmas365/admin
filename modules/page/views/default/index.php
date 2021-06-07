@@ -2,14 +2,15 @@
 /**
  * index.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
  */
 
+use kartik\grid\CheckboxColumn;
 use app\modules\admin\widgets\grid\AdminGrid;
 
 /* @var $this yii\web\View */
@@ -26,13 +27,14 @@ $this->params['icon'] = 'file-text'
     'dataProvider' => $dataProvider,
     'filterModel'  => $searchModel,
     'columns'      => [
-        AdminGrid::COLUMN_SERIAL,
+        [
+            'class' => CheckboxColumn::class,
+        ],
         'title',
         'created_at',
         'created_by',
         'slug',
         'draft:boolean',
-        AdminGrid::COLUMN_ACTION,
     ],
 ]) ?>
 

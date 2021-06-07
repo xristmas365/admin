@@ -15,7 +15,7 @@ namespace app\modules\admin\controllers;
 use Yii;
 use yii\web\{Response, Controller};
 
-class BackendController extends Controller
+abstract class BackendController extends Controller
 {
     
     public $layout = '@app/modules/admin/views/layouts/main';
@@ -50,5 +50,11 @@ class BackendController extends Controller
     {
         return $this->redirect(['/admin/default/index']);
     }
+    
+    /**
+     * POST multiple delete
+     * @return mixed
+     */
+    abstract public function actionDelete();
     
 }

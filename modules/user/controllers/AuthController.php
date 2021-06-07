@@ -52,6 +52,10 @@ class AuthController extends Controller
         $model = new Login;
         
         if($model->load(Yii::$app->request->post()) && $model->in()) {
+            if(Yii::$app->session->has('__returnUrl')) {
+                Yii::$app->session->remove('__returnUrl');
+                return $this->redirect(Yii::$app->session->get('__returnUrl'));
+            }
             return $this->redirect(['/admin/default/index']);
         }
         

@@ -23,7 +23,19 @@ class AdminGrid extends GridView
     
     public $title;
     
-    public $createButton;
+    public $leftButtons      = [
+        [
+            'url'   => ['create'],
+            'label' => '<div class="fas fa-plus"></div> New',
+        ],
+    ];
+    
+    public $rightButtons     = [
+        [
+            'url'   => ['index'],
+            'label' => '<i class="fas fa-filter"></i> Clear Filters',
+        ],
+    ];
     
     public $extraSearch;
     
@@ -39,7 +51,7 @@ class AdminGrid extends GridView
     
     public $pjaxSettings         = [
         'neverTimeout'    => true,
-        'loadingCssClass' => false,
+        'loadingCssClass' => 'grid-loading',
     ];
     
     public $bordered             = false;
@@ -73,7 +85,15 @@ class AdminGrid extends GridView
     
     public $panelHeadingTemplate = <<< HTML
 <div class="position-relative text-center">
-     <div class="create-button">{createButton}</div>{gridTitle}
+     <div class="grid-left-buttons">
+        {leftButtons}
+     </div>
+     <div class="grid-title">
+     {gridTitle}
+     </div>
+     <div class="grid-right-buttons">
+        {rightButtons}
+    </div>
 </div>
 HTML;
     
@@ -97,6 +117,10 @@ HTML;
     {
         parent::init();
         $this->extraSearch = $this->extraSearch ?? $this->view->render('@app/modules/admin/widgets/grid/_search', ['model' => $this->filterModel]);
+        $this->rowOptions = function($model, $key, $index, $grid)
+        {
+            return ['id' => $model['id'], 'ondblclick' => 'location.href="' . Url::toRoute(['update', 'id' => $model->id]) . '"'];
+        };
     }
     
     public function renderSection($name)
@@ -108,8 +132,10 @@ HTML;
                 return $this->renderGridTitle();
             case '{extraSearch}':
                 return $this->renderExtraSearch();
-            case '{createButton}':
-                return $this->renderCreateButton();
+            case '{leftButtons}':
+                return $this->renderLeftButtons();
+            case '{rightButtons}':
+                return $this->renderRightButtons();
             default:
                 return parent::renderSection($name);
         }
@@ -149,9 +175,30 @@ HTML;
         return $this->extraSearch;
     }
     
-    public function renderCreateButton()
+    public function renderLeftButtons()
     {
-        return $this->createButton ?? Html::a('<div class="fas fa-plus"></div> New', ['create'], ['class' => 'btn btn-sm btn-white', 'data-pjax' => 0]);
+        $html = Html::button('<i class="fas fa-trash-alt"></i> Delete <span id="' . $this->id . '-selected-counter"></span>', [
+            'id'        => $this->id . '-delete-btn',
+            'class'     => 'btn btn-sm btn-danger grid-delete-btn mr-1',
+            'style'     => 'display:none',
+            'data-grid' => $this->id,
+            'data-url'  => Url::toRoute(['delete']),
+        ]);
+        foreach($this->leftButtons as $leftButton) {
+            $html .= Html::a($leftButton['label'], $leftButton['url'], ['class' => 'btn btn-sm btn-white mr-1', 'data-pjax' => 0]);
+        }
+        
+        return $html;
+    }
+    
+    public function renderRightButtons()
+    {
+        $html = '';
+        foreach($this->rightButtons as $rightButton) {
+            $html .= Html::a($rightButton['label'], $rightButton['url'], ['class' => 'btn btn-sm btn-white']);
+        }
+        
+        return $html;
     }
     
 }

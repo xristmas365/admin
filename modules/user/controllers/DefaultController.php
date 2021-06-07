@@ -13,7 +13,6 @@
 namespace app\modules\user\controllers;
 
 use Yii;
-use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\modules\admin\controllers\BackendController;
 use app\modules\user\models\{User, ChangePassword, search\UserSearch};
@@ -23,21 +22,6 @@ use app\modules\user\models\{User, ChangePassword, search\UserSearch};
  */
 class DefaultController extends BackendController
 {
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class'   => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
     
     /**
      * Lists all User models.
@@ -145,20 +129,12 @@ class DefaultController extends BackendController
         
     }
     
-    /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param integer $id
-     *
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->findModel($id)->delete();
+        Yii::$app->response->format = 'json';
+        $ids = Yii::$app->request->post('ids');
         
-        return $this->redirect(['index']);
+        return $ids;
     }
     
     /**
