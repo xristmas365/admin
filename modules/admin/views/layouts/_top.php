@@ -25,6 +25,6 @@ use yii\bootstrap4\Breadcrumbs;
     </div>
 
     <nav class="nav">
-        <a href="<?= Url::toRoute(['/user/auth/logout']) ?>" class="nav-link" data-confirm="Are you sure you want to exit?"><i data-feather="log-out"></i></a>
+        <a href="<?= Url::toRoute(['/user/auth/logout']) ?>" class="nav-link" data-confirm="Are you sure you want to exit?">Logout <i data-feather="log-out"></i></a>
     </nav>
 </div>
