@@ -28,58 +28,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <?php $form = ActiveForm::begin(); ?>
-<div class="card user-card">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-        <div class="d-flex justify-content-start">
-            <?= Html::a('<i class="fas fa-arrow-left"></i> Back', ['index'], ['class' => 'btn btn-white mr-4']) ?>
-        </div>
-        <div class="text-heading"><?= $this->title ?></div>
-        <div class="d-flex justify-content-end">
-            <?php if(!$model->isNewRecord) : ?>
-                <?= Html::a('<div class="fas fa-trash"></div> Delete', ['delete', 'id' => $model->id], [
-                    'class'        => 'btn btn-danger mr-2',
-                    'data-confirm' => 'Are You sure you want to Delete?',
-                    'data-method'  => 'POST',
-                ]) ?>
-            <?php endif ?>
-            <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-white']) ?>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="d-flex justify-content-end align-content-end">
+<div class="container-admin shadow p-4">
+    <div class="text-heading mb-4"><?= $this->title ?></div>
+    <div class="row">
+        <div class="col-md-2">
             <?= $form->field($model, 'files')->widget(Upload::class, [
                 'url'        => ['/storage/default/upload'],
                 'uploadPath' => 'photo/',
                 'multiple'   => true,
             ])->label('Photo') ?>
-            <div class="row ml-4">
-                <div class="col-md-6">
-                    <?= $form->field($model, 'email') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'password')->passwordInput() ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'first_name') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'last_name') ?>
-                </div>
+            <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-white btn-block']) ?>
+            <?= Html::a('<div class="fas fa-ban"></div> Cancel', ['/admin/default/index'], ['class' => 'btn btn-block btn-white']) ?>
+        </div>
+        <div class="col-md-10 ">
+            <?= $form->field($model, 'email') ?>
+            <div class="row">
+                <div class="col"><?= $form->field($model, 'first_name') ?></div>
+                <div class="col"><?= $form->field($model, 'last_name') ?></div>
             </div>
-            <div class="row ml-4">
-                <div class="col-md-6">
-                    <?= $form->field($model, 'address') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'city') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'state') ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'zip') ?>
-                </div>
-            </div>
+            <?= $form->field($model, 'phone') ?>
+            <?= $form->field($model, 'address') ?>
+            <?= $form->field($model, 'city') ?>
+            <?= $form->field($model, 'state') ?>
+            <?= $form->field($model, 'zip') ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 offset-md-2">
         </div>
     </div>
 </div>

@@ -102,6 +102,7 @@ class UserSearch extends User
         }
         
         $query->andFilterWhere([
+            'id'        => $this->id,
             'blocked'   => $this->blocked,
             'confirmed' => $this->confirmed,
             'role'      => $this->role,

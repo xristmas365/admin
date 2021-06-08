@@ -10,7 +10,6 @@
  * @since      File available since v1.0
  */
 
-use kartik\grid\CheckboxColumn;
 use app\modules\admin\widgets\grid\AdminGrid;
 
 /* @var $this yii\web\View */
@@ -27,9 +26,7 @@ $this->params['icon'] = 'file-text'
     'dataProvider' => $dataProvider,
     'filterModel'  => $searchModel,
     'columns'      => [
-        [
-            'class' => CheckboxColumn::class,
-        ],
+        AdminGrid::COLUMN_CHECKBOX,
         'title',
         'created_at',
         'created_by',

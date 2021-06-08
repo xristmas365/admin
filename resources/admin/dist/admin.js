@@ -37,7 +37,7 @@ $(document).on('click', '.grid-delete-btn', function () {
   const selected = getSelectedRows(grid)
   const url = $(this).data('url')
   krajeeDialog.confirm('Are You Sure You Want to Delete ' + selected.length + ' item(s)?', function (result) {
-    if (result) { // ok button was pressed
+    if (result) {
       $.post(url, { 'ids': selected }).done(function (res) {
         $.pjax.reload({ container: '#' + grid + '-pjax' })
         krajeeDialog.alert(res + ' item(s) successfully deleted')

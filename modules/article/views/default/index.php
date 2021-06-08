@@ -1,7 +1,6 @@
 <?php
 
 use yii\web\View;
-use yii\helpers\Html;
 use yii\data\ActiveDataProvider;
 use app\modules\article\models\Section;
 use app\modules\admin\widgets\grid\AdminGrid;
@@ -18,21 +17,23 @@ use app\modules\article\models\search\ArticleSearch;
 $this->title = 'Articles';
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['icon'] = 'cast';
-
-$createButton =
-    '<div>' .
-    Html::a('<div class="fas fa-plus"></div> New', ['create'], ['class' => 'btn btn-white', 'data-pjax' => 0])
-    . Html::a('<div class="fas fa-bars"></div> Topics', ['/article/section/index'], ['class' => 'btn btn-white ml-2', 'data-pjax' => 0])
-    . '</div>';
-
 ?>
 
 <?= AdminGrid::widget([
-    'createButton' => $createButton,
     'dataProvider' => $dataProvider,
     'filterModel'  => $searchModel,
+    'leftButtons'  => [
+        [
+            'url'   => ['create'],
+            'label' => '<div class="fas fa-plus"></div> New',
+        ],
+        [
+            'url'   => ['/article/section/index'],
+            'label' => '<div class="fas fa-bars"></div> Topics',
+        ],
+    ],
     'columns'      => [
-        AdminGrid::COLUMN_SERIAL,
+        AdminGrid::COLUMN_CHECKBOX,
         [
             'class'          => ImageColumn::class,
             'imageAttribute' => 'coverImage',
@@ -47,7 +48,5 @@ $createButton =
             'class'     => SwitchColumn::class,
             'attribute' => 'draft',
         ],
-        
-        AdminGrid::COLUMN_ACTION,
     ],
 ]); ?>

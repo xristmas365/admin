@@ -42,19 +42,16 @@ $this->params['icon'] = 'menu';
                 </div>
             </div>
             <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-white']) ?>
-            <?= Html::a('<div class="fas fa-ban"></div> Cancel', ['/article/default/index'], ['class' => 'btn btn-white']) ?>
         </div>
         <?php $form = ActiveForm::end() ?>
     </div>
     <div class="col-md-8">
         <?= AdminGrid::widget([
-            'createButton' => '',
             'dataProvider' => $dataProvider,
             'filterModel'  => $searchModel,
             'columns'      => [
-                AdminGrid::COLUMN_SERIAL,
                 AdminGrid::COLUMN_IMAGE,
-                
+                AdminGrid::COLUMN_CHECKBOX,
                 'name',
                 [
                     'class'     => SwitchColumn::class,
@@ -64,7 +61,6 @@ $this->params['icon'] = 'menu';
                     'class'     => SwitchColumn::class,
                     'attribute' => 'visible',
                 ],
-                AdminGrid::COLUMN_ACTION,
             ],
         ]); ?>
     </div>

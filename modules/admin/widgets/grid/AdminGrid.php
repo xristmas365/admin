@@ -13,13 +13,15 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use kartik\popover\PopoverX;
 
 class AdminGrid extends GridView
 {
     
-    const COLUMN_ACTION = ['class' => 'app\modules\admin\widgets\grid\ActionColumn'];
-    const COLUMN_IMAGE  = ['class' => 'app\modules\admin\widgets\grid\ImageColumn'];
-    const COLUMN_SERIAL = ['class' => 'kartik\grid\SerialColumn'];
+    const COLUMN_ACTION   = ['class' => 'app\modules\admin\widgets\grid\ActionColumn'];
+    const COLUMN_IMAGE    = ['class' => 'app\modules\admin\widgets\grid\ImageColumn'];
+    const COLUMN_SERIAL   = ['class' => 'kartik\grid\SerialColumn'];
+    const COLUMN_CHECKBOX = ['class' => 'kartik\grid\CheckboxColumn'];
     
     public $title;
     
@@ -33,7 +35,7 @@ class AdminGrid extends GridView
     public $rightButtons     = [
         [
             'url'   => ['index'],
-            'label' => '<i class="fas fa-filter"></i> Clear Filters',
+            'label' => '<i class="fas fa-ban"></i> Clear Filters',
         ],
     ];
     
@@ -51,7 +53,7 @@ class AdminGrid extends GridView
     
     public $pjaxSettings         = [
         'neverTimeout'    => true,
-        'loadingCssClass' => 'grid-loading',
+        //'loadingCssClass' => 'grid-loading',
     ];
     
     public $bordered             = false;
@@ -116,10 +118,9 @@ HTML;
     public function init()
     {
         parent::init();
-        $this->extraSearch = $this->extraSearch ?? $this->view->render('@app/modules/admin/widgets/grid/_search', ['model' => $this->filterModel]);
         $this->rowOptions = function($model, $key, $index, $grid)
         {
-            return ['id' => $model['id'], 'ondblclick' => 'location.href="' . Url::toRoute(['update', 'id' => $model->id]) . '"'];
+            return ['id' => $model['id'], 'title' => 'Double click to View', 'ondblclick' => 'location.href="' . Url::toRoute(['update', 'id' => $model->id]) . '"'];
         };
     }
     

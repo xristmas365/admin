@@ -2,20 +2,19 @@
 /**
  * index.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
  */
 
 use yii\helpers\Html;
-use yii\helpers\StringHelper;
-use kartik\grid\BooleanColumn;
 use app\modules\store\models\Product;
 use app\modules\store\models\Catalog;
 use app\modules\admin\widgets\grid\AdminGrid;
+use app\modules\admin\widgets\grid\SwitchColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\store\models\search\ProductSearch */
@@ -31,7 +30,8 @@ $this->params['icon'] = 'shopping-bag'
     'dataProvider' => $dataProvider,
     'filterModel'  => $searchModel,
     'columns'      => [
-        AdminGrid::COLUMN_SERIAL,
+        AdminGrid::COLUMN_IMAGE,
+        AdminGrid::COLUMN_CHECKBOX,
         [
             'attribute' => 'title',
             'format'    => 'raw',
@@ -41,37 +41,19 @@ $this->params['icon'] = 'shopping-bag'
             },
         ],
         [
-            'attribute'           => 'catalog_id',
-            'format'              => 'raw',
-            'width'               => '30%',
-            'filterType'          => 'kartik\tree\TreeViewInput',
-            'filterWidgetOptions' => [
-                'query'            => Catalog::find()->addOrderBy('root, lft'),
-                'headingOptions'   => ['label' => 'Store'],
-                'rootOptions'      => ['label' => '<i class="fas fa-tree text-success"></i>'],
-                'fontAwesome'      => true,
-                'multiple'         => false,
-                'topRootAsHeading' => true,
-            ],
-            'value'               => function(Product $model)
+            'attribute' => 'catalog_id',
+            'format'    => 'raw',
+            'filter'    => Catalog::getList(),
+            'value'     => function(Product $model)
             {
-                return $model->catalog->getBreadcrumbs(0);
+                return $model->catalog ? $model->catalog->getBreadcrumbs(0) : null;
                 
             },
         ],
-        //[
-        //    'attribute' => 'description',
-        //    'width'     => '30%',
-        //    'value'     => function(Product $model)
-        //    {
-        //        return StringHelper::truncate($model->description, 70);
-        //    },
-        //],
         [
-            'class'     => BooleanColumn::class,
+            'class'     => SwitchColumn::class,
             'attribute' => 'active',
         ],
         'price:currency',
-        AdminGrid::COLUMN_ACTION,
     ],
 ]) ?>

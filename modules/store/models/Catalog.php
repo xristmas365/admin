@@ -2,9 +2,9 @@
 /**
  * Catalog.php
  *
- * @version    1.0
- * @package    AX project
  * @author     Paul Storre <1230840.ps@gmail.com>
+ * @package    AX project
+ * @version    1.0
  * @copyright  IndustrialAX LLC
  * @license    https://industrialax.com/license
  * @since      File available since v1.0
@@ -44,6 +44,7 @@ class Catalog extends Tree
 {
     
     public $search;
+    
     public $slug;
     
     /**
@@ -52,6 +53,55 @@ class Catalog extends Tree
     public static function tableName()
     {
         return 'catalog';
+    }
+    
+    public static function getList()
+    {
+        $nestedSets = Catalog::find()->select(['id', 'lvl', 'name'])->orderBy('root, lft')->asArray()->all();
+        
+        $list = [];
+        
+        foreach($nestedSets as $node) {
+            $list[$node['id']] = str_repeat('»', $node['lvl']) . " " . $node['name'];
+        }
+        
+        return $list;
+    }
+    
+    public static function getNestedSets()
+    {
+        $collection = Catalog::find()->orderBy('root, lft')->asArray()->all();
+        
+        $trees = [];
+        $l = 0;
+        
+        if($collection) {
+            $stack = [];
+            
+            foreach($collection as $node) {
+                $item = ['id' => $node['id'], 'lvl' => $node['lvl'], 'name' => $node['name']];
+                $item['items'] = [];
+                
+                $l = count($stack);
+                
+                while($l > 0 && $stack[$l - 1]['lvl'] >= $item['lvl']) {
+                    array_pop($stack);
+                    $l--;
+                }
+                
+                if($l == 0) {
+                    $i = count($trees);
+                    $trees[$i] = $item;
+                    $stack[] = &$trees[$i];
+                } else {
+                    $i = count($stack[$l - 1]['items']);
+                    $stack[$l - 1]['items'][$i] = $item;
+                    $stack[] = &$stack[$l - 1]['items'][$i];
+                }
+            }
+        }
+        
+        return $trees;
     }
     
     /**
@@ -113,7 +163,7 @@ class Catalog extends Tree
     public function attributeHints()
     {
         return [
-            'name' => 'Save after editing'
+            'name' => 'Save after editing',
         ];
     }
     

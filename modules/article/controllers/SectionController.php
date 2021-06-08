@@ -37,18 +37,23 @@ class SectionController extends BackendController
     }
     
     /**
-     * Displays a single Section model.
+     * Updates an existing Section model.
+     * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param integer $id
      *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionUpdate($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+        
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+        
+        return $this->render('form', ['model' => $model]);
     }
     
     /**
@@ -67,46 +72,6 @@ class SectionController extends BackendController
         }
         
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-    
-    /**
-     * Creates a new Section model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Section();
-        
-        if($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-        
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-    
-    /**
-     * Updates an existing Section model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param integer $id
-     *
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-        
-        if($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-        
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
     
     /**

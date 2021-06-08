@@ -11,10 +11,10 @@
  */
 
 use yii\helpers\Html;
-use kartik\grid\BooleanColumn;
 use app\modules\user\models\User;
-use app\modules\user\models\UserSearch;
 use app\modules\admin\widgets\grid\AdminGrid;
+use app\modules\user\models\search\UserSearch;
+use app\modules\admin\widgets\grid\SwitchColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel UserSearch */
@@ -27,10 +27,12 @@ $this->params['icon'] = 'users';
 ?>
 
 <?= AdminGrid::widget([
+    'leftButtons' => [],
     'dataProvider' => $dataProvider,
     'filterModel'  => $searchModel,
     'columns'      => [
-        AdminGrid::COLUMN_SERIAL,
+        AdminGrid::COLUMN_CHECKBOX,
+        'id',
         'email:email',
         [
             'attribute' => 'first_name',
@@ -38,15 +40,25 @@ $this->params['icon'] = 'users';
             'label'     => 'Name',
             'value'     => function(User $model)
             {
-                return $model->id === Yii::$app->user->id ? '<strong>' . $model->name . ' (you)</strong>' : $model->name;
+                if($model->id === Yii::$app->user->id) {
+                    $value = '<strong>' . $model->name . ' (you)</strong>';
+                } else {
+                    $value = Html::a('<i class="fas fa-user-secret text-secondary"></i> ', ['/user/auth/switch', 'id' => $model->id], [
+                            'data-pjax'    => 0,
+                            'data-confirm' => 'Are You sure You want to become <strong>&#60;' . $model->name . '&#62;</strong>?' .
+                                '<br> You can return in the <strong>left menu</strong>',
+                        ]) . $model->name;
+                }
+                
+                return $value;
             },
         ],
         [
-            'class'     => BooleanColumn::class,
+            'class'     => SwitchColumn::class,
             'attribute' => 'blocked',
         ],
         [
-            'class'     => BooleanColumn::class,
+            'class'     => SwitchColumn::class,
             'attribute' => 'confirmed',
         ],
         [
@@ -78,23 +90,23 @@ $this->params['icon'] = 'users';
                 ],
             ],
         ],
-        [
-            'class'    => 'app\modules\admin\widgets\grid\ActionColumn',
-            'template' => '<div class="d-flex actions justify-content-between px-2">{switch}<span class="action-delete">{delete}</span></div>',
-            'buttons'  => [
-                'switch' => function($url, $model)
-                {
-                    return $model->id === Yii::$app->user->id ? null : Html::a(
-                        '<i class="fas fa-user-cog"></i>',
-                        ['/user/auth/switch', 'id' => $model->id],
-                        [
-                            'data-pjax'    => 0,
-                            'title'        => 'Switch to ' . $model->name,
-                            'data-confirm' => 'Are You sure You want to become <strong>&#60;' . $model->name . '&#62;</strong>?' .
-                                '<br> You can return in the <strong>left menu</strong>',
-                        ]);
-                },
-            ],
-        ],
+        //[
+        //    'class'    => 'app\modules\admin\widgets\grid\ActionColumn',
+        //    'template' => '<div class="d-flex actions justify-content-between px-2">{switch}<span class="action-delete">{delete}</span></div>',
+        //    'buttons'  => [
+        //        'switch' => function($url, $model)
+        //        {
+        //            return $model->id === Yii::$app->user->id ? null : Html::a(
+        //                '<i class="fas fa-user-cog"></i>',
+        //                ['/user/auth/switch', 'id' => $model->id],
+        //                [
+        //                    'data-pjax'    => 0,
+        //                    'title'        => 'Switch to ' . $model->name,
+        //                    'data-confirm' => 'Are You sure You want to become <strong>&#60;' . $model->name . '&#62;</strong>?' .
+        //                        '<br> You can return in the <strong>left menu</strong>',
+        //                ]);
+        //        },
+        //    ],
+        //],
     ],
 ]); ?>

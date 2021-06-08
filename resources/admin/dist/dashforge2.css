@@ -667,6 +667,11 @@ body {
     padding-left: 0;
 }
 
+.kv-loader {
+    position: absolute;
+    background: #fff center center no-repeat !important;
+}
+
 .grid-left-buttons {
     position: absolute;
     left: 0;
