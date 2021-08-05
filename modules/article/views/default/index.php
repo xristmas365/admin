@@ -1,11 +1,17 @@
 <?php
+/**
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
+ */
 
 use yii\web\View;
+use yii\helpers\Html;
 use yii\data\ActiveDataProvider;
-use app\modules\article\models\Section;
+use app\modules\article\models\Article;
 use app\modules\admin\widgets\grid\AdminGrid;
-use app\modules\admin\widgets\grid\ImageColumn;
-use app\modules\admin\widgets\grid\SwitchColumn;
 use app\modules\article\models\search\ArticleSearch;
 
 /**
@@ -18,35 +24,68 @@ $this->title = 'Articles';
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['icon'] = 'cast';
 ?>
-
+<?= Html::a('<i class="fas fa-plus"></i> Create New Article', ['create'], ['class' => 'btn btn-primary']) ?>
 <?= AdminGrid::widget([
     'dataProvider' => $dataProvider,
-    'filterModel'  => $searchModel,
-    'leftButtons'  => [
-        [
-            'url'   => ['create'],
-            'label' => '<div class="fas fa-plus"></div> New',
-        ],
-        [
-            'url'   => ['/article/section/index'],
-            'label' => '<div class="fas fa-bars"></div> Topics',
-        ],
-    ],
+    'emptyText'    => '<i data-feather="cast"></i><hr>' . Html::a('Create', ['create'], ['data-pjax' => 0]) . ' Your First Article',
     'columns'      => [
         AdminGrid::COLUMN_CHECKBOX,
-        [
-            'class'          => ImageColumn::class,
-            'imageAttribute' => 'coverImage',
-        ],
         'title',
         [
-            'attribute' => 'section_id',
-            'value'     => 'section.name',
-            'filter'    => Section::items(),
+            'attribute' => 'topic_id',
+            'value'     => 'topic.name',
         ],
         [
-            'class'     => SwitchColumn::class,
-            'attribute' => 'draft',
+            'attribute' => 'published_at',
+            'format'    => 'dateTime',
+            'width'     => '100px',
         ],
+        [
+            'attribute' => 'created_at',
+            'format'    => 'dateTime',
+            'width'     => '100px',
+        ],
+        [
+            'attribute'      => 'visits',
+            'width'          => '50px',
+            'contentOptions' => [
+                'class' => 'text-center',
+            ],
+        
+        ],
+        [
+            'label'          => 'Content',
+            'format'         => 'raw',
+            'width'          => '50px',
+            'contentOptions' => [
+                'class' => 'text-center',
+            ],
+            'value'          => function(Article $model)
+            {
+                if($model->content) {
+                    return '<i class="fas text-success fa-check"></i>';
+                }
+                
+                return '<i class="fas text-danger fa-times"></i>';
+            },
+        ],
+        [
+            'label'          => 'SEO',
+            'format'         => 'raw',
+            'width'          => '50px',
+            'contentOptions' => [
+                'class' => 'text-center',
+            ],
+            'value'          => function(Article $model)
+            {
+                if($model->seo_keywords && $model->seo_description) {
+                    return '<i class="fas text-success fa-check"></i>';
+                }
+                
+                return '<i class="fas text-danger fa-times"></i>';
+            },
+        ],
+        
+        AdminGrid::COLUMN_ACTION,
     ],
 ]); ?>

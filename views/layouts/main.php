@@ -1,20 +1,17 @@
 <?php
 /**
- * main.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 use yii\web\View;
-use yii\helpers\Url;
 use yii\helpers\Html;
 use app\assets\AppAsset;
-use yii\bootstrap4\NavBar;
+use yii\bootstrap4\Breadcrumbs;
+use app\modules\store\assets\CartAsset;
 
 /**
  * @var $this    View
@@ -22,6 +19,7 @@ use yii\bootstrap4\NavBar;
  */
 
 AppAsset::register($this);
+CartAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
@@ -37,30 +35,16 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
-<?php NavBar::begin([
-    'brandLabel'           => 'NavBar Test',
-    'brandImage'           => '/favicon.ico',
-    'renderInnerContainer' => false,
-    'options'              => [
-        'class' => 'navbar navbar-expand-lg shadow p-1 z-index-2',
-    ],
-    'collapseOptions'      => [
-        'class' => 'd-flex justify-content-end mx-5',
-    ],
-]) ?>
-<?= Html::a('Home', Url::home(), ['class' => 'btn btn-secondary']) ?>
-<?php if(Yii::$app->user->isGuest): ?>
-    <?= Html::a('Register', ['/user/auth/register'], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Login', ['/user/auth/login'], ['class' => 'btn btn-primary']) ?>
-<?php else: ?>
-    <?= Html::a('Dashboard', ['/admin/default/index'], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Logout', ['/user/auth/logout'], ['class' => 'btn btn-primary']) ?>
-<?php endif ?>
-<?php NavBar::end() ?>
-<div class="app">
-    <img src="/images/bg.webp" class="blur" alt="">
-    <div class="z-index-2 w-100 text">
+<?= $this->render('@app/views/layouts/_header') ?>
+<div class="main">
+    <?= $this->render('@app/views/layouts/_cart') ?>
+    <div class="container py-5">
+        <h2><?= $this->title ?></h2>
+        <?= Breadcrumbs::widget([
+            'homeLink' => ['label' => 'Home', 'url' => ['/site/index']],
+            'links'    => $this->params['breadcrumbs'] ?? [],
+            'options'  => ['class' => 'breadcrumb bg-white pl-0 pt-0'],
+        ]) ?>
         <?= $content ?>
     </div>
 </div>

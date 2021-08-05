@@ -1,13 +1,10 @@
 <?php
 /**
- * CatalogController.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\store\controllers;
@@ -15,6 +12,7 @@ namespace app\modules\store\controllers;
 use Yii;
 use yii\web\NotFoundHttpException;
 use app\modules\store\models\Catalog;
+use app\modules\store\models\search\CatalogSearch;
 use app\modules\admin\controllers\BackendController;
 
 /**
@@ -29,22 +27,49 @@ class CatalogController extends BackendController
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new CatalogSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel'  => $searchModel,
+        ]);
     }
     
     /**
-     * Displays a single Catalog model.
+     * Creates a new Catalog model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $model = new Catalog;
+        
+        if($model->load(Yii::$app->request->post()) && $model->validate() && $model->makeRoot()) {
+            return $this->redirect(['index']);
+        }
+        
+        return $this->render('form', ['model' => $model]);
+    }
+    
+    /**
+     * Updates an existing Catalog model.
+     * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param integer $id
      *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionUpdate($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+        
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+        
+        return $this->render('form', ['model' => $model]);
     }
     
     /**
@@ -66,46 +91,6 @@ class CatalogController extends BackendController
     }
     
     /**
-     * Creates a new Catalog model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Catalog();
-        
-        if($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-        
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-    
-    /**
-     * Updates an existing Catalog model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param integer $id
-     *
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-        
-        if($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-        
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-    
-    /**
      * Deletes an existing Catalog model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
@@ -116,8 +101,6 @@ class CatalogController extends BackendController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-        
-        return $this->redirect(['index']);
+        return $this->findModel($id)->deleteWithChildren();
     }
 }

@@ -1,106 +1,75 @@
 <?php
 /**
  * @author    Paul Storre <1230840.ps@gmail.com>
- * @package   NACR project
+ * @package   Admin AX project
  * @version   1.0
  * @copyright Copyright (c) 2021, IndustrialAX LLC
  * @license   https://industrialax.com/license
  */
 
+use yii\web\View;
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use dosamigos\tinymce\TinyMce;
-use kartik\tree\TreeViewInput;
 use trntv\filekit\widget\Upload;
 use extead\autonumeric\AutoNumeric;
-use app\modules\store\models\Brand;
-use app\modules\store\models\Catalog;
-use dosamigos\selectize\SelectizeTextInput;
+use app\modules\store\models\Product;
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\store\models\Product */
-/* @var $form yii\widgets\ActiveForm */
+/**
+ * @var $this         View
+ * @var $model        Product
+ * @var $form         ActiveForm
+ * @var $rootCatalogs []
+ */
 
-$this->title = $model->isNewRecord ? 'Register New Product' : $model->title;
+$this->title = $model->isNewRecord ? 'New Product' : $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['icon'] = 'shopping-bag'
 
 ?>
-<?php $form = ActiveForm::begin(); ?>
-<div class="container-admin shadow p-4">
-    <div class="d-flex justify-content-between">
-        <div class="text-heading mb-4"><?= $this->title ?></div>
-        <div>
-            <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-white']) ?>
-            <?= Html::a('<i class="fas fa-ban"></i> Cancel', ['index'], ['class' => 'btn btn-white']) ?>
-            <?php if(!$model->isNewRecord) : ?>
-                <?= Html::a('<div class="fas fa-trash"></div> Delete', ['delete', 'id' => $model->id], [
-                    'class'        => 'btn btn-danger ml-2',
-                    'data-confirm' => 'Are You sure you want to Delete?',
-                    'data-method'  => 'POST',
-                ]) ?>
-            <?php endif ?></div>
+<?php $form = ActiveForm::begin([
+    'type'       => ActiveForm::TYPE_HORIZONTAL,
+    'formConfig' => ['labelSpan' => 2],
+]); ?>
+<div class="card shadow">
+    <div class="card-header d-flex justify-content-center">
+        <div class="text-uppercase font-weight-bold" style="color:#596882"><?= $this->title ?></div>
     </div>
-    <div class="row">
-        <div class="col-md-9">
-            <div class="row">
-                <div class="col-md-8">
-                    <?= $form->field($model, 'title') ?>
-                </div>
-                <div class="col-md-4">
-                    <?= $form->field($model, 'catalog_id')->widget(TreeViewInput::class, [
-                        'query'            => Catalog::find()->addOrderBy('root, lft'),
-                        'headingOptions'   => ['label' => 'Store'],
-                        'rootOptions'      => ['label' => '<i class="fas fa-tree text-success"></i>'],
-                        'fontAwesome'      => true,
-                        'multiple'         => false,
-                        'topRootAsHeading' => true,
-                    ]) ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
-                </div>
-            </div>
-            <?= $form->field($model, 'content')->widget(TinyMce::class, [
-                'clientOptions' => [
-                    'height'   => '700px',
-                    'toolbar'  => "undo redo | code link table hr | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  ",
-                    'branding' => false,
-                    'plugins'  => [
-                        "advlist autolink lists link charmap print preview anchor",
-                        "searchreplace visualblocks code fullscreen",
-                        "insertdatetime media table paste hr",
-                    ],
-                ],
-            ]) ?>
+    <div class="card-body">
+        <?= $form->field($model, 'title')->textInput(['placeholder' => 'Product Title']) ?>
+        
+        <?= $form->field($model, 'catalog_id')->dropDownList($rootCatalogs, ['prompt' => 'Select Catalog']) ?>
+        
+        <?= $form->field($model, 'price')->widget(AutoNumeric::class, ['options' => ['placeholder' => 'Product Price']]) ?>
+        <?= $form->field($model, 'description')->textInput(['placeholder' => 'Product Description']) ?>
+        <div class="row">
+            <div class="col-2">Flags</div>
+            <div class="col"> <?= $form->field($model, 'active')->checkbox(['custom' => true, 'switch' => true]) ?></div>
+            <div class="col"> <?= $form->field($model, 'new')->checkbox(['custom' => true, 'switch' => true]) ?></div>
+            <div class="col"> <?= $form->field($model, 'popular')->checkbox(['custom' => true, 'switch' => true]) ?></div>
         </div>
-        <div class="col-md-3 border-left">
-            <?= $form->field($model, 'price', ['addon' => ['prepend' => ['content' => '<i class="fas fa-dollar-sign"></i>']]])->widget(AutoNumeric::class) ?>
-            <?= $form->field($model, 'active')->checkbox(['custom' => true, 'switch' => true]) ?>
-            <?= $form->field($model, 'new')->checkbox(['custom' => true, 'switch' => true]) ?>
-            <?= $form->field($model, 'popular')->checkbox(['custom' => true, 'switch' => true]) ?>
-            <?= $form->field($model, 'keywords')->textInput(['data-role' => 'tagsinput'])->hint('Use Commas To Separate Keywords') ?>
-            <div class="d-flex justify-content-start align-content-end pt-2">
-                <?= $form->field($model, 'files')->widget(Upload::class, [
-                    'url'              => ['/storage/default/upload'],
-                    'uploadPath'       => 'photo/',
-                    'multiple'         => true,
-                    'sortable'         => true,
-                    'maxNumberOfFiles' => 50,
-                ])->label('Images') ?>
+        <?= $form->field($model, 'keywords')->textInput(['data-role' => 'tagsinput'])->hint('Use Commas To Separate Keywords') ?>
+        <?= $form->field($model, 'content')->widget(TinyMce::class)->label('Content (HTML)') ?>
+        <div class="row">
+            <div class="col-2">Images</div>
+            <div class="col-10">
+                <div class="d-flex justify-content-start align-content-end pt-2">
+                    <?= $form->field($model, 'files')->widget(Upload::class, [
+                        'url'              => ['/storage/default/upload'],
+                        'uploadPath'       => 'photo/',
+                        'multiple'         => true,
+                        'sortable'         => false,
+                        'maxNumberOfFiles' => 50,
+                    ])->label(false) ?>
+                </div>
             </div>
         </div>
+        <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-primary']) ?>
     </div>
-    <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-white']) ?>
-    <?= Html::a('<i class="fas fa-ban"></i> Cancel', ['index'], ['class' => 'btn btn-white']) ?>
-    <?php if(!$model->isNewRecord) : ?>
-        <?= Html::a('<div class="fas fa-trash"></div> Delete', ['delete', 'id' => $model->id], [
-            'class'        => 'btn btn-danger ml-2',
-            'data-confirm' => 'Are You sure you want to Delete?',
-            'data-method'  => 'POST',
-        ]) ?>
-    <?php endif ?>
 </div>
 <?php ActiveForm::end(); ?>
+
+
+
+

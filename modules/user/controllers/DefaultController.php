@@ -1,18 +1,16 @@
 <?php
 /**
- * DefaultController.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\user\controllers;
 
 use Yii;
+use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use app\modules\admin\controllers\BackendController;
 use app\modules\user\models\{User, ChangePassword, search\UserSearch};
@@ -31,7 +29,6 @@ class DefaultController extends BackendController
     {
         $searchModel = new UserSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
         return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
@@ -66,14 +63,12 @@ class DefaultController extends BackendController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id = null)
+    public function actionUpdate($id)
     {
-        $id = $id ?? Yii::$app->user->id;
-        
         $model = $this->findModel($id);
         
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            Yii::$app->session->setFlash('success', 'Account Saved Successfully');
         }
         
         return $this->render('form', ['model' => $model]);
@@ -98,59 +93,81 @@ class DefaultController extends BackendController
     }
     
     /**
-     * Updates an existing User model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Form for Current User
      *
-     * @param integer $id
-     *
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return string
+     * @throws NotFoundHttpException
      */
     public function actionAccount()
     {
-        $model = Yii::$app->user->identity;
+        $model = $this->findModel(Yii::$app->user->id);
         
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->goAdmin();
+            Yii::$app->session->setFlash('success', 'Account Successfully Saved ');
+            return $this->redirect(['/admin/default/index']);
         }
         
         return $this->render('account', ['model' => $model]);
     }
     
-    public function actionPassword()
+    /**
+     * Changes Password for Current User
+     *
+     * @param null $id
+     *
+     * @return string|Response
+     */
+    public function actionPassword($id = null)
     {
-        $model = new ChangePassword;
+        $id = $id ?? Yii::$app->user->id;
+        
+        $user = User::findOne($id);
+        
+        $model = new ChangePassword(['user' => $user]);
         
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['account']);
+            Yii::$app->session->setFlash('success', 'Password Successfully Changed');
+            
+            return $this->redirect(['/admin/default/index']);
         }
         
         return $this->render('password', ['model' => $model]);
         
     }
     
-    public function actionDelete()
+    /**
+     * Changes password for Given User (access only for Admin Role)
+     *
+     * @param $id
+     *
+     * @return string|Response
+     */
+    public function actionNewPassword($id)
     {
-        Yii::$app->response->format = 'json';
-        $ids = Yii::$app->request->post('ids');
+        $user = User::findOne($id);
         
-        return $ids;
+        $model = new ChangePassword(['user' => $user]);
+        
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['update', 'id' => $user->id]);
+        }
+        
+        return $this->render('new-password', ['model' => $model]);
+        
     }
     
     /**
-     * Deactivates an existing User.
-     * If deactivation is successful, the browser will be redirected to the 'index' page.
+     * Deletes User by given ID
      *
+     * @param $id
      *
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return bool|false|int
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDeactivate()
+    public function actionDelete($id)
     {
-        $this->findModel(Yii::$app->user->id)->updateAttributes(['blocked' => true]);
-        
-        Yii::$app->user->logout();
-        
-        return $this->goHome();
+        return $this->findModel($id)->delete();
     }
 }

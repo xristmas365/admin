@@ -1,15 +1,17 @@
 <?php
 /**
- *
- * @author    Paul Stolyarov <teajeraker@gmail.com>
- * @copyright industrialax.com
- * @license   https://industrialax.com/crm-general-license
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\user\models;
 
 use Yii;
 use yii\base\Model;
+use Mailgun\Mailgun;
 
 class Register extends Model
 {
@@ -18,13 +20,11 @@ class Register extends Model
     
     public $password;
     
-    public $firstName;
-    
-    public $lastName;
+    public $name;
     
     public $phone;
     
-    public $remember;
+    public $company;
     
     /**
      * @return array
@@ -32,11 +32,11 @@ class Register extends Model
     public function rules()
     {
         return [
-            [['email', 'password', 'firstName'], 'required'],
-            [['firstName', 'lastName', 'password', 'phone'], 'string'],
+            [['email', 'password', 'name'], 'required'],
+            [['name', 'password', 'phone', 'company'], 'string'],
             ['email', 'email'],
-            ['remember', 'boolean'],
             ['email', 'unique', 'targetAttribute' => 'email', 'targetClass' => User::class, 'message' => 'Account already exists'],
+            ['company', 'unique', 'targetAttribute' => 'email', 'targetClass' => User::class, 'message' => 'Company already exists'],
         ];
     }
     
@@ -51,14 +51,22 @@ class Register extends Model
         }
         $user = new User;
         $user->email = $this->email;
+        $user->company = $this->company;
         $user->phone = $this->phone;
         $user->password = $this->password;
-        $user->first_name = $this->firstName;
-        $user->last_name = $this->lastName;
+        $user->name = $this->name;
         
         if($user->save()) {
-            return Yii::$app->user->login($user, $this->remember ? getenv('SESSION_DURATION') : 0);
+            $mg = Mailgun::create(getenv('MAILGUN_KEY'));
             
+            $mg->messages()->send(getenv('MAILGUN_DOMAIN'), [
+                'from'    => 'security@' . getenv('MAILGUN_DOMAIN'),
+                'to'      => $this->email,
+                'subject' => 'Account Verification',
+                'html'    => Yii::$app->controller->renderPartial('@mail/auth/verify', ['user' => User::findOne(['email' => $this->email])]),
+            ]);
+            
+            return true;
         }
         
         return false;

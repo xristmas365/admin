@@ -1,13 +1,10 @@
 <?php
 /**
- * UserSearch.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\user\models\search;
@@ -15,6 +12,7 @@ namespace app\modules\user\models\search;
 use Yii;
 use yii\data\ActiveDataProvider;
 use app\modules\user\models\User;
+use app\modules\user\models\Role;
 use kartik\daterange\DateRangeBehavior;
 
 /**
@@ -23,7 +21,6 @@ use kartik\daterange\DateRangeBehavior;
 class UserSearch extends User
 {
     
-    public $search;
     
     public $created_at_start;
     
@@ -35,17 +32,17 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'role', 'zip'], 'integer'],
+            [['id', 'role'], 'integer'],
             [
                 [
                     'email',
                     'password',
                     'auth_key',
-                    'first_name',
-                    'last_name',
+                    'name',
                     'phone',
                     'address',
                     'city',
+                    'zip',
                     'state',
                     'name',
                     'search',
@@ -84,11 +81,12 @@ class UserSearch extends User
     {
         $query = User::find()
                      ->with(['attachments'])
-                     ->select(['id', 'email', 'first_name', 'last_name', 'blocked', 'confirmed', 'role', 'created_at', 'last_login_at']);
-        
-        if(!Yii::$app->user->can(User::ROLE_DEVELOPER)) {
-            $query->andWhere(['<>', 'role', User::ROLE_DEVELOPER]);
-        }
+                     ->select(['id', 'zip', 'state', 'city', 'email', 'name', 'blocked', 'confirmed', 'role', 'created_at', 'last_login_at']);
+    
+        /**
+         * Exclude Admin and Developer from Users List
+         */
+        $query->andWhere(['<>', 'role', Role::DEVELOPER]);
         
         $dataProvider = new ActiveDataProvider([
             'query'      => $query,
@@ -111,14 +109,7 @@ class UserSearch extends User
         $query
             ->andFilterWhere(['ilike', 'email', $this->email])
             ->andFilterWhere(['between', 'created_at', $this->created_at_start, $this->created_at_end])
-            ->andFilterWhere(['ilike', 'CONCAT(first_name, \' \' ,last_name)', $this->first_name])
-            ->andFilterWhere([
-                'OR',
-                ['ilike', 'first_name', $this->search],
-                ['ilike', 'last_name', $this->search],
-                ['ilike', 'phone', $this->search],
-                ['ilike', 'email', $this->search],
-            ]);
+            ->andFilterWhere(['ilike', 'name', $this->name]);
         
         return $dataProvider;
     }

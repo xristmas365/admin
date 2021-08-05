@@ -1,19 +1,17 @@
 <?php
 /**
- * Reset.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\user\models;
 
 use Yii;
 use yii\base\Model;
+use Mailgun\Mailgun;
 
 class Reset extends Model
 {
@@ -38,10 +36,10 @@ class Reset extends Model
             return false;
         }
         
-        $mg = \Mailgun\Mailgun::create(getenv('MAILGUN_KEY'));
+        $mg = Mailgun::create(getenv('MAILGUN_KEY'));
         
-        $mg->messages()->send('5th-store.com', [
-            'from'    => '5th Store <admin@5th-store.com>',
+        $mg->messages()->send(getenv('MAILGUN_DOMAIN'), [
+            'from'    => 'security@' . getenv('MAILGUN_DOMAIN'),
             'to'      => $this->email,
             'subject' => 'Reset Password',
             'html'    => Yii::$app->controller->renderPartial('@mail/auth/reset', ['user' => User::findOne(['email' => $this->email])]),

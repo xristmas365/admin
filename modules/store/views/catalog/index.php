@@ -1,96 +1,72 @@
 <?php
 /**
- * index.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
-use kartik\tree\TreeView;
+use yii\web\View;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\data\ActiveDataProvider;
+use app\modules\user\models\Role;
 use app\modules\store\models\Catalog;
+use app\modules\admin\widgets\grid\AdminGrid;
+use app\modules\admin\widgets\grid\SwitchColumn;
+use app\modules\admin\widgets\grid\ActionColumn;
+use app\modules\store\models\search\ProductSearch;
 
-/* @var $this yii\web\View */
+/**
+ * @var $this         View
+ * @var $searchModel  ProductSearch
+ * @var $dataProvider ActiveDataProvider
+ */
 
 $this->title = 'Catalogs';
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['icon'] = 'server'
 ?>
-<div class="row">
-    <div class="col-md-12">
-        <?= TreeView::widget([
-            'query'                => Catalog::find()->addOrderBy('root, lft'),
-            'headingOptions'       => ['label' => 'Store'],
-            'rootOptions'          => ['label' => '<span class="text-primary">' . Yii::$app->name . '</span>'],
-            'topRootAsHeading'     => true,
-            'fontAwesome'          => true,
-            'softDelete'           => false,
-            'emptyNodeMsg'         => 'Click Create or Select to Update',
-            'showIDAttribute'      => false,
-            'cacheSettings'        => ['enableCache' => true],
-            'childNodeIconOptions' => ['class' => 'text-primary'],
-            'parentNodeIconOptions' => ['class' => 'text-secondary'],
-            'mainTemplate'         => <<< HTML
-<div class="row">
-    <div class="col-sm-12">
-        {wrapper}
-    </div>
-    <div class="col-sm-12 mt-2">
-        {detail}
-    </div>
-</div>
-HTML
-            ,
-            'headerTemplate'       => <<< HTML
-<div class="row">
-    <div class="col-sm-8 pt-1 pl-4">
-        {toolbar}
-    </div>
-    <div class="col-sm-4">
-        {search}
-    </div>
-</div>
-HTML,
-            'wrapperTemplate'      => "{header}\n{tree}",
-            'headerOptions'        => [
-                'class' => 'bg-light',
-            ],
-            'toolbar'              => [
-                TreeView::BTN_CREATE_ROOT => [
-                    'label'   => 'Create',
-                    'icon'    => 'server',
-                    'options' => ['title' => 'Create Top Level Catalog', 'class' => 'btn btn-white'],
-                ],
-                TreeView::BTN_SEPARATOR,
-                TreeView::BTN_CREATE      => [
-                    'label'          => 'Append',
-                    'icon'           => 'plus',
-                    'alwaysDisabled' => false, // set this property to `true` to force disable the button always
-                    'options'        => ['title' => 'Append New Catalog', 'disabled' => true, 'class' => 'btn btn-white'],
-                ],
-                TreeView::BTN_REMOVE      => [
-                    'label'   => 'Delete',
-                    'icon'    => 'trash',
-                    'options' => ['title' => 'Delete', 'disabled' => true, 'class' => 'btn btn-white'],
-                ],
-                TreeView::BTN_MOVE_UP     => false,
-                TreeView::BTN_MOVE_DOWN   => false,
-                TreeView::BTN_MOVE_LEFT   => false,
-                TreeView::BTN_MOVE_RIGHT  => false,
-                TreeView::BTN_REFRESH     => false,
-            ],
-            'toolbarOrder'         => [
-                TreeView::BTN_CREATE_ROOT,
-                TreeView::BTN_SEPARATOR,
-                TreeView::BTN_CREATE,
-                TreeView::BTN_REMOVE,
-            ],
-        ]) ?>
-    </div>
-</div>
 
-
-
+<?= Html::a('<i class="fas fa-plus"></i> Create New Catalog', ['create'], ['class' => 'btn btn-primary']) ?>
+<div class="my-3"></div>
+<?= AdminGrid::widget([
+    'dataProvider' => $dataProvider,
+    'emptyText'    => '<i data-feather="server"></i><hr>' . Html::a('Create', ['create'], ['data-pjax' => 0]) . ' Your First Catalog',
+    'columns'      => [
+        AdminGrid::COLUMN_CHECKBOX,
+        'name',
+        [
+            'attribute' => 'slug',
+            'label'     => 'Link',
+            'format'    => 'raw',
+            'value'     => function(Catalog $model)
+            {
+                $link = Url::toRoute([
+                    '/store/front/index',
+                    'ProductSearch' => ['catalog_id' => $model->id],
+                ]);
+                
+                return Html::a('<i class="fas fa-external-link-alt"></i>&nbsp' . $model->name, $link, ['data-pjax' => 0, 'target' => '_blank']);
+            },
+        ],
+        [
+            'class'     => SwitchColumn::class,
+            'attribute' => 'visible',
+            'readonly'  => !Yii::$app->user->can(Role::ADMIN),
+        ],
+        [
+            'label' => 'Products',
+            'width' => '40px',
+            'value' => function(Catalog $model)
+            {
+                return $model->getProducts()->count();
+            },
+        ],
+        [
+            'class'   => ActionColumn::class,
+            'visible' => Yii::$app->user->can(Role::ADMIN),
+        ],
+    ],
+]) ?>

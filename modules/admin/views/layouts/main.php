@@ -1,7 +1,7 @@
 <?php
 /**
  * @author    Paul Storre <1230840.ps@gmail.com>
- * @package   NACR project
+ * @package   Admin AX project
  * @version   1.0
  * @copyright Copyright (c) 2021, IndustrialAX LLC
  * @license   https://industrialax.com/license
@@ -16,6 +16,7 @@ use yii\helpers\Html;
 use kartik\icons\Icon;
 use kartik\dialog\Dialog;
 use kartik\alert\AlertBlock;
+use yii\bootstrap4\Breadcrumbs;
 use app\modules\admin\assets\DashAsset;
 use app\modules\admin\assets\CustomAsset;
 
@@ -27,9 +28,9 @@ echo Dialog::widget([
     'dialogDefaults' => [
         Dialog::DIALOG_CONFIRM => [
             'type'           => Dialog::TYPE_PRIMARY,
-            'title'          => 'Confirmation',
-            'btnOKClass'     => 'btn-white',
-            'btnCancelClass' => 'btn-outline-danger',
+            'btnOKClass'     => 'btn-primary',
+            'btnCancelClass' => 'btn-secondary',
+            'closable'       => false,
         ],
     ],
 ]);
@@ -48,22 +49,27 @@ echo Dialog::widget([
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="pos-relative" data-spy="scroll" data-target="#navSection" data-offset="120">
+<body>
 <?php $this->beginBody() ?>
 <?= $this->render('_left') ?>
-<div class="content ht-100v p-0">
-    <?= $this->render('_top') ?>
+<div class="content">
     <div class="content-body">
-        <div class="preloader">
-            <div class="lds-ripple">
-                <div></div>
-                <div></div>
-            </div>
-        </div>
-        <div class="container-admin pt-5">
+        <div class="container-admin">
             <?= AlertBlock::widget(['type' => 'growl', 'delay' => 1000]) ?>
+            <h3 class="tx-spacing--1"><i class="pb-1" data-feather="<?= $this->params['icon'] ?? 'box' ?>"></i> <?= $this->title ?></h3>
+            <span class="tx-12 tx-color-03">
+                <?= Breadcrumbs::widget([
+                    'homeLink'           => ['label' => 'Dashboard', 'url' => ['/admin/default/index']],
+                    'links'              => $this->params['breadcrumbs'] ?? [],
+                    'tag'                => 'ol',
+                    'options'            => ['class' => 'breadcrumb df-breadcrumbs mb-4'],
+                    'itemTemplate'       => "<li class=\"breadcrumb-item\">{link}</li>\n",
+                    'activeItemTemplate' => "<li class=\"breadcrumb-item active\">{link}</li>\n",
+                ]) ?>
+            </span>
             <?= $content ?>
         </div>
+        <img src="/images/t.png" alt="" style="z-index:-1; height: 80%; width: auto;opacity: 0.1; position: fixed; right: 0; bottom: 0">
     </div>
 </div>
 <?php $this->endBody() ?>

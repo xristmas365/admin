@@ -1,13 +1,10 @@
 <?php
 /**
- * ChangePassword.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\user\models;
@@ -15,6 +12,17 @@ namespace app\modules\user\models;
 use Yii;
 use yii\base\Model;
 
+/**
+ * Class ChangePassword changes password from admin page for all users
+ *
+ * @property string $password
+ * @property string $new_password
+ * @property string $new_password_confirm
+ * @property User   $user
+ *
+ * @package app\modules\user\models
+ *
+ */
 class ChangePassword extends Model
 {
     
@@ -23,6 +31,8 @@ class ChangePassword extends Model
     public $new_password;
     
     public $new_password_confirm;
+    
+    public $user;
     
     /**
      * @return array
@@ -42,18 +52,13 @@ class ChangePassword extends Model
             return false;
         }
         
-        /**
-         * @var $user User
-         */
-        $user = Yii::$app->user->identity;
-        
-        if(!Yii::$app->security->validatePassword($this->password, $user->password)) {
-            $this->addError('password', 'Invalid password');
+        if(!Yii::$app->security->validatePassword($this->password, $this->user->password)) {
+            $this->addError('password', 'Incorrect current password');
             
             return false;
         }
         
-        return $user->updateAttributes(['password' => Yii::$app->security->generatePasswordHash($this->new_password)]);
+        return $this->user->updateAttributes(['password' => Yii::$app->security->generatePasswordHash($this->new_password)]);
         
     }
 }

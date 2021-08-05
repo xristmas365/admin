@@ -1,13 +1,10 @@
 <?php
 /**
- * PageSearch.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\page\models;
@@ -30,7 +27,7 @@ class PageSearch extends Page
     {
         return [
             [['id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['title', 'description', 'content', 'keywords', 'slug', 'search'], 'safe'],
+            [['title', 'description', 'content', 'seo_keywords', 'seo_description', 'slug', 'search'], 'safe'],
             [['draft'], 'boolean'],
         ];
     }
@@ -84,7 +81,8 @@ class PageSearch extends Page
             ->andFilterWhere(['ilike', 'title', $this->search])
             ->andFilterWhere(['ilike', 'description', $this->description])
             ->andFilterWhere(['ilike', 'content', $this->content])
-            ->andFilterWhere(['ilike', 'keywords', $this->keywords])
+            ->andFilterWhere(['ilike', 'seo_keywords', $this->seo_keywords])
+            ->andFilterWhere(['ilike', 'seo_description', $this->seo_description])
             ->andFilterWhere(['ilike', 'slug', $this->slug]);
         
         return $dataProvider;

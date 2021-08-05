@@ -4,11 +4,9 @@ $primary: #a4c5fe;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  background: #ffffff;
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: #111111 !important;
   text-decoration: none !important;
 
   &-body {
@@ -19,7 +17,6 @@ $primary: #a4c5fe;
   &-icon {
     width: 80px;
     flex-shrink: 0;
-    color: $primary;
     svg {
       width: 60px;
       height: 60px;
@@ -31,7 +28,6 @@ $primary: #a4c5fe;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #111111;
     border-top: 1px solid #ccc;
   }
 }

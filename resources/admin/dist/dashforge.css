@@ -479,6 +479,7 @@ strong {
 .custom-radio .custom-control-label:empty::after,
 .custom-switch .custom-control-label:empty::before,
 .custom-switch .custom-control-label:empty::after {
+    box-shadow: none;
     left: -16px;
 }
 

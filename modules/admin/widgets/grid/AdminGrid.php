@@ -1,7 +1,7 @@
 <?php
 /**
  * @author    Paul Storre <1230840.ps@gmail.com>
- * @package   NACR project
+ * @package   Admin AX project
  * @version   1.0
  * @copyright Copyright (c) 2021, IndustrialAX LLC
  * @license   https://industrialax.com/license
@@ -13,7 +13,6 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use kartik\popover\PopoverX;
 
 class AdminGrid extends GridView
 {
@@ -21,54 +20,43 @@ class AdminGrid extends GridView
     const COLUMN_ACTION   = ['class' => 'app\modules\admin\widgets\grid\ActionColumn'];
     const COLUMN_IMAGE    = ['class' => 'app\modules\admin\widgets\grid\ImageColumn'];
     const COLUMN_SERIAL   = ['class' => 'kartik\grid\SerialColumn'];
-    const COLUMN_CHECKBOX = ['class' => 'kartik\grid\CheckboxColumn'];
+    const COLUMN_CHECKBOX = ['class' => 'app\modules\admin\widgets\grid\CheckboxColumn'];
     
     public $title;
-    
-    public $leftButtons      = [
-        [
-            'url'   => ['create'],
-            'label' => '<div class="fas fa-plus"></div> New',
-        ],
-    ];
-    
-    public $rightButtons     = [
-        [
-            'url'   => ['index'],
-            'label' => '<i class="fas fa-ban"></i> Clear Filters',
-        ],
-    ];
-    
-    public $extraSearch;
     
     public $pjax             = true;
     
     public $emptyText        = '<i class="fas fa-dice"></i> Empty';
     
     public $emptyTextOptions = [
-        'class' => 'text-uppercase text-center font-weight-bold mt-3 mb-3',
-        'style' => 'color:#596882',
+        'class' => 'text-center tx-color-03 my-3',
     ];
     
     
-    public $pjaxSettings         = [
+    public $pjaxSettings    = [
         'neverTimeout'    => true,
-        //'loadingCssClass' => 'grid-loading',
+        'loadingCssClass' => 'grid-loading',
     ];
     
-    public $bordered             = false;
+    public $bordered        = false;
     
-    public $export               = false;
+    public $responsive      = true;
     
-    public $striped              = false;
+    public $responsiveWrap  = false;
     
-    public $hover                = true;
+    public $export          = false;
     
-    public $toolbar              = false;
+    public $striped         = false;
     
-    public $panel                = [
+    public $hover           = false;
+    
+    public $toolbar         = false;
+    
+    public $condensed       = true;
+    
+    public $panel           = [
         'options'        => [
-            'class' => 'shadow',
+            'class' => 'shadow mt-3',
         ],
         'headingOptions' => [
             'class' => 'card-header',
@@ -77,39 +65,30 @@ class AdminGrid extends GridView
         'after'          => false,
     ];
     
-    public $tableOptions         = [
-        'class' => 'text-nowrap table-sm',
+    public $tableOptions    = [
+        'class' => 'text-nowrap',
     ];
     
-    public $dataColumnClass      = DataColumn::class;
+    public $dataColumnClass = DataColumn::class;
     
-    public $resizableColumns     = false;
     
     public $panelHeadingTemplate = <<< HTML
-<div class="position-relative text-center">
-     <div class="grid-left-buttons">
-        {leftButtons}
-     </div>
-     <div class="grid-title">
-     {gridTitle}
-     </div>
-     <div class="grid-right-buttons">
-        {rightButtons}
-    </div>
+<div class="d-flex justify-content-between">
+     <div class="d-flex justify-content-start align-items-center">{summary}</div>
+     <div class="d-flex justify-content-start align-items-center">{gridTitle}</div>
+     {sizer}
 </div>
 HTML;
     
     public $panelFooterTemplate  = <<< HTML
-<div class="d-flex justify-content-between">
-     <div class="d-flex justify-content-start align-items-center">{summary}</div>
+<div class="d-flex justify-content-center">
      <div class="d-flex justify-content-start align-items-center">{pager}</div>
-    <div class="d-flex justify-content-end align-items-center"><span class="text-nowrap mr-2">Page size:</span>{sizer}</div>
 </div>
 HTML;
     
     public $pager                = [
         'options'        => [
-            'class' => 'pagination pagination-space my-0',
+            'class' => 'pagination pagination-sm pagination-space mt-1 mb-1',
         ],
         'pageCssClass'   => 'page-item',
         'maxButtonCount' => 5,
@@ -117,11 +96,11 @@ HTML;
     
     public function init()
     {
-        parent::init();
-        $this->rowOptions = function($model, $key, $index, $grid)
-        {
-            return ['id' => $model['id'], 'title' => 'Double click to View', 'ondblclick' => 'location.href="' . Url::toRoute(['update', 'id' => $model->id]) . '"'];
-        };
+        if($this->dataProvider->getTotalCount() === 0) {
+            $this->showHeader = false;
+        }
+        
+        return parent::init();
     }
     
     public function renderSection($name)
@@ -131,12 +110,6 @@ HTML;
                 return $this->renderSizer();
             case '{gridTitle}':
                 return $this->renderGridTitle();
-            case '{extraSearch}':
-                return $this->renderExtraSearch();
-            case '{leftButtons}':
-                return $this->renderLeftButtons();
-            case '{rightButtons}':
-                return $this->renderRightButtons();
             default:
                 return parent::renderSection($name);
         }
@@ -144,6 +117,9 @@ HTML;
     
     public function renderSizer()
     {
+        if($this->dataProvider->getTotalCount() === 0) {
+            return '<div></div>';
+        }
         $value = Yii::$app->session->get('page-size', 20);
         
         $items = [
@@ -157,11 +133,14 @@ HTML;
             500 => 500,
         ];
         
-        return Html::dropDownList('grid-sizer', $value, $items, [
+        $sizer = Html::dropDownList('grid-sizer', $value, $items, [
             'class'     => 'form-control form-control-sm page-sizer',
             'data-url'  => Url::toRoute(['/admin/default/page-size']),
             'data-pjax' => $this->pjaxSettings['options']['id'],
         ]);
+        
+        return '<div class="d-flex justify-content-end align-items-center"><span class="text-nowrap mr-2">Items:</span>' . $sizer . '</div>';
+        
     }
     
     public function renderGridTitle()
@@ -170,36 +149,4 @@ HTML;
         
         return Html::tag('div', $title, ['class' => 'text-uppercase font-weight-bold', 'style' => 'color:#596882']);
     }
-    
-    public function renderExtraSearch()
-    {
-        return $this->extraSearch;
-    }
-    
-    public function renderLeftButtons()
-    {
-        $html = Html::button('<i class="fas fa-trash-alt"></i> Delete <span id="' . $this->id . '-selected-counter"></span>', [
-            'id'        => $this->id . '-delete-btn',
-            'class'     => 'btn btn-sm btn-danger grid-delete-btn mr-1',
-            'style'     => 'display:none',
-            'data-grid' => $this->id,
-            'data-url'  => Url::toRoute(['delete']),
-        ]);
-        foreach($this->leftButtons as $leftButton) {
-            $html .= Html::a($leftButton['label'], $leftButton['url'], ['class' => 'btn btn-sm btn-white mr-1', 'data-pjax' => 0]);
-        }
-        
-        return $html;
-    }
-    
-    public function renderRightButtons()
-    {
-        $html = '';
-        foreach($this->rightButtons as $rightButton) {
-            $html .= Html::a($rightButton['label'], $rightButton['url'], ['class' => 'btn btn-sm btn-white']);
-        }
-        
-        return $html;
-    }
-    
 }

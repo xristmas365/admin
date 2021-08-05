@@ -1,13 +1,10 @@
 <?php
 /**
- * index.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 use yii\web\View;
@@ -28,10 +25,9 @@ $this->title = 'Error Log';
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['icon'] = 'layers';
 ?>
+
 <?= AdminGrid::widget([
     'dataProvider' => $dataProvider,
-    'filterModel'  => $searchModel,
-    'createButton'  => '<span></span>',
     'columns'      => [
         'category',
         'log_time:datetime',
@@ -46,8 +42,8 @@ $this->params['icon'] = 'layers';
             },
         ],
         [
-            'class' => 'app\modules\admin\widgets\grid\ActionColumn',
-            'template'=> '{view}'
+            'class'    => 'app\modules\admin\widgets\grid\ActionColumn',
+            'template' => '{view}',
         ],
     ],
 ]); ?>

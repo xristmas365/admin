@@ -1,4 +1,11 @@
 <?php
+/**
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
+ */
 
 namespace app\modules\article\models\search;
 
@@ -20,9 +27,8 @@ class ArticleSearch extends Article
     public function rules()
     {
         return [
-            [['id', 'section_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['title', 'description', 'content', 'seo_description', 'seo_keywords', 'search', 'slug'], 'safe'],
-            [['draft'], 'boolean'],
+            [['id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'published_at'], 'integer'],
+            [['title', 'description', 'content', 'seo_description', 'seo_keywords', 'search', 'slug', 'topic_id'], 'safe'],
         ];
     }
     
@@ -44,7 +50,7 @@ class ArticleSearch extends Article
      */
     public function search($params)
     {
-        $query = Article::find()->joinWith(['section'])->with('coverAttachments');
+        $query = Article::find()->joinWith(['topic'])->with('coverAttachments');
         
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -61,8 +67,7 @@ class ArticleSearch extends Article
         // grid filtering conditions
         $query->andFilterWhere([
             'id'         => $this->id,
-            'section_id' => $this->section_id,
-            'draft'      => $this->draft,
+            'topic_id'   => $this->topic_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
@@ -78,12 +83,9 @@ class ArticleSearch extends Article
         return $dataProvider;
     }
     
-    public function frontSearch($section_id, $params)
+    public function frontSearch($params)
     {
-        $query = Article::find()
-                        ->joinWith(['section'])
-                        ->andWhere(['section_id' => $section_id])
-                        ->with('coverAttachments');
+        $query = Article::find()->with(['attachments', 'coverAttachments', 'topic']);
         
         $dataProvider = new ActiveDataProvider([
             'query'      => $query,
@@ -91,6 +93,12 @@ class ArticleSearch extends Article
         ]);
         
         $this->load($params);
+        
+        if($this->topic_id != 0) {
+            $query->andFilterWhere([
+                'topic_id' => $this->topic_id,
+            ]);
+        }
         
         return $dataProvider;
     }

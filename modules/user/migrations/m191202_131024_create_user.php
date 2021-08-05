@@ -1,16 +1,14 @@
 <?php
 /**
- * m191202_131024_create_user.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 use yii\db\Migration;
+use app\modules\user\models\Role;
 
 /**
  * Class m191202_131024_create_user
@@ -34,14 +32,15 @@ class m191202_131024_create_user extends Migration
             'blocked'       => $this->boolean()->notNull()->defaultValue(false),
             'confirmed'     => $this->boolean()->notNull()->defaultValue(false),
             'auth_key'      => $this->string(32),
-            'role'          => $this->integer()->notNull()->defaultValue(0),
-            'first_name'    => $this->string(32)->notNull(),
-            'last_name'     => $this->string(32),
+            'role'          => $this->integer()->notNull()->defaultValue(Role::USER),
+            'name'          => $this->string(32)->notNull(),
+            'company'       => $this->string(),
+            'slug'          => $this->string(),
             'phone'         => $this->string(16),
             'address'       => $this->string(60),
             'city'          => $this->string(32),
             'state'         => $this->string(2),
-            'zip'           => $this->integer(5),
+            'zip'           => $this->string(5),
             'created_at'    => $this->integer(10),
             'updated_at'    => $this->integer(10),
             'last_login_at' => $this->integer(10),
@@ -56,7 +55,14 @@ class m191202_131024_create_user extends Migration
             'email'      => 'demo@ax.com',
             'password'   => Yii::$app->security->generatePasswordHash('axdemo*&'),
             'auth_key'   => Yii::$app->security->generateRandomString(),
-            'first_name' => 'Demo',
+            'name'       => 'Demo',
+            'company'    => 'Demo Company',
+            'slug'       => 'demo-company',
+            'zip'        => '90025',
+            'phone'      => '(123) 123-1234',
+            'role'       => Role::USER,
+            'state'      => 'CA',
+            'city'       => 'Los Angeles',
             'created_at' => time(),
             'updated_at' => time(),
             'confirmed'  => true,
@@ -69,22 +75,12 @@ class m191202_131024_create_user extends Migration
             'email'      => 'admin@ax.com',
             'password'   => Yii::$app->security->generatePasswordHash('axadmin*&'),
             'auth_key'   => Yii::$app->security->generateRandomString(),
-            'first_name' => 'Admin',
-            'role'       => 1,
-            'created_at' => time(),
-            'updated_at' => time(),
-            'confirmed'  => true,
-        ]);
-        
-        /**
-         * Developer
-         */
-        $this->insert($this->tableUser, [
-            'email'      => 'developer@ax.com',
-            'password'   => Yii::$app->security->generatePasswordHash('axdev*&'),
-            'auth_key'   => Yii::$app->security->generateRandomString(),
-            'first_name' => 'Developer',
-            'role'       => 2,
+            'name'       => 'Admin',
+            'zip'        => '90025',
+            'state'      => 'CA',
+            'city'       => 'Los Angeles',
+            'phone'      => '(123) 123-1234',
+            'role'       => Role::DEVELOPER,
             'created_at' => time(),
             'updated_at' => time(),
             'confirmed'  => true,

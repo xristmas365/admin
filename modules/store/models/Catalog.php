@@ -1,13 +1,10 @@
 <?php
 /**
- * Catalog.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\store\models;
@@ -44,8 +41,6 @@ class Catalog extends Tree
 {
     
     public $search;
-    
-    public $slug;
     
     /**
      * {@inheritdoc}
@@ -120,13 +115,14 @@ class Catalog extends Tree
      */
     public function behaviors()
     {
-        return array_merge(parent::behaviors(), [
-            'slug' => [
-                'class'        => 'yii\behaviors\SluggableBehavior',
-                'attribute'    => 'name',
-                'ensureUnique' => true,
-            ],
-        ]);
+        return array_merge(parent::behaviors(),
+            [
+                'slug' => [
+                    'class'        => 'yii\behaviors\SluggableBehavior',
+                    'attribute'    => 'name',
+                    'ensureUnique' => true,
+                ],
+            ]);
     }
     
     /**
@@ -160,13 +156,6 @@ class Catalog extends Tree
         ];
     }
     
-    public function attributeHints()
-    {
-        return [
-            'name' => 'Save after editing',
-        ];
-    }
-    
     public function beforeSave($insert)
     {
         $this->icon_type = 1;
@@ -174,5 +163,10 @@ class Catalog extends Tree
         $this->collapsed = true;
         
         return parent::beforeSave($insert);
+    }
+    
+    public function getProducts()
+    {
+        return $this->hasMany(Product::class, ['catalog_id' => 'id']);
     }
 }

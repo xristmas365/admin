@@ -1,4 +1,11 @@
 <?php
+/**
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
+ */
 
 $config = [
     'id'                  => 'basic',
@@ -34,6 +41,7 @@ $config = [
                 '@app/modules/page/migrations',
                 '@app/modules/store/migrations',
                 '@app/modules/article/migrations',
+                '@app/modules/system/migrations',
                 '@yii/log/migrations/',
             ],
         ],

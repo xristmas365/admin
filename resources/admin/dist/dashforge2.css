@@ -6,7 +6,7 @@
  */
 
 body {
-    background-color: #fff;
+    background-color: #f5f5f5;
 }
 
 .aside-header {
@@ -34,7 +34,6 @@ body {
 
 .nav-aside {
     margin-top: 15px;
-    /*margin-left: 10px;*/
 }
 
 .nav-aside .nav-item.active .nav-link::before {
@@ -43,6 +42,14 @@ body {
 
 .card {
     border: none;
+}
+
+.card-footer {
+    padding: 0;
+}
+
+.card-header, .card-footer {
+    background-color: whitesmoke;
 }
 
 
@@ -132,8 +139,8 @@ body {
 }
 
 .df-breadcrumbs .breadcrumb-item {
-    font-size: 1em;
-    line-height: 1.6;
+    font-size: 0.9em;
+    line-height: 1.0;
     text-transform: uppercase;
     font-family: -apple-system, BlinkMacSystemFont, "Inter UI", Roboto, sans-serif;
 }
@@ -567,11 +574,13 @@ body {
 }
 
 .card, .btn, .form-control {
-    border-radius: 0px;
+    border-radius: 5px;
 }
 
 .actions a {
     color: rgba(27, 46, 75, 0.7);
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .actions .action-delete a {
@@ -678,6 +687,7 @@ body {
     top: 50%;
     transform: translateY(-50%);
 }
+
 .grid-right-buttons {
     position: absolute;
     right: 0;
@@ -686,5 +696,5 @@ body {
 }
 
 .upload-kit-item {
-  width: calc(50% - 12px);
+    width: calc(50% - 12px);
 }

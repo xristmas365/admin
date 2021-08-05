@@ -1,13 +1,10 @@
 <?php
 /**
- * CatalogSearch.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\store\models\search;
@@ -53,8 +50,6 @@ class CatalogSearch extends Catalog
     public function search($params)
     {
         $query = Catalog::find();
-        
-        // add conditions that should always apply here
         
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

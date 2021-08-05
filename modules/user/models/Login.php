@@ -1,19 +1,17 @@
 <?php
 /**
- * Login.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\user\models;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\Html;
 
 /**
  * Class Login
@@ -45,6 +43,7 @@ class Login extends Model
         ];
     }
     
+    
     /**
      * Logs in a user using the provided email and password.
      * @return bool whether the user is logged in successfully
@@ -60,19 +59,21 @@ class Login extends Model
         $user = User::findOne(['email' => $this->email]);
         
         if(!$user) {
-            $this->addError('email', 'Account not created. Create an Account');
+            $registerLink = Html::a('<i class="fas fa-lock"></i> Register', ['/user/auth/register']);
+            $this->addError('email', 'Account not found. ' . $registerLink);
             
             return false;
         }
         
         if(!Yii::$app->security->validatePassword($this->password, $user->password)) {
-            $this->addError('password', 'Incorrect password');
+            $resetLink = Html::a('<i class="fas fa-lock"></i> Reset Password', ['/user/auth/reset']);
+            $this->addError('password', 'Incorrect password. ' . $resetLink);
             
             return false;
         }
         
         if($user->blocked) {
-            $this->addError('email', 'Account blocked or deactivated');
+            $this->addError('email', 'Sorry, Your Account is blocked. Contact Adminitstrator');
             
             return false;
         }
@@ -83,6 +84,6 @@ class Login extends Model
             return false;
         }
         
-        return Yii::$app->user->login($user, $this->remember ? getenv('SESSION_DURATION') : 0);
+        return Yii::$app->user->login($user, getenv('SESSION_DURATION'));
     }
 }

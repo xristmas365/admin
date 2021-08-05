@@ -1,13 +1,10 @@
 <?php
 /**
- * Product.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\store\models;
@@ -16,7 +13,9 @@ use yii\helpers\Url;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\base\InvalidConfigException;
+use yz\shoppingcart\CartPositionTrait;
 use app\modules\storage\models\Storage;
+use yz\shoppingcart\CartPositionInterface;
 
 /**
  * This is the model class for table "product".
@@ -38,9 +37,12 @@ use app\modules\storage\models\Storage;
  * @property bool|null   $popular
  *
  * @property Catalog     $catalog
+ * @property string      $image
  */
-class Product extends ActiveRecord
+class Product extends ActiveRecord implements CartPositionInterface
 {
+    
+    use CartPositionTrait;
     
     const ACTIVE   = 1;
     const DISABLED = 0;
@@ -53,6 +55,16 @@ class Product extends ActiveRecord
     public static function tableName()
     {
         return 'product';
+    }
+    
+    public function getPrice()
+    {
+        return $this->price;
+    }
+    
+    public function getId()
+    {
+        return $this->id;
     }
     
     /**
@@ -130,11 +142,7 @@ class Product extends ActiveRecord
     public function attributeHints()
     {
         return [
-            'title'       => 'Used for product link',
-            'price'       => 'Base product price',
-            'catalog_id'  => 'Which Catalog',
-            'keywords'    => 'SEO Keywords, comma separated',
-            'description' => 'Small product description. Used for SEO tag description',
+            'keywords' => 'SEO Keywords, comma separated',
         ];
     }
     

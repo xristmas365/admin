@@ -1,16 +1,13 @@
 <?php
 /**
- * menu.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
-use app\modules\user\models\User;
+use app\modules\user\models\Role;
 
 return [
     [
@@ -32,54 +29,70 @@ return [
         'url'   => ['/admin/default/index'],
     ],
     [
-        'label' => '<i data-feather="user"></i> <span>Account</span>',
-        'url'   => ['/user/default/account'],
+        'label' => '<i data-feather="user"></i> <span>My Profile</span>',
+        'url'   => '#',
+        'items' => [
+            [
+                'label' => ' - Account',
+                'url'   => ['/user/default/account'],
+            ],
+            [
+                'label' => ' - Password',
+                'url'   => ['/user/default/password'],
+            ],
+            [
+                'label' => ' - Logout',
+                'url'   => ['/user/auth/logout'],
+            ],
+        ],
     ],
     ['label' => 'Store'],
-    [
-        'label' => '<i data-feather="shopping-bag"></i> <span>Products</span>',
-        'url'   => ['/store/product/index'],
-    ],
     [
         'label' => '<i data-feather="server"></i> <span>Catalogs</span>',
         'url'   => ['/store/catalog/index'],
     ],
-    ['label' => 'Content', 'visible' => Yii::$app->user->can(User::ROLE_ADMIN),],
+    [
+        'label' => '<i data-feather="shopping-bag"></i> <span>Products</span>',
+        'url'   => ['/store/product/index'],
+    ],
+    ['label' => 'Content', 'visible' => Yii::$app->user->can(Role::ADMIN),],
     [
         'label'   => '<i data-feather="file-text"></i> <span>Pages</span>',
         'url'     => ['/page/default/index'],
-        'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
+        'visible' => Yii::$app->user->can(Role::ADMIN),
     ],
     [
-        'label'   => '<i data-feather="cast"></i> <span>Articles</span>',
+        'label'   => '<i data-feather="cast"></i> <span>Article Feed</span>',
         'url'     => ['/article/default/index'],
-        'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
+        'visible' => Yii::$app->user->can(Role::ADMIN),
+        'items'   => [
+            [
+                'label' => ' - Articles',
+                'url'   => ['/article/default/index'],
+            ],
+            [
+                'label' => ' - Topics',
+                'url'   => ['/article/topic/index'],
+            ],
+        ],
     ],
     [
         'label'   => 'Admin Tools',
-        'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
+        'visible' => Yii::$app->user->can(Role::ADMIN),
     ],
     [
-        'label' => '<i data-feather="users"></i> <span>Users</span>',
-        'url'   => ['/user/default/index'],
-    ],
-    [
-        'label'   => '<i data-feather="settings"></i> <span>Settings</span>',
-        'url'     => ['/admin/default/settings'],
-        'visible' => Yii::$app->user->can(User::ROLE_ADMIN),
-    ],
-    [
-        'label'   => 'DEV Tools',
-        'visible' => Yii::$app->user->can(User::ROLE_DEVELOPER),
+        'label'   => '<i data-feather="users"></i> <span>Users</span>',
+        'url'     => ['/user/default/index'],
+        'visible' => Yii::$app->user->can(Role::ADMIN),
     ],
     [
         'label'   => '<i data-feather="layers"></i> <span>Error Log</span>',
         'url'     => ['/admin/log/index'],
-        'visible' => Yii::$app->user->can(User::ROLE_DEVELOPER),
+        'visible' => Yii::$app->user->can(Role::DEVELOPER),
     ],
     [
         'label'   => '<i data-feather="code"></i> <span>GII</span>',
         'url'     => ['/gii'],
-        'visible' => Yii::$app->user->can(User::ROLE_DEVELOPER),
+        'visible' => Yii::$app->user->can(Role::DEVELOPER),
     ],
 ];

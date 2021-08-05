@@ -1,13 +1,10 @@
 <?php
 /**
- * ProductSearch.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\store\models\search;
@@ -22,6 +19,10 @@ use app\modules\store\models\Product;
 class ProductSearch extends Product
 {
     
+    public $priceMin;
+    
+    public $priceMax;
+    
     /**
      * {@inheritdoc}
      */
@@ -32,6 +33,7 @@ class ProductSearch extends Product
             [['title', 'description', 'content', 'keywords', 'slug'], 'safe'],
             [['price'], 'number'],
             [['active', 'new', 'popular'], 'boolean'],
+            [['priceMin', 'priceMax'], 'safe'],
         ];
     }
     
@@ -44,7 +46,7 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
-        $query = Product::find()->with(['attachments'])->joinWith(['catalog']);
+        $query = Product::find()->where(['created_by' => Yii::$app->user->id])->with(['catalog']);
         
         $dataProvider = new ActiveDataProvider([
             'query'      => $query,
@@ -69,6 +71,32 @@ class ProductSearch extends Product
         $query
             ->andFilterWhere(['ilike', 'title', $this->title])
             ->andFilterWhere(['ilike', 'slug', $this->slug]);
+        
+        return $dataProvider;
+    }
+    
+    public function frontSearch($params)
+    {
+        $query = Product::find()->where(['active' => true])->with(['catalog']);
+        
+        $dataProvider = new ActiveDataProvider([
+            'query'      => $query,
+            'pagination' => ['pageSize' => 20],
+        
+        ]);
+        
+        $this->load($params);
+        
+        if(!$this->validate()) {
+            return $dataProvider;
+        }
+        
+        if($this->catalog_id != 0) {
+            $query->andFilterWhere(['catalog_id' => $this->catalog_id]);
+        }
+        
+        $query->andFilterWhere(['<', 'price', $this->priceMin]);
+        $query->andFilterWhere(['>', 'price', $this->priceMax]);
         
         return $dataProvider;
     }

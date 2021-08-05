@@ -1,7 +1,7 @@
 <?php
 /**
  * @author    Paul Storre <1230840.ps@gmail.com>
- * @package   NACR project
+ * @package   Admin AX project
  * @version   1.0
  * @copyright Copyright (c) 2021, IndustrialAX LLC
  * @license   https://industrialax.com/license
@@ -20,19 +20,21 @@ use yii\behaviors\{TimestampBehavior, BlameableBehavior, SluggableBehavior};
  * This is the model class for table "article".
  *
  * @property int         $id
- * @property int|null    $section_id
+ * @property int|null    $topic_id
  * @property string|null $title
  * @property string|null $description
  * @property string|null $content
  * @property string|null $seo_description
  * @property string|null $seo_keywords
  * @property bool        $draft
+ * @property int|null    $visits
  * @property int|null    $created_at
  * @property int|null    $updated_at
  * @property int|null    $created_by
  * @property int|null    $updated_by
+ * @property int|null    $published_at
  *
- * @property Section     $section
+ * @property Topic       $topic
  * @property Storage[]   $coverAttachments
  * @property string      $coverImage
  */
@@ -57,13 +59,12 @@ class Article extends ActiveRecord
     public function rules()
     {
         return [
-            [['section_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'default', 'value' => null],
-            [['section_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['topic_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'default', 'value' => null],
+            [['topic_id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'visits'], 'integer'],
             [['description', 'content'], 'string'],
-            [['draft'], 'boolean'],
-            [['files', 'cover'], 'safe'],
+            [['files', 'cover', 'published_at',], 'safe'],
             [['title', 'seo_description', 'seo_keywords', 'slug'], 'string', 'max' => 255],
-            [['section_id'], 'exist', 'skipOnError' => true, 'targetClass' => Section::class, 'targetAttribute' => ['section_id' => 'id']],
+            [['topic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Topic::class, 'targetAttribute' => ['topic_id' => 'id']],
         ];
     }
     
@@ -100,13 +101,14 @@ class Article extends ActiveRecord
     {
         return [
             'id'              => 'ID',
-            'section_id'      => 'Section',
+            'topic_id'        => 'Topic',
             'title'           => 'Title',
             'description'     => 'Description',
             'content'         => 'Content',
             'seo_description' => 'Seo Description',
             'seo_keywords'    => 'Seo Keywords',
-            'draft'           => 'Draft',
+            'published_at'    => 'Published At',
+            'visits'          => 'Visits',
             'created_at'      => 'Created At',
             'updated_at'      => 'Updated At',
             'created_by'      => 'Created By',
@@ -114,14 +116,21 @@ class Article extends ActiveRecord
         ];
     }
     
+    public function beforeSave($insert)
+    {
+        $this->published_at = strtotime($this->published_at . ' 09:00:00 AM');
+        
+        return parent::beforeSave($insert);
+    }
+    
     /**
-     * Gets query for [[Section]].
+     * Gets query for [[Topic]].
      *
      * @return ActiveQuery
      */
-    public function getSection()
+    public function getTopic()
     {
-        return $this->hasOne(Section::class, ['id' => 'section_id']);
+        return $this->hasOne(Topic::class, ['id' => 'topic_id']);
     }
     
     /**

@@ -1,87 +1,86 @@
 <?php
 
 /**
- *  PHP version 7.3
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.net/license
- * @version    1.0
- * @link       https://github.com/xristmas365/basic
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 return [
-    /**
-     * Project
-     */
-    
-    '/'        => '/site/index',
-    '/privacy' => '/site/privacy',
-    '/terms'   => '/site/terms',
     
     /**
-     * FRONT PAGES
+     * Site
      */
-    
-    '/sections'       => '/article/front/sections',
-    '/section/<slug>' => '/article/front/section',
-    '/article/<slug>' => '/article/front/article',
+    '/'                       => '/site/index',
+    '/articles'               => '/article/front/index',
+    '/products'               => '/store/front/index',
+    '/products/<slug>'        => '/store/front/product',
     
     /**
      * AUTH
      */
-    
-    '/login'    => '/user/auth/login',
-    '/logout'   => '/user/auth/logout',
-    '/reset'    => '/user/auth/reset',
-    '/password' => '/user/auth/password',
+    '/register'               => '/user/auth/register',
+    '/login'                  => '/user/auth/login',
+    '/logout'                 => '/user/auth/logout',
+    '/reset'                  => '/user/auth/reset',
+    '/password'               => '/user/auth/password',
+    '/switch/<id>'            => '/user/auth/switch',
     
     /**
      * ADMIN
      */
-    
-    '/admin'           => '/admin/default/index',
-    '/admin/logs'      => '/admin/log/index',
-    '/admin/logs/<id>' => '/admin/log/view',
-    '/admin/settings' => '/admin/default/settings',
+    '/admin'                  => '/admin/default/index',
+    '/admin/logs'             => '/admin/log/index',
+    '/admin/logs/<id>'        => '/admin/log/view',
     
     /**
-     * USERS
+     * ADMIN - USERS
      */
-    
     '/admin/users'            => '/user/default/index',
-    '/admin/account'          => '/user/default/account',
-    '/admin/account/password' => '/user/default/password',
-    '/admin/users/create'     => '/user/default/create',
+    '/admin/users/new'        => '/user/default/create',
     '/admin/users/<id>'       => '/user/default/update',
     
     /**
-     * PAGE
+     * ADMIN - ACCOUNT
      */
-    
-    '/admin/pages'     => '/page/default/index',
-    '/admin/pages/new' => '/page/default/create',
-    '/admin/pages/<id>' => '/page/default/update',
+    '/admin/account'          => '/user/default/account',
+    '/admin/account/password' => '/user/default/password',
     
     /**
-     * ARTICLE
+     * ADMIN - PAGES
      */
     
-    '/admin/articles'          => '/article/default/index',
-    '/admin/articles/new'      => '/article/default/create',
-    '/admin/articles/sections' => '/article/section/index',
+    '/admin/pages'         => '/page/default/index',
+    '/admin/pages/new'     => '/page/default/create',
+    '/admin/pages/<id>'    => '/page/default/update',
     
     /**
-     * STORE
+     * ADMIN - ARTICLES
      */
+    '/admin/articles'      => '/article/default/index',
+    '/admin/articles/new'  => '/article/default/create',
+    '/admin/articles/<id>' => '/article/default/update',
     
+    /**
+     * ADMIN - TOPICS
+     */
+    '/admin/topics'        => '/article/topic/index',
+    '/admin/topics/new'    => '/article/topic/create',
+    '/admin/topics/<id>'   => '/article/topic/update',
+    
+    /**
+     * ADMIN - PRODUCTS
+     */
     '/admin/products'      => '/store/product/index',
     '/admin/products/new'  => '/store/product/create',
     '/admin/products/<id>' => '/store/product/update',
     
-    '/p/<slug>' => '/store/front/product',
-    
-    '/admin/catalogs' => '/store/catalog/index',
+    /**
+     * ADMIN - PRODUCTS
+     */
+    '/admin/catalogs'      => '/store/catalog/index',
+    '/admin/catalogs/new'  => '/store/catalog/create',
+    '/admin/catalogs/<id>' => '/store/catalog/update',
 ];

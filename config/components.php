@@ -1,23 +1,19 @@
 <?php
 
 /**
- *  PHP version 7.3
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @version    1.0
- * @link       https://github.com/xristmas365/basic
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 return [
-    'request'              => [
+    'request'      => [
         'cookieValidationKey' => 'yL1FydCIbAwf71v9wqUJb7ZSFkn6iIFB',
         'baseUrl'             => '',
     ],
-    'db'                   => [
+    'db'           => [
         'class'             => 'yii\db\Connection',
         'dsn'               => getenv('DB_DSN'),
         'username'          => getenv('DB_USERNAME'),
@@ -25,8 +21,8 @@ return [
         'charset'           => getenv('DB_CHARSET'),
         'enableSchemaCache' => getenv('DB_SCHEMA_CACHE'),
     ],
-    'cache'                => 'yii\caching\FileCache',
-    'user'                 => [
+    'cache'        => 'yii\caching\FileCache',
+    'user'         => [
         'identityClass' => 'app\modules\user\models\User',
         'accessChecker' => 'app\modules\user\components\AuthManager',
         'loginUrl'      => ['/user/auth/login'],
@@ -35,10 +31,10 @@ return [
             Yii::$app->user->identity->touch('last_login_at');
         },
     ],
-    'errorHandler'         => [
+    'errorHandler' => [
         'errorAction' => 'site/error',
     ],
-    'log'                  => [
+    'log'          => [
         'traceLevel' => YII_DEBUG ? 3 : 0,
         'targets'    => [
             [
@@ -47,24 +43,22 @@ return [
             ],
         ],
     ],
-    'urlManager'           => [
+    'urlManager'   => [
         'enablePrettyUrl' => true,
         'showScriptName'  => false,
         'rules'           => require __DIR__ . '/urls.php',
     ],
-    'formatter'            => [
+    'formatter'    => [
         'nullDisplay'    => '',
         'datetimeFormat' => 'MM/dd/yyyy HH:mm a',
         'dateFormat'     => 'MM/dd/yyyy',
         'currencyCode'   => 'usd',
     ],
-    'assetManager'         => [
+    'assetManager' => [
         'linkAssets' => true,
         'class'      => 'yii\web\AssetManager',
         'bundles'    => [
             'yii\web\JqueryAsset'                 => ['js' => ['jquery.min.js']],
-            'yii\bootstrap4\BootstrapAsset'       => false, //enabled in BackendController
-            'yii\bootstrap4\BootstrapPluginAsset' => ['js' => ['js/bootstrap.bundle.min.js']],
             'extead\autonumeric\AutoNumericAsset' => [
                 'depends' => [
                     'yii\web\JqueryAsset',
@@ -78,15 +72,20 @@ return [
     /**
      * Storage
      */
-    'fsLocal'              => [
+    'fsLocal'      => [
         'class' => 'creocoder\flysystem\LocalFilesystem',
         'path'  => '@webroot/upload',
     ],
-    'fileStorage'          => [
+    'fileStorage'  => [
         'class'               => 'trntv\filekit\Storage',
         'useDirindex'         => true,
         'filesystemComponent' => 'fsLocal',
         'baseUrl'             => '/upload/',
+    ],
+    
+    'cart'                 => [
+        'class'  => 'yz\shoppingcart\ShoppingCart',
+        'cartId' => 'store',
     ],
     /**
      * Google Auth

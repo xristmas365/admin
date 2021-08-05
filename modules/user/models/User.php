@@ -1,13 +1,10 @@
 <?php
 /**
- * User.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\user\models;
@@ -20,6 +17,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\base\InvalidConfigException;
+use yii\behaviors\SluggableBehavior;
 use app\modules\storage\models\Storage;
 
 /**
@@ -32,9 +30,10 @@ use app\modules\storage\models\Storage;
  * @property bool        $confirmed
  * @property string|null $auth_key
  * @property int         $role
- * @property string      $first_name
- * @property string|null $last_name
+ * @property string      $name
  * @property string|null $phone
+ * @property string|null $company
+ * @property string|null $slug
  * @property string|null $address
  * @property string|null $city
  * @property string|null $state
@@ -43,7 +42,6 @@ use app\modules\storage\models\Storage;
  * @property int|null    $updated_at
  * @property int|null    $last_login_at
  *
- * @property string      $name
  * @property string      $roleValue
  * @property Storage[]   $attachments
  * @property string      $image
@@ -51,10 +49,6 @@ use app\modules\storage\models\Storage;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    
-    const ROLE_USER      = 0;
-    const ROLE_ADMIN     = 1;
-    const ROLE_DEVELOPER = 2;
     
     public $files;
     
@@ -73,10 +67,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::find()
-                     ->where(['id' => $id])
-                     ->with(['attachments'])
-                     ->one();
+        return static::find()->where(['id' => $id])->one();
     }
     
     /**
@@ -90,52 +81,6 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['auth_key' => $token]);
     }
     
-    /**
-     * Gets List of all Roles
-     *
-     * @return array
-     */
-    public static function roleList() : array
-    {
-        $roles = static::roles();
-        $list = [];
-        
-        foreach($roles as $key => $role) {
-            if(!Yii::$app->user->can(static::ROLE_DEVELOPER) && $key === static::ROLE_DEVELOPER) {
-                continue;
-            }
-            
-            $list[$key] = $role['name'];
-        }
-        
-        return $list;
-    }
-    
-    /**
-     * Roles Configuration
-     *
-     * @return array
-     */
-    public static function roles() : array
-    {
-        return [
-            static::ROLE_USER      => [
-                'name' => 'User',
-            ],
-            static::ROLE_ADMIN     => [
-                'name'   => 'Admin',
-                'access' => [
-                    User::ROLE_USER,
-                ],
-            ],
-            static::ROLE_DEVELOPER => [
-                'name'   => 'Developer',
-                'access' => [
-                    User::ROLE_ADMIN,
-                ],
-            ],
-        ];
-    }
     
     /**
      * {@inheritdoc}
@@ -143,18 +88,21 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['email', 'first_name'], 'required'],
+            [['email', 'name', 'password'], 'required'],
             [['blocked', 'confirmed'], 'boolean'],
             [['role', 'zip', 'created_at', 'updated_at', 'last_login_at'], 'default', 'value' => null],
-            [['role', 'zip', 'created_at', 'updated_at', 'last_login_at'], 'integer'],
-            [['email'], 'string', 'max' => 255],
+            [['role', 'created_at', 'updated_at', 'last_login_at'], 'integer'],
+            [['email', 'company'], 'string', 'max' => 255],
             [['password', 'address'], 'string', 'max' => 60],
-            [['auth_key', 'first_name', 'last_name', 'city'], 'string', 'max' => 32],
+            [['auth_key', 'name', 'city'], 'string', 'max' => 32],
             [['phone'], 'string', 'max' => 16],
             [['state'], 'string', 'max' => 2],
+            [['zip'], 'string', 'max' => 5],
             [['email'], 'unique'],
             [['email'], 'email'],
-            [['files'], 'safe'],
+            [['files', 'slug'], 'safe'],
+            [['company'], 'unique'],
+        
         ];
     }
     
@@ -182,6 +130,10 @@ class User extends ActiveRecord implements IdentityInterface
                 'attributes' => [static::EVENT_BEFORE_INSERT => 'auth_key'],
                 'value'      => Yii::$app->security->generateRandomString(),
             ],
+            'slug'     => [
+                'class'     => SluggableBehavior::class,
+                'attribute' => 'company',
+            ],
         ];
     }
     
@@ -198,8 +150,7 @@ class User extends ActiveRecord implements IdentityInterface
             'confirmed'     => 'Confirmed',
             'auth_key'      => 'Auth Key',
             'role'          => 'Role',
-            'first_name'    => 'First Name',
-            'last_name'     => 'Last Name',
+            'name'          => 'Name',
             'phone'         => 'Phone',
             'address'       => 'Address',
             'city'          => 'City',
@@ -218,7 +169,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $authKey;
+        return $this->auth_key === $authKey;
     }
     
     /**
@@ -238,23 +189,13 @@ class User extends ActiveRecord implements IdentityInterface
     }
     
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return trim($this->first_name . ' ' . $this->last_name);
-    }
-    
-    /**
      * Gets Role Value
      *
-     * @return mixed|null
+     * @return array
      */
-    public function getRoleValue() : ?string
+    public function getRoleValue() : string
     {
-        $roles = static::roles();
-        
-        return ArrayHelper::getValue($roles[$this->role], 'name');
+        return ArrayHelper::getValue(Role::list(), [$this->role]);
     }
     
     /**
@@ -297,7 +238,17 @@ class User extends ActiveRecord implements IdentityInterface
     }
     
     /**
-     * Generates role, password hash and token for new User
+     * @return string
+     */
+    public function generateVerifyLink()
+    {
+        $this->updateAuthKey();
+        
+        return Url::toRoute(['/user/auth/verify', 'auth' => $this->auth_key], true);
+    }
+    
+    /**
+     * Generates password hash token for new User
      *
      * @param bool $insert
      *
@@ -307,8 +258,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function beforeSave($insert) : bool
     {
         if($insert) {
-            $this->role = $this->role ?? static::ROLE_USER;
             $this->password = Yii::$app->security->generatePasswordHash($this->password);
+            $this->role = $this->role ?? Role::USER;
         }
         
         return parent::beforeSave($insert);

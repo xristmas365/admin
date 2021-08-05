@@ -1,42 +1,40 @@
 <?php
 /**
- *
- * @author    Paul Stolyarov <teajeraker@gmail.com>
- * @copyright industrialax.com
- * @license   https://industrialax.com/crm-general-license
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\article\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\modules\article\models\{Section, Article, search\SectionSearch, search\ArticleSearch};
+use yii\helpers\ArrayHelper;
+use app\modules\article\models\{Topic, Article, search\ArticleSearch};
 
 class FrontController extends Controller
 {
     
-    public function actionSections()
+    /**
+     * Renders All Actual Topic
+     *
+     * @return string
+     */
+    public function actionIndex()
     {
-        $searchModel = new SectionSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
-        return $this->render('sections', [
-            'searchModel'  => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-    
-    public function actionSection($slug)
-    {
-        $section = Section::findOne(['slug' => $slug]);
-        
+        /**
+         * Fluid Layout
+         */
         $searchModel = new ArticleSearch();
-        $dataProvider = $searchModel->frontSearch($section->id, Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->frontSearch(Yii::$app->request->queryParams);
+        $topics = ArrayHelper::map(Topic::find()->select(['id', 'name'])->where(['visible' => true])->asArray()->all(), 'id', 'name');
         
-        return $this->render('section', [
-            'section'      => $section,
+        return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
+            'topics'       => $topics,
         ]);
     }
     

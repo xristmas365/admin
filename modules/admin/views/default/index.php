@@ -1,20 +1,19 @@
 <?php
 /**
  * @author    Paul Storre <1230840.ps@gmail.com>
- * @package   NACR project
+ * @package   Admin AX project
  * @version   1.0
  * @copyright Copyright (c) 2021, IndustrialAX LLC
  * @license   https://industrialax.com/license
  */
 
-use app\modules\user\models\User;
+use app\modules\user\models\Role;
 use app\modules\admin\widgets\Dashboard;
 
 $this->title = 'Dashboard';
-$this->params['icon'] = 'box';
+$this->params['description'] = 'The Main Page';
 ?>
-<h3 class="mb-3">Welcome, <?= Yii::$app->user->identity->name ?>!</h3>
-<?php if(Yii::$app->user->identity->role === User::ROLE_USER): ?>
+<?php if(Yii::$app->user->identity->role === Role::USER): ?>
     <?= Dashboard::widget([
         'items' => [
             [
@@ -34,16 +33,18 @@ $this->params['icon'] = 'box';
         ],
     ]) ?>
 <?php endif ?>
-
-<?php if(Yii::$app->user->can(User::ROLE_ADMIN)): ?>
+<?php if(Yii::$app->user->can(Role::ADMIN)): ?>
     <?= Dashboard::widget([
-        'items' => [
+        'columnClass' => 'col-lg-6',
+        'items'       => [
             [
                 [
                     'title'       => 'Products',
                     'url'         => ['/store/product/index'],
                     'description' => 'Click here to view/edit the Products in the database',
                     'icon'        => 'shopping-bag',
+                    'bg'          => '#e4e5ec',
+                    'color'       => '#2a3176',
                 ],
                 [
                     'title'       => 'Product Catalogs',
@@ -58,12 +59,14 @@ $this->params['icon'] = 'box';
                     'url'         => ['/article/default/index'],
                     'description' => 'Click here to view/edit the Articles in the database',
                     'icon'        => 'file-text',
+                    'bg'          => '#f5f5f5',
                 ],
                 [
                     'title'       => 'Pages',
-                    'url'         => ['/article/section/index'],
+                    'url'         => ['/page/default/index'],
                     'description' => 'Click here to view/edit Pages',
                     'icon'        => 'file-text',
+                    'bg'          => '#f5f5f5',
                 ],
             ],
             [
@@ -72,26 +75,7 @@ $this->params['icon'] = 'box';
                     'url'         => ['/user/default/index'],
                     'description' => 'Click here to manage Users in the database',
                     'icon'        => 'users',
-                ],
-            ],
-        ],
-    ]) ?>
-<?php endif ?>
-<?php if(Yii::$app->user->can(User::ROLE_DEVELOPER)) : ?>
-    <?= Dashboard::widget([
-        'items' => [
-            [
-                [
-                    'title'       => 'Error Logs',
-                    'url'         => ['/admin/log/index'],
-                    'description' => 'Click here to view App Logs',
-                    'icon'        => 'layers',
-                ],
-                [
-                    'title'       => 'GII',
-                    'url'         => ['/gii'],
-                    'description' => 'Click here generate PHP Code',
-                    'icon'        => 'code',
+                    'bg'          => '#fcfcff',
                 ],
             ],
         ],

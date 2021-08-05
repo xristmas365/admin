@@ -1,21 +1,18 @@
 <?php
 
 /**
- * AuthManager.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\user\components;
 
 use Yii;
 use yii\base\Component;
-use app\modules\user\models\User;
+use app\modules\user\models\Role;
 use yii\rbac\CheckAccessInterface;
 
 /**
@@ -39,7 +36,8 @@ class AuthManager extends Component implements CheckAccessInterface
             return false;
         }
         
-        if(key_exists($permissionName, User::roles())) {
+        
+        if(key_exists($permissionName, Role::config())) {
             return $this->checkRoleAccess(Yii::$app->user->identity->role, $permissionName);
         }
         
@@ -53,11 +51,14 @@ class AuthManager extends Component implements CheckAccessInterface
             return true;
         }
         
-        if(key_exists('access', User::roles()[$role])) {
-            foreach(User::roles()[$role]['access'] as $child) {
-                if($this->checkRoleAccess($child, $permissionName)) {
-                    return true;
-                }
+        
+        if(!key_exists('access', Role::config($role))) {
+            return false;
+        }
+        
+        foreach(Role::config($role)['access'] as $child) {
+            if($this->checkRoleAccess($child, $permissionName)) {
+                return true;
             }
         }
         

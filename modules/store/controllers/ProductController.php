@@ -1,20 +1,19 @@
 <?php
 /**
- * ProductController.php
- *
- * @version    1.0
- * @package    AX project
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\store\controllers;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use app\modules\store\models\Product;
+use app\modules\store\models\Catalog;
 use app\modules\store\models\search\ProductSearch;
 use app\modules\admin\controllers\BackendController;
 
@@ -49,11 +48,13 @@ class ProductController extends BackendController
         $model = new Product;
         $model->active = Product::ACTIVE;
         
+        $rootCatalogs = ArrayHelper::map(Catalog::find()->roots()->asArray()->all(), 'id', 'name');
+        
         if($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
         
-        return $this->render('form', ['model' => $model]);
+        return $this->render('form', ['model' => $model, 'rootCatalogs' => $rootCatalogs]);
     }
     
     /**
@@ -69,6 +70,8 @@ class ProductController extends BackendController
     {
         $model = Product::findOne(['id' => $id]);
         
+        $rootCatalogs = ArrayHelper::map(Catalog::find()->roots()->asArray()->all(), 'id', 'name');
+        
         if(!$model) {
             return $this->redirect(['index']);
         }
@@ -77,7 +80,7 @@ class ProductController extends BackendController
             return $this->redirect(['index']);
         }
         
-        return $this->render('form', ['model' => $model]);
+        return $this->render('form', ['model' => $model, 'rootCatalogs' => $rootCatalogs]);
     }
     
     /**
@@ -94,9 +97,9 @@ class ProductController extends BackendController
         $product = Product::findOne(['id' => $id]);
         
         if($product) {
-            $product->delete();
+            return $product->delete();
         }
         
-        return $this->redirect(Yii::$app->request->referrer);
+        return false;
     }
 }

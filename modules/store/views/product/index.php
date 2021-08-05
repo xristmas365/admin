@@ -1,18 +1,15 @@
 <?php
 /**
- * index.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use app\modules\store\models\Product;
-use app\modules\store\models\Catalog;
 use app\modules\admin\widgets\grid\AdminGrid;
 use app\modules\admin\widgets\grid\SwitchColumn;
 
@@ -25,35 +22,38 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->params['icon'] = 'shopping-bag'
 ?>
 
+<?= Html::a('<i class="fas fa-plus"></i> Create New Product', ['create'], ['class' => 'btn btn-primary']) ?>
 
 <?= AdminGrid::widget([
     'dataProvider' => $dataProvider,
-    'filterModel'  => $searchModel,
+    'emptyText'    => '<i data-feather="shopping-bag"></i><hr>' . Html::a('Create', ['create'], ['data-pjax' => 0]) . ' Your First Product',
     'columns'      => [
-        AdminGrid::COLUMN_IMAGE,
         AdminGrid::COLUMN_CHECKBOX,
         [
             'attribute' => 'title',
-            'format'    => 'raw',
-            'value'     => function(Product $model)
-            {
-                return Html::a($model->title, ['/store/front/product', 'slug' => $model->slug], ['data-pjax' => 0]);
-            },
+            'width'     => '35%',
         ],
         [
             'attribute' => 'catalog_id',
+            'value'     => 'catalog.name',
+        ],
+        [
+            'attribute' => 'slug',
+            'label'     => 'Link',
             'format'    => 'raw',
-            'filter'    => Catalog::getList(),
             'value'     => function(Product $model)
             {
-                return $model->catalog ? $model->catalog->getBreadcrumbs(0) : null;
+                $link = Url::toRoute(['/store/front/index', 'slug' => $model->slug], true);
                 
+                return Html::a('<i class="fas fa-external-link-alt"></i>&nbsp' . $link, $link, ['data-pjax' => 0, 'target' => '_blank']);
             },
         ],
         [
             'class'     => SwitchColumn::class,
             'attribute' => 'active',
         ],
+        
         'price:currency',
+        AdminGrid::COLUMN_ACTION,
     ],
 ]) ?>

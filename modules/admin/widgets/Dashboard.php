@@ -1,10 +1,11 @@
 <?php
 
 /**
- *
- * @author    Paul Stolyarov <teajeraker@gmail.com>
- * @copyright industrialax.com
- * @license   https://industrialax.com/crm-general-license
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\admin\widgets;
@@ -14,6 +15,23 @@ use yii\bootstrap4\Widget;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
+/**
+ * Dashboard Cards Widget
+ *
+ *
+ * Row Example [item, item]
+ *
+ * Item Example
+ * [
+ *  'title'       => 'Users',
+ *  'url'         => ['/user/default/index'],
+ *  'description' => 'Click here to manage Users in the database',
+ *  'icon'        => 'users',
+ *  'bg'          => '#fff',
+ *  'color'       => '#ccc',
+ * ],
+ * @package app\modules\admin\widgets
+ */
 class Dashboard extends Widget
 {
     
@@ -67,7 +85,18 @@ class Dashboard extends Widget
         
         $url = ArrayHelper::getValue($card, 'url', ['/admin/default/index']);
         
-        return Html::a($this->renderBody($card) . $this->renderFooter($card), $url, ['class' => 'dashboard-card shadow']);
+        /**
+         * Colors
+         */
+        $bg = ArrayHelper::getValue($card, 'bg', '#e4e5ec');
+        $color = ArrayHelper::getValue($card, 'color', '#2a3176');
+        
+        $style = [
+            'color:' . $color . '!important',
+            'background-color:' . $bg . '!important',
+        ];
+        
+        return Html::a($this->renderBody($card) . $this->renderFooter($card), $url, ['class' => 'dashboard-card shadow', 'style' => implode(';', $style)]);
     }
     
     public function renderBody($card)

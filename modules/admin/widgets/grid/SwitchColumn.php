@@ -1,13 +1,10 @@
 <?php
 /**
- * SwitchColumn.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\admin\widgets\grid;
@@ -18,13 +15,18 @@ use yii\helpers\Json;
 class SwitchColumn extends \kartik\grid\BooleanColumn
 {
     
-    public $key = 'id';
+    public $key      = 'id';
+    
+    public $readonly = false;
     
     /**
      * @inheritdoc
      */
     public function getDataCellValue($model, $key, $index)
     {
+        if($this->readonly) {
+            return parent::getDataCellValue($model, $key, $index);
+        }
         $id = 'switch_' . strtolower($model->formName()) . '_' . $this->attribute . '_' . $model->id;
         
         $input = Html::checkbox(null, $model->{$this->attribute}, [

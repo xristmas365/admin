@@ -1,19 +1,15 @@
 <?php
 /**
- * DefaultController.php
- *
- * @author     Paul Storre <1230840.ps@gmail.com>
- * @package    AX project
- * @version    1.0
- * @copyright  IndustrialAX LLC
- * @license    https://industrialax.com/license
- * @since      File available since v1.0
+ * @author    Paul Storre <1230840.ps@gmail.com>
+ * @package   Admin AX project
+ * @version   1.0
+ * @copyright Copyright (c) 2021, IndustrialAX LLC
+ * @license   https://industrialax.com/license
  */
 
 namespace app\modules\page\controllers;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\modules\page\models\Page;
 use yii\web\NotFoundHttpException;
 use app\modules\page\models\PageSearch;
@@ -24,21 +20,6 @@ use app\modules\admin\controllers\BackendController;
  */
 class DefaultController extends BackendController
 {
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class'   => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
     
     /**
      * Lists all Page models.
@@ -109,11 +90,9 @@ class DefaultController extends BackendController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
     
-    public function actionDelete()
+    public function actionDelete($id)
     {
+        return $this->findModel($id)->delete();
         
-        $ids = Yii::$app->request->post('ids');
-        
-        return Page::deleteAll(['id' => $ids]);
     }
 }
