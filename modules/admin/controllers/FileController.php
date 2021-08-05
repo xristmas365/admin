@@ -12,6 +12,7 @@ namespace app\modules\admin\controllers;
 use Yii;
 use yii\helpers\FileHelper;
 use yii\data\ArrayDataProvider;
+use app\modules\storage\models\Storage;
 use app\modules\storage\models\StorageSearch;
 
 class FileController extends BackendController
@@ -56,6 +57,15 @@ class FileController extends BackendController
         
         return unlink($id);
         
+    }
+    
+    public function actionDelete($id)
+    {
+        Yii::$app->response->format = 'json';
+        
+        $model = Storage::findOne($id);
+        
+        return $model->delete();
     }
     
 }
