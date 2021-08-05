@@ -63,7 +63,7 @@ return [
     ],
     [
         'label'   => '<i data-feather="cast"></i> <span>Article Feed</span>',
-        'url'     => ['/article/default/index'],
+        'url'     => ['#'],
         'visible' => Yii::$app->user->can(Role::ADMIN),
         'items'   => [
             [
@@ -88,6 +88,16 @@ return [
     [
         'label'   => '<i data-feather="layers"></i> <span>Error Log</span>',
         'url'     => ['/admin/log/index'],
+        'visible' => Yii::$app->user->can(Role::DEVELOPER),
+    ],
+    [
+        'label'   => '<i data-feather="database"></i> <span>Storage</span>',
+        'url'     => ['/admin/file/storage'],
+        'visible' => Yii::$app->user->can(Role::DEVELOPER),
+    ],
+    [
+        'label'   => '<i data-feather="folder"></i> <span>Files</span>',
+        'url'     => ['/admin/file/index'],
         'visible' => Yii::$app->user->can(Role::DEVELOPER),
     ],
     [

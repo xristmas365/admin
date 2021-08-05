@@ -9,6 +9,7 @@
 
 namespace app\modules\article\models\search;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\article\models\Article;
@@ -54,6 +55,7 @@ class ArticleSearch extends Article
         
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => ['pageSize' => Yii::$app->session->get('page-size', 20)],
         ]);
         
         $this->load($params);
