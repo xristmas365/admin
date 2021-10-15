@@ -20,6 +20,8 @@ $positions = $cart->positions;
 
 ?>
 <nav id="sidebar" class="bg-light">
+    <div class="btn btn-outline-primary btn-block m-2 mr-4 continue-shopping">Continue Shopping</div>
+    <a href="<?= Url::toRoute(['/store/cart/index']) ?>" class="btn btn-outline-primary btn-block m-2">Checkout</a>
     <?php Pjax::begin(['id' => 'card-sidebar']) ?>
     <?php if($positions) : ?>
         <?php

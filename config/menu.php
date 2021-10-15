@@ -9,6 +9,11 @@
 
 use app\modules\user\models\Role;
 
+$customer = Yii::$app->user->can(Role::CUSTOMER);
+$user = Yii::$app->user->can(Role::USER);
+$admin = Yii::$app->user->can(Role::ADMIN);
+$developer = Yii::$app->user->can(Role::DEVELOPER);
+
 return [
     [
         'label'   => 'Account Identity',
@@ -29,42 +34,69 @@ return [
         'url'   => ['/admin/default/index'],
     ],
     [
-        'label' => '<i data-feather="user"></i> <span>My Profile</span>',
+        'label' => '<i data-feather="user"></i> <span>Profile</span>',
         'url'   => '#',
         'items' => [
             [
-                'label' => ' - Account',
+                'label' => ' - My Account',
                 'url'   => ['/user/default/account'],
             ],
             [
                 'label' => ' - Password',
                 'url'   => ['/user/default/password'],
             ],
+        ],
+    ],
+    [
+        'label' => '<i data-feather="credit-card"></i> <span>Payments</span>',
+        'url'   => '#',
+        'items' => [
             [
-                'label' => ' - Logout',
-                'url'   => ['/user/auth/logout'],
+                'label' => ' - History',
+                'url'   => ['/user/payment/index'],
+            ],
+            [
+                'label' => ' - Cards',
+                'url'   => ['/user/payment/card'],
             ],
         ],
     ],
-    ['label' => 'Store'],
     [
-        'label' => '<i data-feather="server"></i> <span>Catalogs</span>',
-        'url'   => ['/store/catalog/index'],
+        'label'   => 'Store',
+        'visible' => $user,
     ],
     [
-        'label' => '<i data-feather="shopping-bag"></i> <span>Products</span>',
-        'url'   => ['/store/product/index'],
+        'label'   => '<i data-feather="server"></i> <span>Catalogs</span>',
+        'url'     => ['/store/catalog/index'],
+        'visible' => $user,
     ],
-    ['label' => 'Content', 'visible' => Yii::$app->user->can(Role::ADMIN),],
+    [
+        'label'   => '<i data-feather="shopping-bag"></i> <span>Products</span>',
+        'url'     => ['/store/product/index'],
+        'visible' => $user,
+    ],
+    [
+        'label' => '<i data-feather="shopping-cart"></i> <span>Orders</span>',
+        'url'   => ['/store/order/index'],
+    ],
+    [
+        'label'   => '<i data-feather="trending-up"></i> <span>Coupons</span>',
+        'url'     => ['/store/coupon/index'],
+        'visible' => $admin,
+    ],
+    [
+        'label'   => 'Content',
+        'visible' => $admin,
+    ],
     [
         'label'   => '<i data-feather="file-text"></i> <span>Pages</span>',
         'url'     => ['/page/default/index'],
-        'visible' => Yii::$app->user->can(Role::ADMIN),
+        'visible' => $admin,
     ],
     [
         'label'   => '<i data-feather="cast"></i> <span>Article Feed</span>',
         'url'     => ['#'],
-        'visible' => Yii::$app->user->can(Role::ADMIN),
+        'visible' => $admin,
         'items'   => [
             [
                 'label' => ' - Articles',
@@ -78,31 +110,31 @@ return [
     ],
     [
         'label'   => 'Admin Tools',
-        'visible' => Yii::$app->user->can(Role::ADMIN),
+        'visible' => $admin,
     ],
     [
         'label'   => '<i data-feather="users"></i> <span>Users</span>',
         'url'     => ['/user/default/index'],
-        'visible' => Yii::$app->user->can(Role::ADMIN),
+        'visible' => $admin,
     ],
     [
         'label'   => '<i data-feather="layers"></i> <span>Error Log</span>',
         'url'     => ['/admin/log/index'],
-        'visible' => Yii::$app->user->can(Role::DEVELOPER),
+        'visible' => $developer,
     ],
     [
         'label'   => '<i data-feather="database"></i> <span>Storage</span>',
         'url'     => ['/admin/file/storage'],
-        'visible' => Yii::$app->user->can(Role::DEVELOPER),
+        'visible' => $developer,
     ],
     [
         'label'   => '<i data-feather="folder"></i> <span>Files</span>',
         'url'     => ['/admin/file/index'],
-        'visible' => Yii::$app->user->can(Role::DEVELOPER),
+        'visible' => $developer,
     ],
     [
         'label'   => '<i data-feather="code"></i> <span>GII</span>',
         'url'     => ['/gii'],
-        'visible' => Yii::$app->user->can(Role::DEVELOPER),
+        'visible' => $developer,
     ],
 ];

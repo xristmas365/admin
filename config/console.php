@@ -37,6 +37,7 @@ $config = [
             'migrationPath' => [
                 '@app/migrations',
                 '@app/modules/storage/migrations',
+                '@app/modules/admin/migrations',
                 '@app/modules/user/migrations',
                 '@app/modules/page/migrations',
                 '@app/modules/store/migrations',

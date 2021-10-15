@@ -24,7 +24,6 @@ class DefaultController extends BackendController
         return $this->render('index');
     }
     
-    
     /**
      * Administration index page size
      */

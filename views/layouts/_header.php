@@ -53,14 +53,6 @@ $defaultItems = [
         'label' => '<i class="fas fa-store"></i> Products',
         'url'   => ['/store/front/index'],
     ],
-    [
-        'label'       => '<i class="fas fa-shopping-cart"></i> Cart',
-        'url'         => null,
-        'linkOptions' => [
-            'id'    => 'sidebarCollapse',
-            'style' => 'cursor:pointer',
-        ],
-    ],
 ];
 
 $authItems = [

@@ -17,6 +17,7 @@ class Role
     const DEVELOPER = 0;
     const ADMIN     = 1;
     const USER      = 2;
+    const CUSTOMER  = 3;
     
     /**
      * Gets List of all Roles
@@ -42,12 +43,15 @@ class Role
     public static function config($role = null) : array
     {
         $config = [
+            static::CUSTOMER  => [
+                'name' => 'Customer',
+            ],
             static::USER      => [
                 'name' => 'User',
             ],
             static::ADMIN     => [
                 'name'   => 'Admin',
-                'access' => [Role::USER],
+                'access' => [Role::USER, Role::CUSTOMER],
             ],
             static::DEVELOPER => [
                 'name'   => 'Developer',

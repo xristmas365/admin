@@ -41,6 +41,7 @@ use app\modules\storage\models\Storage;
  * @property int|null    $created_at
  * @property int|null    $updated_at
  * @property int|null    $last_login_at
+ * @property string|null $stripe_id
  *
  * @property string      $roleValue
  * @property Storage[]   $attachments
@@ -92,7 +93,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['blocked', 'confirmed'], 'boolean'],
             [['role', 'zip', 'created_at', 'updated_at', 'last_login_at'], 'default', 'value' => null],
             [['role', 'created_at', 'updated_at', 'last_login_at'], 'integer'],
-            [['email', 'company'], 'string', 'max' => 255],
+            [['email', 'company', 'stripe_id'], 'string', 'max' => 255],
             [['password', 'address'], 'string', 'max' => 60],
             [['auth_key', 'name', 'city'], 'string', 'max' => 32],
             [['phone'], 'string', 'max' => 16],

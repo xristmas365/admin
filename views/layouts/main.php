@@ -10,6 +10,7 @@
 use yii\web\View;
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use kartik\dialog\Dialog;
 use yii\bootstrap4\Breadcrumbs;
 use app\modules\store\assets\CartAsset;
 
@@ -20,6 +21,17 @@ use app\modules\store\assets\CartAsset;
 
 AppAsset::register($this);
 CartAsset::register($this);
+
+echo Dialog::widget([
+    'dialogDefaults' => [
+        Dialog::DIALOG_CONFIRM => [
+            'type'           => Dialog::TYPE_PRIMARY,
+            'btnOKClass'     => 'btn-primary',
+            'btnCancelClass' => 'btn-secondary',
+            'closable'       => false,
+        ],
+    ],
+]);
 
 ?>
 <?php $this->beginPage() ?>
@@ -47,6 +59,7 @@ CartAsset::register($this);
         ]) ?>
         <?= $content ?>
     </div>
+    <?= $this->render('@app/views/layouts/_cart_button') ?>
 </div>
 <?php $this->endBody() ?>
 </body>

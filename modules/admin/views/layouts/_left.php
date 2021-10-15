@@ -8,6 +8,7 @@
  */
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 use app\modules\user\models\User;
 use app\modules\admin\widgets\Menu;
 
@@ -30,5 +31,8 @@ $user = Yii::$app->user->identity;
             <a href="<?= Url::toRoute(['/user/default/account']) ?>" class="avatar"><img src="/images/t.png" alt=""></a>
         </div>
         <?= Menu::widget(['items' => require Yii::getAlias('@config/menu.php')]) ?>
+        <?= Html::beginForm(['/user/auth/logout']) ?>
+        <?= Html::submitButton('Logout', ['class' => 'btn btn-light btn-block', 'data-confirm'=> 'Are You Sure?']) ?>
+        <?= Html::endForm() ?>
     </div>
 </aside>

@@ -11,7 +11,6 @@ use yii\web\View;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
-use yii\widgets\MaskedInput;
 use richardfan\widget\JSRegister;
 use app\modules\user\models\User;
 
@@ -41,10 +40,8 @@ $this->params['icon'] = 'user';
         <?php endif ?>
         <?= $form->field($model, 'name') ?>
         <?= $form->field($model, 'company') ?>
-        <?= $form->field($model, 'phone')->widget(MaskedInput::class, ['mask' => '(999) 999-9999', 'options' => ['placeholder' => '(555)-123-1234 Example']]) ?>
-        <?= $form->field($model, 'zip')
-                 ->widget(MaskedInput::class, ['mask' => '99999', 'options' => ['placeholder' => '92100 Example']])
-                 ->hint('Enter ZIP Code. City and State will be set automatically') ?>
+        <?= $form->field($model, 'phone')->phoneInput() ?>
+        <?= $form->field($model, 'zip')->zipInput()->hint('Enter ZIP Code. City and State will be set automatically') ?>
         <?= $form->field($model, 'city') ?>
         <?= $form->field($model, 'state') ?>
         <?= $form->field($model, 'address') ?>

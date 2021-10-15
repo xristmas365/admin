@@ -13,9 +13,10 @@ return [
             'class'        => 'yii\data\Sort',
             'defaultOrder' => ['id' => SORT_ASC],
         ],
+        'kartik\form\ActiveField'   => 'app\modules\admin\widgets\form\ActiveField',
         'dosamigos\tinymce\TinyMce' => [
             'clientOptions' => [
-                'height'=> '60vh',
+                'height'   => '60vh',
                 'toolbar'  => "undo redo | code link table hr | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  ",
                 'branding' => false,
                 'plugins'  => [
