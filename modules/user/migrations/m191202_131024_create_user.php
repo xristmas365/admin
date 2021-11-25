@@ -33,7 +33,7 @@ class m191202_131024_create_user extends Migration
             'confirmed'     => $this->boolean()->notNull()->defaultValue(false),
             'auth_key'      => $this->string(32),
             'role'          => $this->integer()->notNull()->defaultValue(Role::USER),
-            'name'          => $this->string(32)->notNull(),
+            'name'          => $this->string(32),
             'company'       => $this->string(),
             'slug'          => $this->string(),
             'phone'         => $this->string(16),
