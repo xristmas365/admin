@@ -85,6 +85,11 @@ return [
         'visible' => $admin,
     ],
     [
+        'label'   => '<i data-feather="truck"></i> <span>Warehouse</span>',
+        'url'     => ['/warehouse/default/index'],
+        'visible' => $user,
+    ],
+    [
         'label'   => 'Content',
         'visible' => $admin,
     ],

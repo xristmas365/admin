@@ -24,8 +24,12 @@ $this->title = 'Articles';
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['icon'] = 'cast';
 ?>
+
+
 <?= Html::a('<i class="fas fa-plus"></i> Create New Article', ['create'], ['class' => 'btn btn-primary']) ?>
+
 <?= AdminGrid::widget([
+    'filterModel'  => $searchModel,
     'dataProvider' => $dataProvider,
     'emptyText'    => '<i data-feather="cast"></i><hr>' . Html::a('Create', ['create'], ['data-pjax' => 0]) . ' Your First Article',
     'columns'      => [
@@ -78,14 +82,13 @@ $this->params['icon'] = 'cast';
             ],
             'value'          => function(Article $model)
             {
-                if($model->seo_keywords && $model->seo_description) {
+                if($model->seo_keywords && $model->seo_description && $model->seo_title) {
                     return '<i class="fas text-success fa-check"></i>';
                 }
                 
                 return '<i class="fas text-danger fa-times"></i>';
             },
         ],
-        
         AdminGrid::COLUMN_ACTION,
     ],
 ]); ?>

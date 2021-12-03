@@ -42,6 +42,11 @@ class ArticleSearch extends Article
         return Model::scenarios();
     }
     
+    public function behaviors()
+    {
+        return [];
+    }
+    
     /**
      * Creates data provider instance with search query applied
      *
@@ -54,7 +59,7 @@ class ArticleSearch extends Article
         $query = Article::find()->joinWith(['topic'])->with('coverAttachments');
         
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query'      => $query,
             'pagination' => ['pageSize' => Yii::$app->session->get('page-size', 20)],
         ]);
         
@@ -76,11 +81,12 @@ class ArticleSearch extends Article
             'updated_by' => $this->updated_by,
         ]);
         
-        $query->andFilterWhere(['ilike', 'title', $this->title])
-              ->andFilterWhere(['ilike', 'description', $this->description])
-              ->andFilterWhere(['ilike', 'content', $this->content])
-              ->andFilterWhere(['ilike', 'seo_description', $this->seo_description])
-              ->andFilterWhere(['ilike', 'seo_keywords', $this->seo_keywords]);
+        $query
+            ->andFilterWhere(['ilike', 'title', $this->title])
+            ->andFilterWhere(['ilike', 'description', $this->description])
+            ->andFilterWhere(['ilike', 'content', $this->content])
+            ->andFilterWhere(['ilike', 'seo_description', $this->seo_description])
+            ->andFilterWhere(['ilike', 'seo_keywords', $this->seo_keywords]);
         
         return $dataProvider;
     }

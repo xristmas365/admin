@@ -13,6 +13,7 @@ use yii\helpers\Url;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\base\InvalidConfigException;
+use yii\behaviors\TimestampBehavior;
 use yz\shoppingcart\CartPositionTrait;
 use app\modules\storage\models\Storage;
 use yz\shoppingcart\CartPositionInterface;
@@ -95,12 +96,12 @@ class Product extends ActiveRecord implements CartPositionInterface
         return [
             'yii\behaviors\TimestampBehavior',
             'yii\behaviors\BlameableBehavior',
-            'slug' => [
+            'slug'      => [
                 'class'        => 'yii\behaviors\SluggableBehavior',
                 'attribute'    => 'title',
                 'ensureUnique' => true,
             ],
-            'file' => [
+            'file'      => [
                 'class'            => 'app\modules\storage\behaviors\UploadBehavior',
                 'uploadRelation'   => 'attachments',
                 'pathAttribute'    => 'path',

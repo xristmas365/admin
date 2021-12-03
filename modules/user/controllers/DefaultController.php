@@ -29,6 +29,7 @@ class DefaultController extends BackendController
     {
         $searchModel = new UserSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
         return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
@@ -104,6 +105,7 @@ class DefaultController extends BackendController
         
         if($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Account Successfully Saved ');
+            
             return $this->redirect(['/admin/default/index']);
         }
         
@@ -169,5 +171,18 @@ class DefaultController extends BackendController
     public function actionDelete($id)
     {
         return $this->findModel($id)->delete();
+    }
+    
+    public function actionAllUsers($q = null, $id = null)
+    {
+        Yii::$app->response->format = 'json';
+        
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if(!is_null($q)) {
+            $users = User::find()->select(['id', 'name as text'])->where(['ilike', 'name', $q])->limit(10)->asArray()->all();
+            $out['results'] = $users;
+        }
+        
+        return $out;
     }
 }

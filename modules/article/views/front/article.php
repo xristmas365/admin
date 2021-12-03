@@ -14,7 +14,12 @@ use app\modules\article\models\Article;
  * @var $this    View
  * @var $article Article
  */
-$this->title = $article->title;
+if(!empty($article->seo_title)){
+    $this->title = $article->seo_title;
+} else {
+    $this->title = $article->title;
+}
+
 $this->params['breadcrumbs'][] = ['label' => 'Articles', 'url' => ['/article/front/index']];
 $this->params['breadcrumbs'][] = ['label' => $article->title];
 /**

@@ -14,7 +14,9 @@ use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use app\modules\store\models\Product;
 use app\modules\store\models\Catalog;
+use app\modules\warehouse\models\Warehouse;
 use app\modules\store\models\search\ProductSearch;
+use app\modules\warehouse\models\ProductWarehouse;
 use app\modules\admin\controllers\BackendController;
 
 /**
@@ -29,12 +31,22 @@ class ProductController extends BackendController
      */
     public function actionIndex()
     {
+        //for($i = 1; $i < 1000; $i++) {
+        //    $model = new Product([
+        //        'title' => 'Product ' . $i,
+        //        'price' => rand(5, 1000),
+        //    ]);
+        //    $model->save();
+        //}
+        
         $searchModel = new ProductSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         return $this->render('index', [
-            'searchModel'  => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModel'   => $searchModel,
+            'dataProvider'  => $dataProvider,
+            'warehouseList' => Warehouse::getWarehouseList(Yii::$app->user->id),
+        
         ]);
     }
     
@@ -102,4 +114,63 @@ class ProductController extends BackendController
         
         return false;
     }
+    
+    /**
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionReceive()
+    {
+        $warehouseId = Yii::$app->request->post('warehouse_id');
+        
+        $warehouse = Warehouse::findOne(['id' => $warehouseId, 'active' => true]);
+        
+        if(!$warehouse) {
+            throw new NotFoundHttpException('Warehouse not found');
+        }
+        
+        $productIds = Yii::$app->request->post('products_ids');
+        
+        $products = Product::find()
+                           ->select(['id', 'title', 'price'])
+                           ->andWhere(['id' => explode(',', $productIds)])
+                           ->asArray()
+                           ->all();
+        
+        return $this->render('receive', [
+            'warehouse' => $warehouse,
+            'products'  => $products,
+        ]);
+    }
+    
+    /**
+     *
+     *
+     * @param $id
+     *
+     * @return \yii\web\Response
+     */
+    public function actionReceiveProducts($id)
+    {
+        $productReceive = Yii::$app->request->post('Receive');
+        
+        foreach($productReceive as $value) {
+            $model = new ProductWarehouse([
+                    'product_id'   => $value['id'],
+                    'warehouse_id' => $id,
+                    'quantity'     => $value['quantity'],
+                    'status'       => ProductWarehouse::STATUS_INBOUND,
+                    'price'        => $value['price'],
+                    'total'        => $value['price'] * $value['quantity'],
+                
+                ]
+            );
+            $model->save();
+        }
+        
+        Yii::$app->session->setFlash('success', 'dcderv');
+        
+        return $this->redirect(['index']);
+    }
+    
 }

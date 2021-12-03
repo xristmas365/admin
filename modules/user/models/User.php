@@ -82,6 +82,17 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['auth_key' => $token]);
     }
     
+    public static function getUserList($role = null)
+    {
+        $user = User::find()
+                    ->select(['id', 'name'])
+                    ->andFilterWhere(['role' => $role])
+                    ->orderBy(['name' => SORT_ASC])
+                    ->asArray()
+                    ->all();
+        
+        return ArrayHelper::map($user, 'id', 'name');
+    }
     
     /**
      * {@inheritdoc}

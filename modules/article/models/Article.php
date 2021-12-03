@@ -10,6 +10,7 @@
 namespace app\modules\article\models;
 
 use yii\helpers\Url;
+use app\modules\user\models\User;
 use yii\base\InvalidConfigException;
 use yii\db\{ActiveQuery, ActiveRecord};
 use app\modules\storage\models\Storage;
@@ -35,8 +36,11 @@ use yii\behaviors\{TimestampBehavior, BlameableBehavior, SluggableBehavior};
  * @property int|null    $published_at
  *
  * @property Topic       $topic
+ * @property User        $user
  * @property Storage[]   $coverAttachments
  * @property string      $coverImage
+ * @property string      $slug      [varchar(255)]
+ * @property string      $seo_title [varchar(255)]
  */
 class Article extends ActiveRecord
 {
@@ -63,7 +67,7 @@ class Article extends ActiveRecord
             [['topic_id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'visits'], 'integer'],
             [['description', 'content'], 'string'],
             [['files', 'cover', 'published_at',], 'safe'],
-            [['title', 'seo_description', 'seo_keywords', 'slug'], 'string', 'max' => 255],
+            [['title', 'seo_title', 'seo_description', 'seo_keywords', 'slug'], 'string', 'max' => 255],
             [['topic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Topic::class, 'targetAttribute' => ['topic_id' => 'id']],
         ];
     }
@@ -105,6 +109,7 @@ class Article extends ActiveRecord
             'title'           => 'Title',
             'description'     => 'Description',
             'content'         => 'Content',
+            'seo_title'       => 'Seo Title',
             'seo_description' => 'Seo Description',
             'seo_keywords'    => 'Seo Keywords',
             'published_at'    => 'Published At',
@@ -132,6 +137,15 @@ class Article extends ActiveRecord
     {
         return $this->hasOne(Topic::class, ['id' => 'topic_id']);
     }
+    
+    /**
+     * @return ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+    
     
     /**
      * @return ActiveQuery

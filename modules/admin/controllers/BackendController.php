@@ -17,12 +17,6 @@ class BackendController extends Controller
     
     public $layout = '@app/modules/admin/views/layouts/main';
     
-    public function init()
-    {
-        parent::init();
-        Yii::$app->assetManager->bundles['yii\bootstrap4\BootstrapAsset'] = ['css' => ['css/bootstrap.min.css']];
-        
-    }
     
     public function behaviors()
     {

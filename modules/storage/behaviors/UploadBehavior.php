@@ -31,7 +31,7 @@ class UploadBehavior extends \trntv\filekit\behaviors\UploadBehavior
             ActiveRecord::EVENT_AFTER_UPDATE  => 'afterUpdateMultiple',
             ActiveRecord::EVENT_BEFORE_DELETE => 'beforeDeleteMultiple',
             ActiveRecord::EVENT_AFTER_DELETE  => 'afterDelete',
-            ActiveRecord::EVENT_AFTER_FIND    => 'afterFindMultiple',
+            //ActiveRecord::EVENT_AFTER_FIND    => 'afterFindMultiple',
         ];
         
         $singleEvents = [
@@ -40,7 +40,7 @@ class UploadBehavior extends \trntv\filekit\behaviors\UploadBehavior
             ActiveRecord::EVENT_AFTER_UPDATE   => 'afterUpdateSingle',
             ActiveRecord::EVENT_BEFORE_DELETE  => 'beforeDeleteSingle',
             ActiveRecord::EVENT_AFTER_DELETE   => 'afterDelete',
-            ActiveRecord::EVENT_AFTER_FIND     => 'afterFindSingle',
+            //ActiveRecord::EVENT_AFTER_FIND     => 'afterFindSingle',
         ];
         
         return $this->multiple ? $multipleEvents : $singleEvents;

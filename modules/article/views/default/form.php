@@ -83,6 +83,7 @@ if($model->published_at) {
             'sortable'         => false,
             'maxNumberOfFiles' => 20,
         ])->label('Attachments') ?>
+        <?= $form->field($model, 'seo_title') ?>
         <?= $form->field($model, 'seo_description')->textarea(['rows' => 2]) ?>
         <?= $form->field($model, 'seo_keywords')->textInput(['data-role' => 'tagsinput']) ?>
         

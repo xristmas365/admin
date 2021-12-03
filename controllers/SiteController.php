@@ -15,6 +15,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use app\modules\user\models\User;
 
 class SiteController extends Controller
 {

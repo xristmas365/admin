@@ -43,6 +43,7 @@ $config = [
                 '@app/modules/store/migrations',
                 '@app/modules/article/migrations',
                 '@app/modules/system/migrations',
+                '@app/modules/warehouse/migrations',
                 '@yii/log/migrations/',
             ],
         ],

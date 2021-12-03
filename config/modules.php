@@ -17,6 +17,7 @@ return [
     'page'        => 'app\modules\page\Module',
     'article'     => 'app\modules\article\Module',
     'system'      => 'app\modules\system\Module',
+    'warehouse'   => 'app\modules\warehouse\Module',
     'treemanager' => [
         'class'            => '\kartik\tree\Module',
         'treeViewSettings' => [
