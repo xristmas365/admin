@@ -8,6 +8,7 @@ use app\modules\user\models\Role;
 use yii\web\NotFoundHttpException;
 use app\modules\warehouse\models\Warehouse;
 use app\modules\admin\controllers\BackendController;
+use app\modules\warehouse\models\search\ProductSearch;
 use app\modules\warehouse\models\search\WarehouseSearch;
 
 /**
@@ -42,8 +43,16 @@ class DefaultController extends BackendController
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        
+        $searchModel = new ProductSearch;
+        $dataProvider = $searchModel->search($model->id, Yii::$app->request->queryParams);
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model'        => $model,
+            'searchModel'  => $searchModel,
+            'dataProvider' => $dataProvider,
+        
         ]);
     }
     

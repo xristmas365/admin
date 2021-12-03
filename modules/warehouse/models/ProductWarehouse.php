@@ -22,15 +22,21 @@ use app\modules\warehouse\models\query\ProductWarehouseQuery;
  *
  * @property Product    $product
  * @property Warehouse  $warehouse
+ * @property int        $qty
  */
 class ProductWarehouse extends ActiveRecord
 {
     
     
-    const STATUS_INBOUND  = 1;
+    const STATUS_INBOUND = 1;
+    
     const STATUS_OUTBOUND = 2;
-    const STATUS_RETURN   = 3;
-    const STATUS_SELL     = 4;
+    
+    const STATUS_RETURN = 3;
+    
+    const STATUS_SELL = 4;
+    
+    public $qty;
     
     /**
      * {@inheritdoc}
@@ -71,9 +77,10 @@ class ProductWarehouse extends ActiveRecord
     {
         return [
             'id'           => 'ID',
-            'product_id'   => 'Product ID',
+            'product_id'   => 'Product',
             'warehouse_id' => 'Warehouse ID',
             'quantity'     => 'Quantity',
+            'qty'          => 'Quantity',
             'status'       => 'Status',
             'price'        => 'Price',
             'total'        => 'Total',
@@ -85,7 +92,7 @@ class ProductWarehouse extends ActiveRecord
     {
         return [
             'timestamp' => [
-                'class'      => 'yii\behaviors\TimestampBehavior',
+                'class'              => 'yii\behaviors\TimestampBehavior',
                 'updatedAtAttribute' => false,
             ],
         ];
