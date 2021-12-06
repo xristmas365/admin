@@ -112,7 +112,7 @@ $(document).on('click', '.product-receive-action', function (e) {
   const id = $(this).data('id')
   const products = $('#products').yiiGridView('getSelectedRows')
   if (products.length === 0) {
-    krajeeDialog.alert('ghghg')
+    krajeeDialog.alert('Please, select Products in the Table')
   } else {
     $('#warehouse_id').val(id)
     $('#products_ids').val(products.join(','))

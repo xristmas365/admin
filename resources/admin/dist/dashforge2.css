@@ -611,14 +611,6 @@ body {
     font-weight: bold;
 }
 
-.kv-grid-bs4 a.asc:after {
-    content: " ↑";
-}
-
-.kv-grid-bs4 a.desc:after {
-    content: " ↓";
-}
-
 .kv-detail-container {
     min-height: 116px;
     padding: 0 20px 0px 20px;

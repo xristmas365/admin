@@ -16,11 +16,5 @@ class CustomAsset extends AssetBundle
     
     public $sourcePath = '@app/web/dist/admin';
     
-    
-    public $css     = [
-        'main.css',
-    ];
-    
-    public $js      = [
-    ];
+    public $css        = ['main.css'];
 }
