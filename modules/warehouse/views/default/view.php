@@ -10,6 +10,7 @@
 use yii\data\ActiveDataProvider;
 use app\modules\warehouse\models\Warehouse;
 use app\modules\admin\widgets\grid\AdminGrid;
+use app\modules\warehouse\models\ProductWarehouse;
 use app\modules\warehouse\models\search\ProductSearch;
 
 /**
@@ -34,6 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'price:currency',
         'qty',
+        [
+            'attribute' => 'status',
+            'value'     => 'statusValue',
+            'filter'    => ProductWarehouse::statuses(),
+        ],
         'total:currency',
     ],
 ]); ?>

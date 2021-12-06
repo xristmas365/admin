@@ -10,6 +10,7 @@
 namespace app\modules\store\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use app\modules\store\models\Product;
@@ -168,9 +169,9 @@ class ProductController extends BackendController
             $model->save();
         }
         
-        Yii::$app->session->setFlash('success', 'dcderv');
+        Yii::$app->session->setFlash('success', 'Products have been successfully transferred to the warehouse');
         
-        return $this->redirect(['index']);
+        return $this->redirect(["/warehouse/default/view?id=$id"]);
     }
     
 }

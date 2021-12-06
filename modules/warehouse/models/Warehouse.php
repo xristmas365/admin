@@ -26,7 +26,7 @@ use app\modules\warehouse\models\query\ProductWarehouseQuery;
  */
 class Warehouse extends ActiveRecord
 {
-    
+    public $pw_total;
     /**
      * {@inheritdoc}
      */
@@ -37,12 +37,12 @@ class Warehouse extends ActiveRecord
     
     public static function getWarehouseList($id)
     {
-        return Warehouse::find()
-                        ->select(['id', 'name', 'active'])
-                        ->andFilterWhere(['user_id' => $id])
-                        ->orderBy(['active'=> SORT_DESC, 'name' => SORT_ASC])
-                        ->asArray()
-                        ->all();
+        return self::find()
+                   ->select(['id', 'name', 'active'])
+                   ->andFilterWhere(['user_id' => $id])
+                   ->orderBy(['active' => SORT_DESC, 'name' => SORT_ASC])
+                   ->asArray()
+                   ->all();
         
     }
     
@@ -83,6 +83,7 @@ class Warehouse extends ActiveRecord
             [['zip'], 'string', 'max' => 6],
             [['state'], 'string', 'max' => 2],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['pw_total'], 'number'],
         ];
     }
     
@@ -92,14 +93,15 @@ class Warehouse extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'      => 'ID',
-            'user_id' => 'User',
-            'name'    => 'Name',
-            'zip'     => 'Zip',
-            'city'    => 'City',
-            'address' => 'Address',
-            'state'   => 'State',
-            'active'  => 'Active',
+            'id'       => 'ID',
+            'user_id'  => 'User',
+            'name'     => 'Name',
+            'zip'      => 'Zip',
+            'city'     => 'City',
+            'address'  => 'Address',
+            'state'    => 'State',
+            'active'   => 'Active',
+            'pw_total' => 'Total',
         ];
     }
     

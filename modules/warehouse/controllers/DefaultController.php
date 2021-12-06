@@ -24,7 +24,8 @@ class DefaultController extends BackendController
      */
     public function actionIndex()
     {
-        $searchModel = new WarehouseSearch();
+        
+        $searchModel = new WarehouseSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         return $this->render('index', [

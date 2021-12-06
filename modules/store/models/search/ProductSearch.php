@@ -46,7 +46,24 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
-        $query = Product::find()->where(['created_by' => Yii::$app->user->id])->with(['catalog']);
+        $sum = <<<SQL
+SUM(CASE product_warehouse.status
+            WHEN 1 THEN product_warehouse.quantity
+            WHEN 2 THEN -product_warehouse.quantity
+            WHEN 3 THEN product_warehouse.quantity
+            WHEN 4 THEN -product_warehouse.quantity
+         END
+    )
+SQL;
+        $query = Product::find()
+                        ->select(['product.*', "$sum as quantity"])
+                        ->distinct()
+                        ->with('attachments')
+                        ->joinWith(['warehouses', 'catalog'])
+                        ->groupBy([
+                            'product_warehouse.product_id',
+                            'product.id',
+                        ]);
         
         $dataProvider = new ActiveDataProvider([
             'query'      => $query,
@@ -67,6 +84,12 @@ class ProductSearch extends Product
             'product.price'      => $this->price,
             'product.active'     => $this->active,
         ]);
+    
+        $dataProvider->sort->attributes['quantity'] = [
+            'asc'          => [$sum=>SORT_ASC],
+            'desc'         => [$sum=>SORT_DESC],
+            'defaultOrder' => SORT_ASC,
+        ];
         
         $query
             ->andFilterWhere(['ilike', 'title', $this->title])

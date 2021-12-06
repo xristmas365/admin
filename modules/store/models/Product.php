@@ -13,10 +13,11 @@ use yii\helpers\Url;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\base\InvalidConfigException;
-use yii\behaviors\TimestampBehavior;
 use yz\shoppingcart\CartPositionTrait;
 use app\modules\storage\models\Storage;
 use yz\shoppingcart\CartPositionInterface;
+use app\modules\warehouse\models\Warehouse;
+use app\modules\warehouse\models\ProductWarehouse;
 
 /**
  * This is the model class for table "product".
@@ -96,12 +97,12 @@ class Product extends ActiveRecord implements CartPositionInterface
         return [
             'yii\behaviors\TimestampBehavior',
             'yii\behaviors\BlameableBehavior',
-            'slug'      => [
+            'slug' => [
                 'class'        => 'yii\behaviors\SluggableBehavior',
                 'attribute'    => 'title',
                 'ensureUnique' => true,
             ],
-            'file'      => [
+            'file' => [
                 'class'            => 'app\modules\storage\behaviors\UploadBehavior',
                 'uploadRelation'   => 'attachments',
                 'pathAttribute'    => 'path',
@@ -171,5 +172,15 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function getCatalog() : ActiveQuery
     {
         return $this->hasOne(Catalog::class, ['id' => 'catalog_id']);
+    }
+    
+    public function getProductWarehouses()
+    {
+        return $this->hasMany(ProductWarehouse::class,['product_id' => 'id']);
+    
+    }
+    public function getWarehouses()
+    {
+        return $this->hasMany(Warehouse::class, ['id' => 'warehouse_id'])->via('productWarehouses');
     }
 }

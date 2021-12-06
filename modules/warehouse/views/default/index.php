@@ -1,14 +1,16 @@
 <?php
 
 use yii\helpers\Html;
+use kartik\field\FieldRange;
 use app\modules\user\models\Role;
 use app\modules\warehouse\models\Warehouse;
 use app\modules\admin\widgets\grid\AdminGrid;
 use app\modules\admin\widgets\grid\SwitchColumn;
 
+/* @var $model Warehouse */
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\warehouse\models\search\WarehouseSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModel WarehouseSearch */
+/* @var $dataProvider ActiveDataProvider */
 
 $this->title = 'Warehouses';
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,9 +20,24 @@ $this->params['breadcrumbs'][] = $this->title;
 </p>
 <?= AdminGrid::widget([
     'dataProvider' => $dataProvider,
+    'filterModel'  => $searchModel,
     'columns'      => [
         AdminGrid::COLUMN_CHECKBOX,
         'id',
+        [
+            'label'  => 'Total',
+            'format' => 'currency',
+            'attribute' => 'pw_total',
+            'filter' => FieldRange::widget([
+                'model'            => $searchModel,
+                'template'         => '{widget}{error}',
+                'attribute1'       => 'total_from',
+                'attribute2'       => 'total_to',
+                'separator'        => '-',
+                'separatorOptions' => ['class' => 'py-0'],
+                'type'             => FieldRange::INPUT_TEXT,
+            ]),
+        ],
         [
             
             'attribute' => 'user_id',
@@ -49,5 +66,4 @@ $this->params['breadcrumbs'][] = $this->title;
         AdminGrid::COLUMN_ACTION,
     ],
 ]); ?>
-
-
+<div class="text-de"></div>

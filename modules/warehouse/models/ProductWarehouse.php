@@ -23,6 +23,7 @@ use app\modules\warehouse\models\query\ProductWarehouseQuery;
  * @property Product    $product
  * @property Warehouse  $warehouse
  * @property int        $qty
+ * @property string     $statusValue
  */
 class ProductWarehouse extends ActiveRecord
 {
@@ -37,6 +38,18 @@ class ProductWarehouse extends ActiveRecord
     const STATUS_SELL = 4;
     
     public $qty;
+    
+    public static function statuses($status = null)
+    {
+        $statuses = [
+            static::STATUS_INBOUND  => 'INBOUND',
+            static::STATUS_OUTBOUND => 'OUTBOUND',
+            static::STATUS_RETURN   => 'RETURN',
+            static::STATUS_SELL     => 'SELL',
+        ];
+        
+        return is_null($status) ? $statuses : $statuses[$status];
+    }
     
     /**
      * {@inheritdoc}
@@ -53,6 +66,11 @@ class ProductWarehouse extends ActiveRecord
     public static function find()
     {
         return new ProductWarehouseQuery(get_called_class());
+    }
+    
+    public function getStatusValue()
+    {
+        return static::statuses($this->status);
     }
     
     /**

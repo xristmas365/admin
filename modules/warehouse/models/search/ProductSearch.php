@@ -24,7 +24,7 @@ class ProductSearch extends ProductWarehouse
     public function rules()
     {
         return [
-            [['product_id', 'price', 'qty', 'total'], 'safe'],
+            [['product_id', 'price', 'qty', 'total','status'], 'safe'],
         ];
     }
     
@@ -50,12 +50,14 @@ SQL;
                                      'p.title',
                                      'pw.price',
                                      'p.created_by',
+                                     'pw.status',
                                  ])
                                  ->select([
                                      'pw.product_id',
                                      'p.id',
                                      'p.title',
                                      'pw.price',
+                                     'pw.status',
                                      'p.created_by',
                                      "$sum as qty",
                                      "pw.price * $sum as total",
@@ -78,6 +80,7 @@ SQL;
         $query->andFilterWhere(['ilike', 'p.title', $this->product_id]);
         $query->andFilterHaving([$sum => $this->qty]);
         $query->andFilterWhere(['total' => $this->total]);
+        $query->andFilterWhere(['status' => $this->status]);
         
         return $dataProvider;
     }

@@ -69,6 +69,20 @@ foreach($warehouseList as $warehouse) {
             'attribute' => 'catalog_id',
             'value'     => 'catalog.name',
         ],
+        //[
+        //    'label'  => 'Warehouse',
+        //    'format' => 'raw',
+        //    'value'  => function($model)
+        //    {
+        //        $names = [];
+        //
+        //        foreach($model->warehouses as $warehouse) {
+        //            $names[] = '<span class="badge badge-secondary">' . $warehouse->name . '</span>';
+        //        }
+        //
+        //        return implode('<span class="ml-1"></span>', $names);
+        //    },
+        //],
         [
             'attribute' => 'slug',
             'label'     => 'Link',
@@ -86,6 +100,7 @@ foreach($warehouseList as $warehouse) {
         ],
         
         'price:currency',
+        'quantity',
         AdminGrid::COLUMN_ACTION,
     ],
 ]) ?>
