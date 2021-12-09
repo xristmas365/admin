@@ -114,11 +114,14 @@ HTML;
         $default = Html::tag('div', 'Filters and Sorting', ['class' => 'text-muted']);
         $filters = Html::tag('div', $this->renderFilterHelper());
         $sorting = Html::tag('div', $this->renderSortingHelper());
+        $leftContainer = Html::tag('div', $default . $sorting . $filters, ['class' => 'd-flex']);
+        $clearAllBtn = '';
+        if($this->renderFilterHelper() != '' || $this->renderSortingHelper() != '') {
+            $clearAllBtn = Html::a('Clear All', array_merge([Yii::$app->controller->action->id], Yii::$app->controller->actionParams), ['class' => 'text-muted']);
+        }
+        $rightContainer = Html::tag('div', $clearAllBtn);
         
-        $leftContainer = Html::tag('div', $default . $sorting . $filters, ['class'=> 'd-flex']);
-        $rightContainer = Html::tag('div', Html::a('Clear All', [Yii::$app->controller->action->id], ['class'=> 'text-muted']));
-        
-        return Html::tag('div', $leftContainer. $rightContainer, ['class'=> 'd-flex justify-content-between']);
+        return Html::tag('div', $leftContainer . $rightContainer, ['class' => 'd-flex justify-content-between']);
     }
     
     protected function renderFilterHelper()
@@ -133,12 +136,12 @@ HTML;
         if(!$params) {
             return $content;
         }
-        $result = array_filter($params);
+        $result = array_filter($params, 'strlen');
         foreach($result as $attr => $value) {
             $v = $this->filterModel->getAttributeLabel($attr);
             $queryParams[$modelName][$attr] = '';
             $url = array_merge([Yii::$app->controller->action->id], $queryParams);
-            $content .= Html::a('<span class="fas fa-filter"></span> '."$v: $value ×", $url, ['class' => 'badge badge-light ml-1']);
+            $content .= Html::a('<span class="fas fa-filter"></span> ' . "$v: $value ×", $url, ['class' => 'badge badge-light ml-1']);
         }
         
         return $content;
@@ -170,7 +173,7 @@ HTML;
         
         ArrayHelper::remove($queryParams, 'sort');
         
-        return Html::a('<span class="fas fa-sort"></span> '." $sortName $direction ×", array_merge([Yii::$app->controller->action->id], $queryParams), ['class' => 'badge badge-dark ml-1']);
+        return Html::a('<span class="fas fa-sort"></span> ' . " $sortName $direction ×", array_merge([Yii::$app->controller->action->id], $queryParams), ['class' => 'badge badge-dark ml-1']);
         
     }
     
