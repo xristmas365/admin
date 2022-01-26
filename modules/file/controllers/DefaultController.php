@@ -6,9 +6,7 @@ use Yii;
 use yii\web\UploadedFile;
 use app\modules\file\models\File;
 use yii\web\NotFoundHttpException;
-use app\modules\shop\models\Brand;
-use app\modules\shop\models\Product;
-use app\modules\rental\models\Rental;
+use app\modules\file\components\CsvParser;
 use app\modules\file\models\search\FileSearch;
 use app\modules\admin\controllers\BackendController;
 
@@ -120,20 +118,9 @@ class DefaultController extends BackendController
     public function actionCreate()
     {
         $model = new File;
-        
         $model->file = UploadedFile::getInstance($model, 'file');
-        $model->file->saveAs(Yii::getAlias('@app/web/upload/' . $model->file->baseName . '.' . $model->file->extension));
-        $model->name = $model->file->baseName;
-        $model->ext = $model->file->extension;
-        $model->size = $model->file->size;
-        $model->created_at = time();
-        $model->created_by = Yii::$app->user->id;
-        $model->uploaded_at = time();
-        $model->uploaded_by = Yii::$app->user->id;
         
-        $model->save();
-        
-        if($model->load(Yii::$app->request->post()) && $model->save()) {
+        if($model->save()) {
             return $this->redirect(['index']);
         }
         
@@ -156,8 +143,7 @@ class DefaultController extends BackendController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public
-    function actionUpdate($id)
+    public function actionUpdate($id)
     {
         $model = $this->findModel($id);
         
@@ -179,15 +165,27 @@ class DefaultController extends BackendController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public
-    function actionDelete($id)
+    public function actionDelete($id)
     {
         $this->findModel($id)->delete();
         
         return $this->redirect(['index']);
     }
     
-    private function getPagination()
+    public function actionShow($id)
     {
+        $model = File::findOne($id);
+        
+        if($model->ext === 'csv') {
+            $parser = new CsvParser;
+            $parser->loadFile($model->src);
+            $data = $parser->preview();
+            
+            return $this->renderAjax('preview/csv', ['data' => $data]);
+            
+        }
+        
+        return $this->renderAjax('preview/default');
+        
     }
 }

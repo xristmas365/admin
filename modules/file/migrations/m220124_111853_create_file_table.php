@@ -12,7 +12,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%file}}`.
  */
-class m220124_111853_create_files_table extends Migration
+class m220124_111853_create_file_table extends Migration
 {
     
     /**
@@ -21,11 +21,12 @@ class m220124_111853_create_files_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%file}}', [
-            'id'         => $this->primaryKey(),
-            'name'       => $this->string(255),
-            'size'       => $this->integer(),
-            'ext'        => $this->string(10),
-            'created_at' => $this->integer(),
+            'id'          => $this->primaryKey(),
+            'name'        => $this->string(255),
+            'size'        => $this->integer(),
+            'ext'         => $this->string(10),
+            'url'         => $this->string(),
+            'created_at'  => $this->integer(),
             'created_by'  => $this->integer(),
             'uploaded_at' => $this->integer(),
             'uploaded_by' => $this->integer(),
