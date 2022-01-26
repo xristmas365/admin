@@ -10,9 +10,13 @@
 namespace app\modules\admin\widgets\grid;
 
 use Yii;
+use yii\base\Model;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
+use yii\db\ActiveQueryInterface;
 
 class AdminGrid extends GridView
 {
@@ -100,7 +104,77 @@ HTML;
             $this->showHeader = false;
         }
         
-        return parent::init();
+        parent::init();
+        $this->panel['before'] = $this->renderHelpers();
+        
+    }
+    
+    public function renderHelpers()
+    {
+        $default = Html::tag('div', 'Filters and Sorting', ['class' => 'text-muted']);
+        $filters = Html::tag('div', $this->renderFilterHelper());
+        $sorting = Html::tag('div', $this->renderSortingHelper());
+        $leftContainer = Html::tag('div', $default . $sorting . $filters, ['class' => 'd-flex']);
+        $clearAllBtn = '';
+        if($this->renderFilterHelper() != '' || $this->renderSortingHelper() != '') {
+            $clearAllBtn = Html::a('Clear All', array_merge([Yii::$app->controller->action->id], Yii::$app->controller->actionParams), ['class' => 'text-muted']);
+        }
+        $rightContainer = Html::tag('div', $clearAllBtn);
+        
+        return Html::tag('div', $leftContainer . $rightContainer, ['class' => 'd-flex justify-content-between']);
+    }
+    
+    protected function renderFilterHelper()
+    {
+        $content = '';
+        $queryParams = Yii::$app->request->queryParams;
+        if(!$this->filterModel) {
+            return $content;
+        }
+        $modelName = $this->filterModel->formName();
+        $params = ArrayHelper::getValue($queryParams, $modelName);
+        if(!$params) {
+            return $content;
+        }
+        $result = array_filter($params, 'strlen');
+        foreach($result as $attr => $value) {
+            $v = $this->filterModel->getAttributeLabel($attr);
+            $queryParams[$modelName][$attr] = '';
+            $url = array_merge([Yii::$app->controller->action->id], $queryParams);
+            $content .= Html::a('<span class="fas fa-filter"></span> ' . "$v: $value ×", $url, ['class' => 'badge badge-light ml-1']);
+        }
+        
+        return $content;
+    }
+    
+    protected function renderSortingHelper()
+    {
+        $content = '';
+        $queryParams = Yii::$app->request->queryParams;
+        $provider = $this->dataProvider;
+        $sort = Yii::$app->request->get('sort');
+        if(!$sort) {
+            return $content;
+        }
+        $desc = str_contains($sort, '-');
+        if($desc) {
+            $sort = str_replace('-', '', $sort);
+        }
+        
+        $sortName = $sort;
+        $direction = $desc ? 'DESC' : 'ASC';
+        
+        if($provider instanceof ActiveDataProvider && $provider->query instanceof ActiveQueryInterface) {
+            $modelClass = $provider->query->modelClass;
+            /* @var $modelClass Model */
+            $model = $modelClass::instance();
+            $sortName = $model->getAttributeLabel($sort);
+        }
+        
+        ArrayHelper::remove($queryParams, 'sort');
+        
+        return Html::a('<span class="fas fa-sort"></span> ' . " $sortName $direction ×", array_merge([Yii::$app->controller->action->id], $queryParams), ['class' => 'badge badge-dark ml-1']);
+        
     }
     
     public function renderSection($name)

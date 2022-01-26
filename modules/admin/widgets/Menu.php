@@ -23,8 +23,6 @@ class Menu extends \yii\widgets\Menu
     
     public $linkTemplate    = '<a class="nav-link" href="{url}">{label}</a>';
     
-    //public $submenuTemplate = '<nav class="nav">{items}</nav>';
-    
     public $options         = [
         'class' => 'nav nav-aside',
     ];
@@ -107,7 +105,7 @@ class Menu extends \yii\widgets\Menu
             ]);
         }
         
-        $template = Html::tag('li', '{label}', ['class'=> 'nav-label mg-t-15']);
+        $template = Html::tag('li', '{label}', ['class' => 'nav-label mg-t-15']);
         
         return strtr($template, [
             '{label}' => $item['label'],
