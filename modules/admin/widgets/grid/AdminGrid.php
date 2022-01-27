@@ -195,6 +195,12 @@ HTML;
     
     public function renderImport()
     {
+        if(!$this->dataProvider instanceof ActiveDataProvider) {
+            return '';
+        }
+        
+        $model = $this->dataProvider->query->modelClass;
+        
         Modal::begin([
             'id'             => $this->id . '-modal-import',
             'scrollable'     => true,
@@ -214,8 +220,11 @@ HTML;
             ],
             'name'          => 'file',
             'pluginOptions' => [
-                'showPreview' => false,
-                'uploadUrl'   => Url::toRoute(['/file/default/create']),
+                'showPreview'     => false,
+                'uploadUrl'       => Url::toRoute(['/file/default/create']),
+                'uploadExtraData' => [
+                    'model' => $model,
+                ],
             ],
         ]);
         

@@ -2,7 +2,10 @@
 
 namespace app\modules\file\components;
 
+use Yii;
 use yii\base\Component;
+use yii\db\ActiveRecord;
+use app\modules\file\models\File;
 use League\Flysystem\FileNotFoundException;
 
 /**
@@ -20,7 +23,7 @@ class CsvParser extends Component
     {
         $content = [];
         $row = 1;
-        if(($handle = fopen($this->file, "r")) !== false) {
+        if(($handle = fopen($this->file->src, "r")) !== false) {
             while(($data = fgetcsv($handle, 1000, ',')) !== false) {
                 if($row === $rows) {
                     break;
@@ -33,15 +36,20 @@ class CsvParser extends Component
         
         $headers = array_shift($content);
         
-        return ['content' => $content, 'headers' => $headers];
+        /**
+         * @var ActiveRecord $model
+         */
+        $model = Yii::createObject($this->file->model);
+        
+        return ['content' => $content, 'headers' => $headers, 'attributes' => $model->fillable(), 'file' => $this->file->id];
     }
     
-    public function loadFile($src)
+    public function loadFile(File $model)
     {
-        if(!file_exists($src)) {
-            throw new FileNotFoundException('File Not Found');
+        if(!file_exists($model->src)) {
+            throw new FileNotFoundException('File Not Uploaded');
         }
-        $this->file = $src;
+        $this->file = $model;
         
     }
 }

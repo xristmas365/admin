@@ -120,6 +120,7 @@ class DefaultController extends BackendController
         Yii::$app->response->format = 'json';
         
         $model = new File;
+        $model->model = Yii::$app->request->post('model');
         $model->file = UploadedFile::getInstanceByName('file');
         
         return $model->save() ? $model->id : null;
@@ -176,7 +177,7 @@ class DefaultController extends BackendController
         
         if($model->ext === 'csv') {
             $parser = new CsvParser;
-            $parser->loadFile($model->src);
+            $parser->loadFile($model);
             $data = $parser->preview();
             
             return $this->renderAjax('preview/csv', ['data' => $data]);
@@ -185,5 +186,12 @@ class DefaultController extends BackendController
         
         return $this->renderAjax('preview/default');
         
+    }
+    
+    public function actionImport()
+    {
+        Yii::$app->response->format = 'json';
+        
+        return Yii::$app->request->post();
     }
 }

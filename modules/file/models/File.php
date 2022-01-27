@@ -18,6 +18,7 @@ use app\modules\file\models\query\FileQuery;
  * @property int|null     $size
  * @property string|null  $ext
  * @property string|null  $url
+ * @property string       $model
  * @property int|null     $created_at
  * @property int|null     $created_by
  * @property int|null     $uploaded_at

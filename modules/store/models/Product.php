@@ -17,6 +17,7 @@ use yz\shoppingcart\CartPositionTrait;
 use app\modules\storage\models\Storage;
 use yz\shoppingcart\CartPositionInterface;
 use app\modules\warehouse\models\Warehouse;
+use app\modules\admin\interfaces\Importable;
 use app\modules\warehouse\models\ProductWarehouse;
 
 /**
@@ -41,7 +42,7 @@ use app\modules\warehouse\models\ProductWarehouse;
  * @property Catalog     $catalog
  * @property string      $image
  */
-class Product extends ActiveRecord implements CartPositionInterface
+class Product extends ActiveRecord implements CartPositionInterface, Importable
 {
     
     use CartPositionTrait;
@@ -176,9 +177,10 @@ class Product extends ActiveRecord implements CartPositionInterface
     
     public function getProductWarehouses()
     {
-        return $this->hasMany(ProductWarehouse::class,['product_id' => 'id']);
-    
+        return $this->hasMany(ProductWarehouse::class, ['product_id' => 'id']);
+        
     }
+    
     public function getWarehouses()
     {
         return $this->hasMany(Warehouse::class, ['id' => 'warehouse_id'])->via('productWarehouses');

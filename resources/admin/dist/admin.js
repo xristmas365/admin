@@ -39,7 +39,13 @@ $('.grid-file-input').on('fileuploaded', function (event, previewId, index, file
   $(this).fileinput('clear')
   const id = previewId.response
   const modal = $(this).data('modal')
-  $('#' + modal).load('/file/default/show?id='+id)
+  $('#' + modal).load('/file/default/show?id=' + id)
+})
+$(document).on('click', '#preview-form-import-btn', function (e) {
+  const data = $('#preview-form-import-form').serialize()
+  $.post('/file/default/import', data).done(function (response) {
+    console.log(response)
+  })
 })
 
 
