@@ -42,7 +42,7 @@ use app\modules\warehouse\models\ProductWarehouse;
  * @property Catalog     $catalog
  * @property string      $image
  */
-class Product extends ActiveRecord implements CartPositionInterface, Importable
+class Product extends ActiveRecord implements CartPositionInterface
 {
     
     use CartPositionTrait;

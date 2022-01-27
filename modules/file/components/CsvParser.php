@@ -41,7 +41,7 @@ class CsvParser extends Component
          */
         $model = Yii::createObject($this->file->model);
         
-        return ['content' => $content, 'headers' => $headers, 'attributes' => $model->fillable(), 'file' => $this->file->id];
+        return ['content' => $content, 'headers' => $headers, 'attributes' => $model->importAttributes(), 'file' => $this->file->id];
     }
     
     public function loadFile(File $model)

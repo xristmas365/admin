@@ -21,5 +21,5 @@ interface Importable
      *
      * @return array
      */
-    public function fillable() : array;
+    public function importAttributes() : array;
 }

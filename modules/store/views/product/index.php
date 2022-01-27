@@ -57,6 +57,7 @@ foreach($warehouseList as $warehouse) {
 
 <?= AdminGrid::widget([
     'id'           => 'products',
+    'import'       => true,
     'dataProvider' => $dataProvider,
     'emptyText'    => '<i data-feather="shopping-bag"></i><hr>' . Html::a('Create', ['create'], ['data-pjax' => 0]) . ' Your First Product',
     'columns'      => [

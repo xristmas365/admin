@@ -19,6 +19,7 @@ use kartik\file\FileInput;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQueryInterface;
+use app\modules\admin\interfaces\Importable;
 
 class AdminGrid extends GridView
 {
@@ -43,6 +44,8 @@ class AdminGrid extends GridView
         'neverTimeout'    => true,
         'loadingCssClass' => 'grid-loading',
     ];
+    
+    public $import          = false;
     
     public $bordered        = false;
     
@@ -195,11 +198,15 @@ HTML;
     
     public function renderImport()
     {
-        if(!$this->dataProvider instanceof ActiveDataProvider) {
+        if(!$this->import || !$this->dataProvider instanceof ActiveDataProvider) {
             return '';
         }
         
         $model = $this->dataProvider->query->modelClass;
+        
+        if(!(new $model) instanceof Importable) {
+            throw new \BadMethodCallException("For <Grid Import> $model must implements ". Importable::class.' Interface');
+        }
         
         Modal::begin([
             'id'             => $this->id . '-modal-import',
