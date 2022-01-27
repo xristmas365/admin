@@ -117,14 +117,12 @@ class DefaultController extends BackendController
     
     public function actionCreate()
     {
+        Yii::$app->response->format = 'json';
+        
         $model = new File;
-        $model->file = UploadedFile::getInstance($model, 'file');
+        $model->file = UploadedFile::getInstanceByName('file');
         
-        if($model->save()) {
-            return $this->redirect(['index']);
-        }
-        
-        return $this->redirect(['index']);
+        return $model->save() ? $model->id : null;
     }
     
     public function actionDeleteFile()

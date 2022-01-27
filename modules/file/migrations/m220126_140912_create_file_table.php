@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author    Ann Kononovich <anna.kononovich@gmail.com>
  * @package   Admin AX project
@@ -12,7 +13,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%file}}`.
  */
-class m220124_111853_create_file_table extends Migration
+class m220126_140912_create_file_table extends Migration
 {
     
     /**

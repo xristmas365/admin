@@ -14,6 +14,8 @@ use yii\base\Model;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\bootstrap4\Modal;
+use kartik\file\FileInput;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQueryInterface;
@@ -47,8 +49,6 @@ class AdminGrid extends GridView
     public $responsive      = true;
     
     public $responsiveWrap  = false;
-    
-    public $export          = false;
     
     public $striped         = false;
     
@@ -114,12 +114,14 @@ HTML;
         $default = Html::tag('div', 'Filters and Sorting', ['class' => 'text-muted']);
         $filters = Html::tag('div', $this->renderFilterHelper());
         $sorting = Html::tag('div', $this->renderSortingHelper());
-        $leftContainer = Html::tag('div', $default . $sorting . $filters, ['class' => 'd-flex']);
-        $clearAllBtn = '';
         if($this->renderFilterHelper() != '' || $this->renderSortingHelper() != '') {
-            $clearAllBtn = Html::a('Clear All', array_merge([Yii::$app->controller->action->id], Yii::$app->controller->actionParams), ['class' => 'text-muted']);
+            $clearAllBtn = Html::a('Clear All', array_merge([Yii::$app->controller->action->id], Yii::$app->controller->actionParams), ['class' => 'text-muted ml-2']);
+        } else {
+            $clearAllBtn = '';
         }
-        $rightContainer = Html::tag('div', $clearAllBtn);
+        $clearAllBtn = Html::tag('div', $clearAllBtn);
+        $leftContainer = Html::tag('div', $default . $sorting . $filters . $clearAllBtn, ['class' => 'd-flex']);
+        $rightContainer = Html::tag('div', "{import}{export}");
         
         return Html::tag('div', $leftContainer . $rightContainer, ['class' => 'd-flex justify-content-between']);
     }
@@ -180,6 +182,8 @@ HTML;
     public function renderSection($name)
     {
         switch($name) {
+            case '{import}':
+                return $this->renderImport();
             case '{sizer}':
                 return $this->renderSizer();
             case '{gridTitle}':
@@ -187,6 +191,48 @@ HTML;
             default:
                 return parent::renderSection($name);
         }
+    }
+    
+    public function renderImport()
+    {
+        Modal::begin([
+            'id'             => $this->id . '-modal-import',
+            'scrollable'     => true,
+            'size'           => Modal::SIZE_EXTRA_LARGE,
+            'centerVertical' => true,
+            'title'          => '',
+        ]);
+        
+        echo '<div class="row" style="height: 600px">';
+        echo '<div class="col-md-12">';
+        
+        echo FileInput::widget([
+            'id'            => $this->id . '-file-input',
+            'options'       => [
+                'class'      => 'grid-file-input',
+                'data-modal' => $this->id . '-modal-import-content',
+            ],
+            'name'          => 'file',
+            'pluginOptions' => [
+                'showPreview' => false,
+                'uploadUrl'   => Url::toRoute(['/file/default/create']),
+            ],
+        ]);
+        
+        echo Html::tag('div', null, ['id' => $this->id . '-modal-import-content']);
+        echo '</div>';
+        echo '</div>';
+        
+        Modal::end();
+        
+        return Html::button('Import', [
+            'class' => 'btn btn-outline-secondary mr-1',
+            'data'  => [
+                'toggle' => 'modal',
+                'target' => '#' . $this->id . '-modal-import',
+            ],
+        ]);
+        
     }
     
     public function renderSizer()
@@ -223,4 +269,5 @@ HTML;
         
         return Html::tag('div', $title, ['class' => 'text-uppercase font-weight-bold', 'style' => 'color:#596882']);
     }
+    
 }

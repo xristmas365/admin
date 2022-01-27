@@ -32,6 +32,8 @@ class File extends ActiveRecord
     
     public $file;
     
+    // public $url;
+    
     /**
      * {@inheritdoc}
      */
@@ -74,6 +76,7 @@ class File extends ActiveRecord
             [['size', 'created_at', 'created_by', 'uploaded_at', 'uploaded_by'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['ext'], 'string', 'max' => 10],
+            [['url', 'model'], 'string', 'max' => 100],
         ];
     }
     
@@ -88,6 +91,7 @@ class File extends ActiveRecord
             'size'        => 'Size',
             'ext'         => 'Ext',
             'url'         => 'Url',
+            'model'       => 'Model',
             'created_at'  => 'Created At',
             'created_by'  => 'Created By',
             'uploaded_at' => 'Uploaded At',

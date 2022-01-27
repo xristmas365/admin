@@ -35,6 +35,12 @@ $(document).on('click', 'a.grid-delete-btn', function (e) {
     }
   })
 })
+$('.grid-file-input').on('fileuploaded', function (event, previewId, index, fileId) {
+  $(this).fileinput('clear')
+  const id = previewId.response
+  const modal = $(this).data('modal')
+  $('#' + modal).load('/file/default/show?id='+id)
+})
 
 
 

@@ -134,7 +134,7 @@ return [
     ],
     [
         'label'   => '<i data-feather="folder"></i> <span>Files</span>',
-        'url'     => ['/admin/file/index'],
+        'url'     => ['/file/default/index'],
         'visible' => $developer,
     ],
     [
