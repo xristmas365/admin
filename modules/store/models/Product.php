@@ -42,7 +42,7 @@ use app\modules\warehouse\models\ProductWarehouse;
  * @property Catalog     $catalog
  * @property string      $image
  */
-class Product extends ActiveRecord implements CartPositionInterface
+class Product extends ActiveRecord implements CartPositionInterface, Importable
 {
     
     use CartPositionTrait;
@@ -184,5 +184,13 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function getWarehouses()
     {
         return $this->hasMany(Warehouse::class, ['id' => 'warehouse_id'])->via('productWarehouses');
+    }
+    
+    public function importAttributes() : array
+    {
+        return [
+            'title' => 'Title',
+            'price' => 'Price',
+        ];
     }
 }

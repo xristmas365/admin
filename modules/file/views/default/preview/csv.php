@@ -14,11 +14,15 @@ use yii\helpers\Html;
 use richardfan\widget\JSRegister;
 
 ?>
-<div class="row">
+<div class="row mt-4">
     <div class="col-3">
         <form id="preview-form-import-form">
             <?= Html::hiddenInput('file', $data['file']) ?>
-            <?= Html::a('Import Data from File', '#', ['class' => 'btn btn-primary btn-block mb-4', 'id' => 'preview-form-import-btn']) ?>
+            <?= Html::a('Import Data from File', '#', [
+                'class'      => 'btn btn-primary btn-block mb-4',
+                'id'         => 'preview-form-import-btn',
+                'data-modal' => 'products-modal-import-content',
+            ]) ?>
             <?php foreach($data['attributes'] as $attribute => $label) : ?>
                 <div class="form-group row field-product-title">
                     <label class="col-form-label has-star col-md-4" for="<?= $label ?>"><?= $label ?></label>

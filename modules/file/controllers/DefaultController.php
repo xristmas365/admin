@@ -4,8 +4,10 @@ namespace app\modules\file\controllers;
 
 use Yii;
 use yii\web\UploadedFile;
+use yii\helpers\ArrayHelper;
 use app\modules\file\models\File;
 use yii\web\NotFoundHttpException;
+use app\modules\store\models\CsvUpload;
 use app\modules\file\components\CsvParser;
 use app\modules\file\models\search\FileSearch;
 use app\modules\admin\controllers\BackendController;
@@ -191,7 +193,56 @@ class DefaultController extends BackendController
     public function actionImport()
     {
         Yii::$app->response->format = 'json';
+        $post = Yii::$app->request->post();
         
-        return Yii::$app->request->post();
+        $file = File::findOne(ArrayHelper::getValue($post, 'file'));
+        
+        if(!$file) {
+            throw new NotFoundHttpException('Model File not found');
+        }
+        
+        unset($post['file']);
+        
+        $modelClass = $file->model;
+        $fileSrc = Yii::getAlias('@app/web/upload/' . $file->url);
+        if(!file_exists($fileSrc)) {
+            throw new NotFoundHttpException('File not found');
+        }
+        if($handle = fopen($fileSrc, 'r')) {
+            $flag = true;
+            $rows = 0;
+            $success = 0;
+            $errors = 0;
+            while(($data = fgetcsv($handle, 1000000, ',')) !== false) {
+                if($flag) {
+                    $flag = false;
+                    continue;
+                }
+                $find = function($attr) use ($data)
+                {
+                    $v = ArrayHelper::getValue($data, $attr);
+                    
+                    return preg_replace("/[^A-Za-z0-9.@ ]/", "", $v);
+                };
+                $attributes = array_map($find, $post);
+                
+                $model = Yii::createObject(array_merge(['class' => $modelClass], $attributes));
+                
+                if(!$model->save()) {
+                    $errors++;
+                    //throw new NotFoundHttpException('Model not save' . json_encode($model->errors));
+                } else {
+                    $success++;
+                }
+                $rows++;
+            }
+            
+            fclose($handle);
+            
+            return compact('rows', 'success', 'errors');
+        }
+        
+        return false;
+        
     }
 }
