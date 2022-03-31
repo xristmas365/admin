@@ -123,6 +123,11 @@ return [
         'visible' => $admin,
     ],
     [
+        'label'   => '<i data-feather="mail"></i> <span>Emails</span>',
+        'url'     => ['/email/template/index'],
+        'visible' => $admin,
+    ],
+    [
         'label'   => '<i data-feather="layers"></i> <span>Error Log</span>',
         'url'     => ['/admin/log/index'],
         'visible' => $developer,

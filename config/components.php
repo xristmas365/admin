@@ -19,7 +19,7 @@ return [
         'username'          => getenv('DB_USERNAME'),
         'password'          => getenv('DB_PASSWORD'),
         'charset'           => getenv('DB_CHARSET'),
-        'enableSchemaCache' => getenv('DB_SCHEMA_CACHE'),
+       // 'enableSchemaCache' => getenv('DB_SCHEMA_CACHE'),
     ],
     'cache'        => 'yii\caching\FileCache',
     'user'         => [
@@ -98,6 +98,12 @@ return [
                 'clientId'     => getenv('GOOGLE_CLIENT_ID'),
                 'clientSecret' => getenv('GOOGLE_CLIENT_SECRET'),
             ],
+        ],
+    ],
+    'mailer' => [
+        'class' => \yii\symfonymailer\Mailer::class,
+        'transport' => [
+            'dsn' => 'smtp://info@its.digits.a2hosted.com:Y2&r{Mdi(I}7@az1-ts9.a2hosting.com:25',
         ],
     ],
 

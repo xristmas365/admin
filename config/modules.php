@@ -19,6 +19,7 @@ return [
     'system'      => 'app\modules\system\Module',
     'warehouse'   => 'app\modules\warehouse\Module',
     'file'        => 'app\modules\file\Module',
+    'email'       => 'app\modules\email\Module',
     'treemanager' => [
         'class'            => '\kartik\tree\Module',
         'treeViewSettings' => [

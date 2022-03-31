@@ -85,10 +85,18 @@ return [
     '/admin/catalogs/<id>'            => '/store/catalog/update',
     
     /**
-     * ADMIN - PRODUCTS
+     * ADMIN - WAREHOUSES
      */
     '/admin/warehouses'               => '/warehouse/default/index',
     '/admin/warehouses/new'           => '/warehouse/default/create',
     '/admin/warehouses/<id>/products' => '/warehouse/default/view',
     '/admin/warehouses/<id>'          => '/warehouse/default/update',
+    
+    ///**
+    // * ADMIN - EMAILS
+    // */
+    //'/admin/emails'                   => '/email/default/index',
+    //'/admin/emails/new'               => '/email/default/create',
+    //'/admin/emails/<id>'              => '/email/default/update',
+
 ];
