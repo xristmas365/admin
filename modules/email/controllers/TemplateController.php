@@ -175,8 +175,7 @@ class TemplateController extends BackendController
                                            ->setTo($user->email)
                                            ->setFrom([getenv('MAIL_USER') => 'admin-ax.com'])
                                            ->setSubject($model->subject)
-                                           ->setHtmlBody($contentReplace)
-                                           ->send();
+                                           ->setHtmlBody($contentReplace);
         }
         
         try {
