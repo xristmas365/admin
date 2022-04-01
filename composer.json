@@ -43,7 +43,8 @@
     "stripe/stripe-php": "^7.75",
     "kartik-v/yii2-widget-select2": "dev-master",
     "kartik-v/yii2-field-range": "dev-master",
-    "yiisoft/yii2-symfonymailer": "~2.0.0"
+    "yiisoft/yii2-symfonymailer": "~2.0.0",
+    "tinymce/tinymce": "5.10.3"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.1.0",
