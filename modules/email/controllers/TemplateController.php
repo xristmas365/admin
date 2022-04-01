@@ -144,8 +144,6 @@ class TemplateController extends BackendController
         $data = Yii::$app->request->post();
         $model = EmailTemplate::findOne($data['template_id']);
         $users = User::find()->where(['id' => $data['users']])->all();
-        $usersEmails = User::find()->select(['email'])->where(['id' => $data['users']])->asArray()->column();
-        $usersNames = User::find()->select(['name', 'email'])->where(['id' => $data['users']])->asArray()->column();
         
         $text = $model->content;
         
@@ -156,19 +154,11 @@ class TemplateController extends BackendController
             '{{product}}' => '',
         ];
         
+        $messages = [];
         $content = [];
         
         foreach($users as $user) {
-            $content[] = [
-                '{{name}}'    => $user->name,
-                '{{company}}' => $user->company,
-                '{{date}}'    => date('Y-m-d'),
-                '{{product}}' => '',
-            ];
-        }
-        
-        $messages = [];
-        foreach($users as $user) {
+            
             $content[] = [
                 '{{name}}'    => $user->name,
                 '{{company}}' => 'Apple',
@@ -198,19 +188,4 @@ class TemplateController extends BackendController
         return false;
     }
     
-    protected
-    function parse($text)
-    {
-        $model = EmailTemplate::findOne(2);
-        $text = $model->content;
-        
-        $a = [
-            '{{name}}'    => 'Ann',
-            '{{company}}' => 'Apple',
-            '{{date}}'    => date('Y-m-d'),
-            '{{product}}' => 'Qaster',
-        ];
-        
-        return str_replace(array_keys($a), array_values($a), $text);
-    }
 }
