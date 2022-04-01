@@ -19,44 +19,41 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->params['icon'] = 'mail';
 
 ?>
-
-<?= Html::a('<i class="fas fa-plus"></i> Create New Template', ['create'], ['class' => 'btn btn-primary']) ?>
-
-
-<?= AdminGrid::widget([
-    'id'           => 'template',
-    'dataProvider' => $dataProvider,
-    'filterModel'  => $searchModel,
-    'columns'      => [
-        AdminGrid::COLUMN_CHECKBOX,
-        'name',
-        'subject',
-        [
-            'class'    => ActionColumn::class,
-            'template' => "{send}{update}{delete}",
-            'hAlign'   => AdminGrid::ALIGN_LEFT,
-            'buttons'  => [
-                'send' => function($url, $model)
-                {
-                    return Html::a('<i class="fas fa-envelope"></i>', '#', [
-                        'data'  => [
-                            'pjax'  => 0,
-                            'url'   => Url::toRoute(['view', 'id' => $model->id]),
-                            'title' => $model->name,
-                            'id'    => $model->id,
-                        ],
-                        'class' => 'show-template text-primary',
-                    ]);
-                },
+<div class="file-index">
+    <?= Html::a('<i class="fas fa-plus"></i> Create New Template', ['create'], ['class' => 'btn btn-primary']) ?>
+    <?= AdminGrid::widget([
+        'id'           => 'template',
+        'dataProvider' => $dataProvider,
+        'filterModel'  => $searchModel,
+        'columns'      => [
+            AdminGrid::COLUMN_CHECKBOX,
+            'name',
+            'subject',
+            [
+                'class'    => ActionColumn::class,
+                'template' => "{send}{update}{delete}",
+                'hAlign'   => AdminGrid::ALIGN_LEFT,
+                'buttons'  => [
+                    'send' => function($url, $model)
+                    {
+                        return Html::a('<i class="fas fa-envelope"></i>', '#', [
+                            'data'  => [
+                                'pjax'  => 0,
+                                'url'   => Url::toRoute(['view', 'id' => $model->id]),
+                                'title' => $model->name,
+                                'id'    => $model->id,
+                            ],
+                            'class' => 'show-template text-primary',
+                        ]);
+                    },
+                ],
             ],
+        
         ],
-    
-    ],
-]); ?>
-
+    ]); ?>
+</div>
 <?php Modal::begin([
     'id'             => 'modal-template-content',
-    'scrollable'     => true,
     'size'           => Modal::SIZE_EXTRA_LARGE,
     'centerVertical' => true,
     'title'          => '',
@@ -70,13 +67,18 @@ $this->params['icon'] = 'mail';
 <?= Select2::widget([
     'name'    => 'users',
     'data'    => $userList,
-    'options' => ['multiple' => true, 'placeholder' => 'Select users'],
+    'theme' => Select2::THEME_BOOTSTRAP,
+    'options' => ['multiple' => true, 'placeholder' => 'Select users', 'autocomplete' => 'on'],
+    'pluginOptions' => [
+        'allowClear' => true,
+        'dropdownParent' => '#modal-template-content'
+    ],
 ]) ?>
 <?= Html::hiddenInput('template_id', null, ['id' => 'template_id']) ?>
 <?php ActiveForm::end() ?>
-
-<?= Html::button('<i class="fas fa-envelope"></i> Send', ['data-url' => Url::toRoute('send-mail'), 'class' => 'btn btn-primary', 'id' => 'send-template']) ?>
-
+<div class="form-group">
+<?= Html::button('<i class="fas fa-envelope"></i> Send', ['data-url' => Url::toRoute('send-mail'), 'class' => 'btn btn-primary mt-2', 'id' => 'send-template']) ?>
+</div>
 <?php Modal::end() ?>
 
 <?php JSRegister::begin() ?>

@@ -43,7 +43,7 @@ class TemplateController extends BackendController
         return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
-            'userList' => User::getUserList([Role::USER, Role::CUSTOMER]),
+            'userList'     => User::getUserList([Role::USER, Role::CUSTOMER]),
         ]);
     }
     
@@ -55,25 +55,6 @@ class TemplateController extends BackendController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    
-    
-    /**
-     * Finds the EmailTemplate model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param integer $id
-     *
-     * @return EmailTemplate the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if(($model = EmailTemplate::findOne($id)) !== null) {
-            return $model;
-        }
-        
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
     
     /**
      * Creates a new EmailTemplate model.
@@ -115,13 +96,32 @@ class TemplateController extends BackendController
         ]);
     }
     
+    /**
+     * Finds the EmailTemplate model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     *
+     * @param integer $id
+     *
+     * @return EmailTemplate the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if(($model = EmailTemplate::findOne($id)) !== null) {
+            return $model;
+        }
+        
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model'    => $this->findModel($id),
+        return $this->renderAjax('view', [
+            'model' => $this->findModel($id),
         ]);
         
     }
+    
     /**
      * Deletes an existing EmailTemplate model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -143,24 +143,63 @@ class TemplateController extends BackendController
         Yii::$app->response->format = 'json';
         $data = Yii::$app->request->post();
         $model = EmailTemplate::findOne($data['template_id']);
-        $users = User::find()->select(['email'])->where(['id'=>$data['users']])->asArray()->column();
-       
-        try {
-            return Yii::$app->mailer->compose()
-                                    ->setTo($users)
-                                    ->setFrom([getenv('MAIL_USER') => 'admin-ax.com'])
-                                    ->setSubject($model->subject)
-                                    ->setHtmlBody($this->parse($model->content))
-                                    ->send();
-           
-        } catch(\Exception $e) {
+        $users = User::find()->where(['id' => $data['users']])->all();
+        $usersEmails = User::find()->select(['email'])->where(['id' => $data['users']])->asArray()->column();
+        $usersNames = User::find()->select(['name', 'email'])->where(['id' => $data['users']])->asArray()->column();
         
+        $text = $model->content;
+        
+        $replaces = [
+            '{{name}}'    => '',
+            '{{company}}' => '',
+            '{{date}}'    => date('Y-m-d'),
+            '{{product}}' => '',
+        ];
+        
+        $content = [];
+        
+        foreach($users as $user) {
+            $content[] = [
+                '{{name}}'    => $user->name,
+                '{{company}}' => $user->company,
+                '{{date}}'    => date('Y-m-d'),
+                '{{product}}' => '',
+            ];
+        }
+        
+        $messages = [];
+        foreach($users as $user) {
+            $content[] = [
+                '{{name}}'    => $user->name,
+                '{{company}}' => 'Apple',
+                '{{date}}'    => date('Y-m-d'),
+                '{{product}}' => '',
+            ];
+            
+            $contentReplace = [];
+            foreach($content as $item) {
+                $contentReplace = str_replace(array_keys($item), array_values($item), $text);
+            }
+            
+            $messages[] = Yii::$app->mailer->compose()
+                                           ->setTo($user->email)
+                                           ->setFrom([getenv('MAIL_USER') => 'admin-ax.com'])
+                                           ->setSubject($model->subject)
+                                           ->setHtmlBody($contentReplace)
+                                           ->send();
+        }
+        
+        try {
+            return Yii::$app->mailer->sendMultiple($messages);
+            
+        } catch(\Exception $e) {
         }
         
         return false;
     }
     
-    protected function parse($text)
+    protected
+    function parse($text)
     {
         $model = EmailTemplate::findOne(2);
         $text = $model->content;
