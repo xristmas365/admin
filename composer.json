@@ -29,9 +29,6 @@
     "kartik-v/yii2-icons": "dev-master",
     "kartik-v/yii2-widget-fileinput": "dev-master",
     "yii2-starter-kit/yii2-file-kit": "dev-master",
-    "mailgun/mailgun-php": "^3.0",
-    "kriswallsmith/buzz": "^1.0",
-    "nyholm/psr7": "^1.2",
     "omnilight/yii2-shopping-cart": "*",
     "extead/yii2-autonumeric": "*",
     "richardfan1126/yii2-js-register": "*",
@@ -54,6 +51,9 @@
     "process-timeout": 1800,
     "fxp-asset": {
       "enabled": false
+    },
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true
     }
   },
   "scripts": {

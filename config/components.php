@@ -19,14 +19,15 @@ return [
         'username'          => getenv('DB_USERNAME'),
         'password'          => getenv('DB_PASSWORD'),
         'charset'           => getenv('DB_CHARSET'),
-       // 'enableSchemaCache' => getenv('DB_SCHEMA_CACHE'),
+        'enableSchemaCache' => getenv('DB_SCHEMA_CACHE'),
     ],
     'cache'        => 'yii\caching\FileCache',
     'user'         => [
-        'identityClass' => 'app\modules\user\models\User',
-        'accessChecker' => 'app\modules\user\components\AuthManager',
-        'loginUrl'      => ['/user/auth/login'],
-        'on afterLogin' => function()
+        'identityClass'   => 'app\modules\user\models\User',
+        'accessChecker'   => 'app\modules\user\components\AuthManager',
+        'loginUrl'        => ['/user/auth/login'],
+        'enableAutoLogin' => true,
+        'on afterLogin'   => function()
         {
             Yii::$app->user->identity->touch('last_login_at');
         },
@@ -100,8 +101,8 @@ return [
             ],
         ],
     ],
-    'mailer' => [
-        'class' => \yii\symfonymailer\Mailer::class,
+    'mailer'               => [
+        'class'     => '\yii\symfonymailer\Mailer',
         'transport' => [
             'dsn' => 'smtp://info@its.digits.a2hosted.com:Y2&r{Mdi(I}7@az1-ts9.a2hosting.com:25',
         ],

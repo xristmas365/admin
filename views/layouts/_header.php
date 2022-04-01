@@ -45,14 +45,6 @@ $defaultItems = [
         'label' => '<i class="fas fa-home"></i> Home',
         'url'   => ['/site/index'],
     ],
-    [
-        'label' => '<i class="fas fa-newspaper"></i> Articles',
-        'url'   => ['/article/front/index'],
-    ],
-    [
-        'label' => '<i class="fas fa-store"></i> Products',
-        'url'   => ['/store/front/index'],
-    ],
 ];
 
 $authItems = [

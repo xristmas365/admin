@@ -3,6 +3,7 @@
 namespace app\modules\email\controllers;
 
 use Yii;
+use yii\web\Controller;
 use app\modules\user\models\User;
 use app\modules\user\models\Role;
 use yii\web\NotFoundHttpException;
@@ -167,23 +168,30 @@ class TemplateController extends BackendController
         $messages = [];
         
         foreach($users as $user) {
-            $content = strtr($template->content, [
+    
+            $controller = Yii::$app->controller;
+            $controller->layout = '@app/mail/layouts/html.php';
+            
+            $content = $controller->renderContent(strtr($template->content, [
                 '{{name}}'    => $user->name,
                 '{{company}}' => $user->company,
                 '{{date}}'    => date('Y-m-d'),
                 '{{product}}' => 'Apple',
-            ]);
+                '{{project}}' => Yii::$app->name,
+            ]));
             
             $messages[] = $mailer->compose()
                                  ->setTo($user->email)
                                  ->setFrom([getenv('MAIL_USER') => 'admin-ax.com'])
                                  ->setSubject($template->subject)
                                  ->setHtmlBody($content);
+            
         }
         
         if(!$messages) {
             throw new InvalidConfigException('Messages are empty');
         }
+        
         
         try {
             $response['emails'] =  $mailer->sendMultiple($messages);
@@ -192,45 +200,6 @@ class TemplateController extends BackendController
         }
         
         return $response;
-        
-        //$replaces = [
-        //    '{{name}}'    => '',
-        //    '{{company}}' => '',
-        //    '{{date}}'    => date('Y-m-d'),
-        //    '{{product}}' => '',
-        //];
-        //
-        //$messages = [];
-        //$content = [];
-        
-        //foreach($users as $user) {
-        //
-        //    $content[] = [
-        //        '{{name}}'    => $user->name,
-        //        '{{company}}' => 'Apple',
-        //        '{{date}}'    => date('Y-m-d'),
-        //        '{{product}}' => '',
-        //    ];
-        //
-        //    $contentReplace = [];
-        //    foreach($content as $item) {
-        //        $contentReplace = str_replace(array_keys($item), array_values($item), $text);
-        //    }
-        //
-        //    $messages[] = Yii::$app->mailer->compose()
-        //                                   ->setTo($user->email)
-        //                                   ->setFrom([getenv('MAIL_USER') => 'admin-ax.com'])
-        //                                   ->setSubject($model->subject)
-        //                                   ->setHtmlBody($contentReplace);
-        //}
-        //
-        //try {
-        //    return Yii::$app->mailer->sendMultiple($messages);
-        //
-        //} catch(\Exception $e) {
-        //}
-        //
-        //return false;
     }
     
 }

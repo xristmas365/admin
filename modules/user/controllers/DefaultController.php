@@ -69,7 +69,9 @@ class DefaultController extends BackendController
         $model = $this->findModel($id);
         
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Account Saved Successfully');
+            Yii::$app->session->setFlash('success', "User <strong>{$model->name}</strong> Saved Successfully");
+            
+            return $this->redirect(['index']);
         }
         
         return $this->render('form', ['model' => $model]);

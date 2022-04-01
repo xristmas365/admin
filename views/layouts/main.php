@@ -20,7 +20,6 @@ use app\modules\store\assets\CartAsset;
  */
 
 AppAsset::register($this);
-CartAsset::register($this);
 
 echo Dialog::widget([
     'dialogDefaults' => [
@@ -49,7 +48,6 @@ echo Dialog::widget([
 <?php $this->beginBody() ?>
 <?= $this->render('@app/views/layouts/_header') ?>
 <div class="main">
-    <?= $this->render('@app/views/layouts/_cart') ?>
     <div class="container py-5">
         <h2><?= $this->title ?></h2>
         <?= Breadcrumbs::widget([
@@ -59,7 +57,6 @@ echo Dialog::widget([
         ]) ?>
         <?= $content ?>
     </div>
-    <?= $this->render('@app/views/layouts/_cart_button') ?>
 </div>
 <?php $this->endBody() ?>
 </body>
