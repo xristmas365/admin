@@ -107,5 +107,8 @@ return [
             'dsn' => 'smtp://info@its.digits.a2hosted.com:Y2&r{Mdi(I}7@az1-ts9.a2hosting.com:25',
         ],
     ],
+    'email'                => [
+        'class'     => '\app\modules\email\components\Email',
+    ],
 
 ];

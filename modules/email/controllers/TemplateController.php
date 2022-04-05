@@ -3,11 +3,9 @@
 namespace app\modules\email\controllers;
 
 use Yii;
-use yii\web\Controller;
 use app\modules\user\models\User;
 use app\modules\user\models\Role;
 use yii\web\NotFoundHttpException;
-use yii\base\InvalidConfigException;
 use app\modules\email\models\EmailTemplate;
 use app\modules\email\models\search\TemplateSearch;
 use app\modules\admin\controllers\BackendController;
@@ -142,61 +140,28 @@ class TemplateController extends BackendController
     
     public function actionSendMail()
     {
-        Yii::$app->response->format = 'json';
-        
         $response = [
             'status' => true,
             'emails' => 0,
         ];
+        Yii::$app->response->format = 'json';
         
-        /**
-         * @var $template EmailTemplate|null
-         */
-        $template = EmailTemplate::findOne(Yii::$app->request->post('template_id'));
+        $template_id = Yii::$app->request->post('template_id');
         
-        if(!$template) {
-            throw new NotFoundHttpException('Template not Found');
-        }
-        
-        /**
-         * @var $users User[]|[]
-         */
-        $users = User::find()->select(['email', 'name', 'company'])->where(['id' => Yii::$app->request->post('users')])->all();
-        
-        $mailer = Yii::$app->mailer;
-        
-        $messages = [];
-        
-        foreach($users as $user) {
-    
-            $controller = Yii::$app->controller;
-            $controller->layout = '@app/mail/layouts/html.php';
-            
-            $content = $controller->renderContent(strtr($template->content, [
-                '{{name}}'    => $user->name,
-                '{{company}}' => $user->company,
-                '{{date}}'    => date('Y-m-d'),
-                '{{product}}' => 'Apple',
-                '{{project}}' => Yii::$app->name,
-            ]));
-            
-            $messages[] = $mailer->compose()
-                                 ->setTo($user->email)
-                                 ->setFrom([getenv('MAIL_USER') => 'admin-ax.com'])
-                                 ->setSubject($template->subject)
-                                 ->setHtmlBody($content);
-            
-        }
-        
-        if(!$messages) {
-            throw new InvalidConfigException('Messages are empty');
-        }
-        
+        $users = Yii::$app->request->post('users');
         
         try {
-            $response['emails'] =  $mailer->sendMultiple($messages);
+            
+            $response['emails'] = Yii::$app
+                ->email
+                ->useTemplate($template_id)
+                ->to($users)
+                ->send();
+            
         } catch(\Exception $e) {
+            
             $response['status'] = false;
+            
         }
         
         return $response;

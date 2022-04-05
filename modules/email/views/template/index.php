@@ -65,19 +65,20 @@ $this->params['icon'] = 'mail';
 </div>
 <?php $form = ActiveForm::begin(['id' => 'send-email-form']) ?>
 <?= Select2::widget([
-    'name'    => 'users',
-    'data'    => $userList,
-    'theme' => Select2::THEME_BOOTSTRAP,
-    'options' => ['multiple' => true, 'placeholder' => 'Select users', 'autocomplete' => 'on'],
+    'name'          => 'users',
+    'data'          => $userList,
+    'theme'         => Select2::THEME_BOOTSTRAP,
+    'options'       => ['multiple' => true, 'placeholder' => 'Select users', 'autocomplete' => 'on'],
     'pluginOptions' => [
-        'allowClear' => true,
-        'dropdownParent' => '#modal-template-content'
+        'allowClear'     => true,
+        'dropdownParent' => '#modal-template-content',
     ],
 ]) ?>
 <?= Html::hiddenInput('template_id', null, ['id' => 'template_id']) ?>
 <?php ActiveForm::end() ?>
 <div class="form-group">
-<?= Html::button('<i class="fas fa-envelope"></i> Send', ['data-url' => Url::toRoute('send-mail'), 'class' => 'btn btn-primary mt-2', 'id' => 'send-template']) ?>
+    <?= Html::button('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <i class="fas fa-envelope"></i> Send', ['data-url' => Url::toRoute('send-mail'), 'class' => 'btn btn-primary mt-2', 'id' => 'send-template']) ?>
 </div>
 <?php Modal::end() ?>
 
@@ -97,11 +98,20 @@ $(document).on('click', '.show-template', function (e) {
 $(document).on('click', '#send-template', function (e) {
   const data = $('#send-email-form').serialize()
   const url = $(this).data('url')
+  $(this).attr('disabled','disabled')
   $.post(url, data).done(function (response) {
     $('#modal-template-content').modal('hide')
     $('#template_id').val('')
   })
 })
+
+$(document).ajaxSend(function () {
+  $('.spinner-border').fadeIn()
+})
+$(document).ajaxSuccess(function () {
+  $('.spinner-border').fadeOut()
+})
+
 $('#modal-template-content').on('hidden.bs.modal', function (e) {
   $('#template-content').text('')
   $('#modal-template-content-label').text('')
