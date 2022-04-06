@@ -57,14 +57,13 @@ class Register extends Model
         $user->name = $this->name;
         
         if($user->save()) {
-            $mg = Mailgun::create(getenv('MAILGUN_KEY'));
             
-            $mg->messages()->send(getenv('MAILGUN_DOMAIN'), [
-                'from'    => 'security@' . getenv('MAILGUN_DOMAIN'),
-                'to'      => $this->email,
-                'subject' => 'Account Verification',
-                'html'    => Yii::$app->controller->renderPartial('@mail/auth/verify', ['user' => User::findOne(['email' => $this->email])]),
-            ]);
+            $user_id = User::find()->select(['id'])->where(['email' => $this->email]);
+            Yii::$app
+                ->email
+                ->useTemplateWithKey('Verification')
+                ->to($user_id)
+                ->send();
             
             return true;
         }

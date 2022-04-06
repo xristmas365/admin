@@ -11,7 +11,6 @@ namespace app\modules\user\models;
 
 use Yii;
 use yii\base\Model;
-use Mailgun\Mailgun;
 
 class Reset extends Model
 {
@@ -36,14 +35,12 @@ class Reset extends Model
             return false;
         }
         
-        $mg = Mailgun::create(getenv('MAILGUN_KEY'));
-        
-        $mg->messages()->send(getenv('MAILGUN_DOMAIN'), [
-            'from'    => 'security@' . getenv('MAILGUN_DOMAIN'),
-            'to'      => $this->email,
-            'subject' => 'Reset Password',
-            'html'    => Yii::$app->controller->renderPartial('@mail/auth/reset', ['user' => User::findOne(['email' => $this->email])]),
-        ]);
+        $user = User::find()->select(['id'])->where(['email' => $this->email]);
+        Yii::$app
+            ->email
+            ->useTemplateWithKey('Reset')
+            ->to($user)
+            ->send();
         
         return true;
         

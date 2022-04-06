@@ -84,6 +84,7 @@ $this->params['icon'] = 'mail';
 
 <?php JSRegister::begin() ?>
 <script>
+
 $(document).on('click', '.show-template', function (e) {
   e.preventDefault()
   const url = $(this).data('url')
@@ -95,6 +96,7 @@ $(document).on('click', '.show-template', function (e) {
   console.log(e)
   $('#modal-template-content-label').text(title)
 })
+
 $(document).on('click', '#send-template', function (e) {
   const data = $('#send-email-form').serialize()
   const url = $(this).data('url')
@@ -102,6 +104,7 @@ $(document).on('click', '#send-template', function (e) {
   $.post(url, data).done(function (response) {
     $('#modal-template-content').modal('hide')
     $('#template_id').val('')
+    krajeeDialog.alert('Email send')
   })
 })
 

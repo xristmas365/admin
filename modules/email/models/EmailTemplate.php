@@ -17,6 +17,7 @@ use app\modules\storage\traits\ImageTrait;
  * @property string|null $content
  * @property Storage[]   $templateAttachments
  * @property string      $templateImage
+ * @property string      $template_key [varchar(255)]
  */
 class EmailTemplate extends ActiveRecord
 {
@@ -40,7 +41,7 @@ class EmailTemplate extends ActiveRecord
     {
         return [
             [['content'], 'string'],
-            [['name', 'subject'], 'string', 'max' => 255],
+            [['name', 'subject', 'template_key'], 'string', 'max' => 255],
             [['files', 'template'], 'safe'],
         ];
     }
@@ -74,6 +75,7 @@ class EmailTemplate extends ActiveRecord
             'name'    => 'Name',
             'subject' => 'Subject',
             'content' => 'Content',
+            'template_key'     => 'Key',
         ];
     }
     

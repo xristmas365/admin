@@ -18,7 +18,7 @@ class TemplateSearch extends EmailTemplate
     {
         return [
             [['id'], 'integer'],
-            [['name', 'subject', 'content'], 'safe'],
+            [['name', 'subject', 'content', 'template_key'], 'safe'],
         ];
     }
 

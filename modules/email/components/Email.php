@@ -39,7 +39,18 @@ class Email extends Component
         return $this;
     }
     
-    public function to(array $users)
+    public function useTemplateWithKey($template_key)
+    {
+        $this->template = EmailTemplate::findOne(['template_key' => $template_key]);
+        
+        if(!$this->template) {
+            throw new NotFoundHttpException('Template not Found');
+        }
+        
+        return $this;
+    }
+    
+    public function to($users)
     {
         $this->users = User::find()->select(['email', 'name', 'company'])->where(['id' => $users])->all();
         
@@ -49,10 +60,6 @@ class Email extends Component
     
     public function send()
     {
-        $response = [
-            'status' => true,
-            'emails' => 0,
-        ];
         $mailer = Yii::$app->mailer;
         
         $messages = [];
@@ -60,13 +67,16 @@ class Email extends Component
         foreach($this->users as $user) {
             $controller = Yii::$app->controller;
             $controller->layout = '@app/mail/layouts/html.php';
+           
             
             $content = $controller->renderContent(strtr($this->template->content, [
-                '{{name}}'    => $user->name,
-                '{{company}}' => $user->company,
-                '{{date}}'    => date('Y-m-d'),
-                '{{product}}' => 'Apple',
-                '{{project}}' => Yii::$app->name,
+                '{{name}}'        => $user->name,
+                '{{company}}'     => $user->company,
+                '{{date}}'        => date('Y-m-d'),
+                '{{product}}'     => 'Apple',
+                '{{project}}'     => Yii::$app->name,
+                '{{verify_link}}' => $user->generateVerifyLink(),
+                '{{reset_link}}'  => $user->generateResetLink(),
             ]));
             
             $messages[] = $mailer->compose()

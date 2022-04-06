@@ -20,7 +20,6 @@ $this->params['icon'] = 'mail';
 
 ?>
 
-
 <?php $form = ActiveForm::begin(); ?>
 <div class="card shadow p-4">
     <div class="text-heading mb-4"><?= $this->title ?></div>
@@ -51,7 +50,7 @@ $this->params['icon'] = 'mail';
         'sortable'         => false,
         'maxNumberOfFiles' => 20,
     ])->label('Attachments') ?>
-   
+    <?= $form->field($model, 'template_key')->textInput(['maxlength' => true]) ?>
     <div class="form-group">
         <?= Html::submitButton('<i class="fas fa-cloud-upload-alt"></i> Save', ['class' => 'btn btn-primary']) ?>
     </div>
