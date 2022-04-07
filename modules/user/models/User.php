@@ -270,6 +270,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function beforeSave($insert) : bool
     {
         if($insert) {
+            $this->auth_key = Yii::$app->security->generateRandomString();
             $this->password = Yii::$app->security->generatePasswordHash($this->password);
             $this->role = $this->role ?? Role::USER;
         }

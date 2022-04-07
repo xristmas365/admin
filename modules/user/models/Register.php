@@ -11,7 +11,6 @@ namespace app\modules\user\models;
 
 use Yii;
 use yii\base\Model;
-use Mailgun\Mailgun;
 
 class Register extends Model
 {
@@ -57,15 +56,11 @@ class Register extends Model
         $user->name = $this->name;
         
         if($user->save()) {
-            
-            $user_id = User::find()->select(['id'])->where(['email' => $this->email]);
-            Yii::$app
+            return Yii::$app
                 ->email
                 ->useTemplateWithKey('Verification')
-                ->to($user_id)
+                ->to([$user->id])
                 ->send();
-            
-            return true;
         }
         
         return false;

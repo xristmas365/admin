@@ -3,6 +3,7 @@
 namespace app\modules\email\components;
 
 use Yii;
+use yii\helpers\Url;
 use yii\base\Component;
 use app\modules\user\models\User;
 use yii\web\NotFoundHttpException;
@@ -50,7 +51,7 @@ class Email extends Component
         return $this;
     }
     
-    public function to($users)
+    public function to(array $users)
     {
         $this->users = User::find()->select(['email', 'name', 'company'])->where(['id' => $users])->all();
         
@@ -75,8 +76,8 @@ class Email extends Component
                 '{{date}}'        => date('Y-m-d'),
                 '{{product}}'     => 'Apple',
                 '{{project}}'     => Yii::$app->name,
-                '{{verify_link}}' => $user->generateVerifyLink(),
-                '{{reset_link}}'  => $user->generateResetLink(),
+                '{{verify_link}}' => Url::toRoute(['/user/auth/verify', 'auth' => $user->auth_key], true),
+                '{{reset_link}}'  => Url::toRoute(['/user/auth/password', 'auth' => $user->auth_key], true),
             ]));
             
             $messages[] = $mailer->compose()

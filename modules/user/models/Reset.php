@@ -35,12 +35,14 @@ class Reset extends Model
             return false;
         }
         
-        $user = User::find()->select(['id'])->where(['email' => $this->email]);
+        $user = User::find()->select(['id'])->where(['email' => $this->email])->column();
+   
         Yii::$app
             ->email
             ->useTemplateWithKey('Reset')
             ->to($user)
             ->send();
+        
         
         return true;
         
